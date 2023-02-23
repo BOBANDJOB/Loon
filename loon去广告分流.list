@@ -989,7 +989,7 @@ HOST,vcardsdkservice.vivo.com.cn
 HOST-KEYWORD,stsdk.vivo.com.cn
 HOST-KEYWORD,stsdk.vivoglobal.com
 # > 微博
-HOST,sdkapp.uve.weibo.com, direct
+#HOST,sdkapp.uve.weibo.com, direct
 HOST,gw.im.weibo.cn
 HOST,gw1.i.weibo.cn
 HOST-KEYWORD,fastimage.uve.weibo.com
