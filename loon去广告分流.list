@@ -2,19 +2,6 @@
 # > 某些APP要清除缓存或者重新安装APP，拦截广告才会生效！  
 # > 更新时间  2022.11.05
 # > */  
-# > OpenAi
-DOMAIN-SUFFIX, ai.com, US
-DOMAIN-SUFFIX, openai.com, US
-DOMAIN-SUFFIX, vimeo.com, US
-DOMAIN-SUFFIX, vimeocdn.com, US
-DOMAIN-SUFFIX, hcaptcha.com, US
-DOMAIN-SUFFIX, akamaized.com, US
-DOMAIN, cdn.auth0.com, US
-DOMAIN, openaiapi-site.azureedge.net, US
-# > 苹果天气直连
-host-keyword, weather-data.apple.com, direct
-host-keyword, weather-map.apple.com, direct
-host-keyword, weather-analytics-events.apple.com, direct
 # > 光大银行阳光惠生活
 host-keyword, talk.bz.getui.com
 # > 民生银行
