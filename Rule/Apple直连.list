@@ -11,16 +11,16 @@ IP-CIDR6, 2403:300:a42::/48, no-resolve
 IP-CIDR6, 2403:300:a51::/48, no-resolve
 IP-CIDR6, 2a01:b740:a42::/48, no-resolve
 # > 苹果直连
-DOMAIN,ocsp2.apple.com,DIRECT
-DOMAIN,appleid.apple.com,DIRECT
-DOMAIN,appleid.cdn-apple.com,DIRECT
-DOMAIN,idmsa.apple.com,DIRECT
-DOMAIN,gsa.apple.com,DIRECT
-DOMAIN-SUFFIX,itunes.apple.com,DIRECT
-DOMAIN-SUFFIX,apps.apple.com,DIRECT
-DOMAIN-SUFFIX,mzstatic.com,DIRECT
-DOMAIN,itunes.apple.com,DIRECT
-DOMAIN,ppq.apple.com,DIRECT
+DOMAIN,ocsp2.apple.com
+DOMAIN,appleid.apple.com
+DOMAIN,appleid.cdn-apple.com
+DOMAIN,idmsa.apple.com
+DOMAIN,gsa.apple.com
+DOMAIN-SUFFIX,itunes.apple.com
+DOMAIN-SUFFIX,apps.apple.com
+DOMAIN-SUFFIX,mzstatic.com
+DOMAIN,itunes.apple.com
+DOMAIN,ppq.apple.com
 DOMAIN-SUFFIX,icloud.com.cn
 DOMAIN-SUFFIX,icloud.com
-
+DOMAIN,profile.gc.apple.com
