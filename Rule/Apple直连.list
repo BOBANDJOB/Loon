@@ -1,26 +1,33 @@
 # Apple 推送通知 - 当使用 Apple 推送通知服务 (APNS) 时，Apple 设备需要访问以下主机
-DOMAIN-SUFFIX, push.apple.com //推送通知
-DOMAIN, identity.apple.com //APNs 证书请求门户
-IP-CIDR, 17.249.0.0/16, no-resolve
-IP-CIDR, 17.252.0.0/16, no-resolve
-IP-CIDR, 17.57.144.0/22, no-resolve
-IP-CIDR, 17.188.128.0/18, no-resolve
-IP-CIDR, 17.188.20.0/23, no-resolve
-IP-CIDR6, 2620:149:a44::/48, no-resolve
-IP-CIDR6, 2403:300:a42::/48, no-resolve
-IP-CIDR6, 2403:300:a51::/48, no-resolve
-IP-CIDR6, 2a01:b740:a42::/48, no-resolve
-# > 苹果直连
-DOMAIN,ocsp2.apple.com
-DOMAIN,appleid.apple.com
-DOMAIN,appleid.cdn-apple.com
-DOMAIN,idmsa.apple.com
-DOMAIN,gsa.apple.com
-DOMAIN-SUFFIX,itunes.apple.com
-DOMAIN-SUFFIX,apps.apple.com
-DOMAIN-SUFFIX,mzstatic.com
-DOMAIN,itunes.apple.com
-DOMAIN,ppq.apple.com
-DOMAIN-SUFFIX,icloud.com.cn
-DOMAIN-SUFFIX,icloud.com
-DOMAIN,profile.gc.apple.com
+USER-AGENT,*com.apple.mobileme.fmip1,Apple
+USER-AGENT,*WeatherFoundation*,Apple
+USER-AGENT,%E5%9C%B0%E5%9B%BE*,Apple
+USER-AGENT,%E6%9F%A5%E6%89%BE*,Apple
+USER-AGENT,%E8%AE%BE%E7%BD%AE*,Apple
+USER-AGENT,AppStore*,Apple
+USER-AGENT,com.apple.appstored*,Apple
+USER-AGENT,com.apple.geod*,Apple
+USER-AGENT,com.apple.Maps,Apple
+USER-AGENT,FindMy*,Apple
+USER-AGENT,FMDClient*,Apple
+USER-AGENT,FMFD*,Apple
+USER-AGENT,fmflocatord*,Apple
+USER-AGENT,geod*,Apple
+USER-AGENT,locationd*,Apple
+USER-AGENT,Maps*,Apple
+USER-AGENT,TestFlight*,Apple
+DOMAIN-SUFFIX,apple.co,Apple
+DOMAIN-SUFFIX,apple.com,Apple
+DOMAIN-SUFFIX,apple.com.cn,Apple
+DOMAIN-SUFFIX,apple-cloudkit.com,Apple
+DOMAIN-SUFFIX,appstore.com,Apple
+DOMAIN-SUFFIX,cdn-apple.com,Apple
+DOMAIN-SUFFIX,crashlytics.com,Apple
+DOMAIN-SUFFIX,icloud.com,Apple
+DOMAIN-SUFFIX,icloud.com.cn,Apple
+DOMAIN-SUFFIX,icloud-content.com,Apple
+DOMAIN-SUFFIX,itunes.com,Apple
+DOMAIN-SUFFIX,me.com,Apple
+DOMAIN-SUFFIX,mzstatic.com,Apple
+DOMAIN,api.smoot.apple.cn,Apple
+
