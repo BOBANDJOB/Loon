@@ -321,10 +321,6 @@ DOMAIN,adextra.51wnl-cq.com
 DOMAIN,log.51wnl-cq.com
 DOMAIN,r.51wnl-cq.com
 # > 屏蔽苹果系统更新
-DOMAIN, gdmf.apple.com, SystemOTA
-DOMAIN, mesu.apple.com, SystemOTA
-DOMAIN, updates-http.cdn-apple.com, SystemOTA
-DOMAIN, xp.apple.com, SystemOTA
 DOMAIN, ns.itunes.apple.com
 DOMAIN, appldnld.apple.com
 DOMAIN, mesu.apple.com
