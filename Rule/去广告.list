@@ -321,10 +321,6 @@ DOMAIN,adextra.51wnl-cq.com
 DOMAIN,log.51wnl-cq.com
 DOMAIN,r.51wnl-cq.com
 # > 屏蔽苹果系统更新
-DOMAIN, ns.itunes.apple.com
-DOMAIN, appldnld.apple.com
-DOMAIN, mesu.apple.com
-DOMAIN, gdmf.apple.com
 DOMAIN-SUFFIX,iadsdk.apple.com
 DOMAIN-SUFFIX,ads.internal.unity3d.com
 DOMAIN-SUFFIX,ads.prd.ie.internal.unity3d.com
