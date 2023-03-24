@@ -1171,23 +1171,6 @@ DOMAIN-SUFFIX, admobile.top
 DOMAIN-KEYWORD,bds.snssdk.com
 DOMAIN-KEYWORD,p6-ad-sign.byteimg.com
 DOMAIN-KEYWORD,p3.pstatp.com
-DOMAIN,p16-tiktokcdn-com.akamaized.net,PROXY
-DOMAIN-SUFFIX,byteoversea.com,PROXY
-DOMAIN-SUFFIX,ibytedtos.com,PROXY
-DOMAIN-SUFFIX,ibyteimg.com,PROXY
-DOMAIN-SUFFIX,ipstatp.com,PROXY
-DOMAIN-SUFFIX,muscdn.com,PROXY
-DOMAIN-SUFFIX,musical.ly,PROXY
-DOMAIN-SUFFIX,sgpstatp.com,PROXY
-DOMAIN-SUFFIX,tik-tokapi.com,PROXY
-DOMAIN-SUFFIX,tiktok.com,PROXY
-DOMAIN-SUFFIX,tiktokcdn.com,PROXY
-DOMAIN-SUFFIX,tiktokv.com,PROXY
-DOMAIN-KEYWORD,-tiktokcdn-com,PROXY
-DOMAIN-KEYWORD,musical.ly,PROXY
-DOMAIN-KEYWORD,tiktok,PROXY
-DOMAIN-KEYWORD,tiktokv,PROXY
-USER-AGENT,TikTok*,PROXY
 # > 皮皮虾（推荐视频不能预览）
 DOMAIN-KEYWORD,log-api.pangolin-sdk-toutiao-b.com
 DOMAIN-KEYWORD,log-api.pangolin-sdk-toutiao.com
