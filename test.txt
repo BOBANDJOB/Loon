@@ -1,1 +1,0 @@
-^http[s]?:\/\/ppt.fuaybr.cn\/\/Api\/(getmovexiangqing|getmhepisodesimg).*$ url request-body sign_token=[a-zA-Z0-9]+ request-body sign_token=8538cb5e338616e1c54d20677d114e96
