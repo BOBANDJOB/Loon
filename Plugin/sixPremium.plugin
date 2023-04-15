@@ -7,7 +7,7 @@
 
 [Script]
 #Premium
-http-request ^https?:\/\/cn\.pornhubpremium\.com\/ script-path=https://raw.githubusercontent.com/yqc007/QuantumultX/master/PornHubPremiumCrack.js, requires-body=true, tag=Pornhub Premium
+http-request ^https?:\/\/cn\.pornhubpremium\.com\/ script-path=https://raw.githubusercontent.com/yqc007/QuantumultX/master/PornHubPremiumCrack.js, requires-body=true, tag=Pornhub
 
 [MITM]
 hostname = cn.pornhubpremium.com
