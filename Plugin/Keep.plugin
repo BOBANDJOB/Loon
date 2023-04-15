@@ -7,8 +7,10 @@
 
 [Rewrite]
 #Keep
-http-response ^https://api.gotokeep.com.+ script-path = https://raw.githubusercontent.com/nameking77/Qx/main/Keep.js, requires-body = true, tag = Keep
+http-response ^https?:\/\/api\.gotokeep\.com\.+ script-path = https://raw.githubusercontent.com/nameking77/Qx/main/Keep.js, requires-body = true, tag = Keep会员
 
+#掌上公交 @ddgksf2013 wx.mygolbs.com
+http-response ^https?:\/\/wx\.mygolbs\.com\/WxBusServer\/ApiData\.do script-path = https://raw.githubusercontent.com/ddgksf2013/Scripts/master/zhangshanggongjiao.js, requires-body = true, tag = 掌上公交去广告
 
 [MITM]
-hostname = api.gotokeep.com
+hostname = api.gotokeep.com, wx.mygolbs.com
