@@ -2,10 +2,12 @@
 #!desc = 
 #!open= 
 #!author = Winfred
+#!homepage = 
+#!icon = https://raw.githubusercontent.com/LovedGM/Quantumult-X-TuBiao/main/dongzuo/dz8.png
 
 [Rewrite]
 #Premium
-http-request ^https?:\/\/cn\.pornhubpremium\.com\/ script-path=https://raw.githubusercontent.com/yqc007/QuantumultX/master/PornHubPremiumCrack.js, requires-body=true, tag=Pornhub Premium, img-url=https://raw.githubusercontent.com/LovedGM/Quantumult-X-TuBiao/main/dongzuo/dz8.png
+http-request ^https?:\/\/cn\.pornhubpremium\.com\/ script-path=https://raw.githubusercontent.com/yqc007/QuantumultX/master/PornHubPremiumCrack.js, requires-body=true, tag=Pornhub Premium
 
 [MITM]
 hostname = cn.pornhubpremium.com
