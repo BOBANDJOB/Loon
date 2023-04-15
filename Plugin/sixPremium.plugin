@@ -5,7 +5,7 @@
 #!homepage = 
 #!icon = https://raw.githubusercontent.com/LovedGM/Quantumult-X-TuBiao/main/dongzuo/dz8.png
 
-[Rewrite]
+[Script]
 #Premium
 http-request ^https?:\/\/cn\.pornhubpremium\.com\/ script-path=https://raw.githubusercontent.com/yqc007/QuantumultX/master/PornHubPremiumCrack.js, requires-body=true, tag=Pornhub Premium
 
