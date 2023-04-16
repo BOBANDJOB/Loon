@@ -55,7 +55,7 @@ http-request ^https?:\/\/.+sez.+m3u8.+m3u8.+ script-path=https://raw.githubuserc
 http-response ^https?:\/\/.+((xo2xo)|(hnyiya)).(live|com)\/api\/(Account\/IndexDetail|movie\/DetailInfo|movie\/watch).*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/Xboy.js, requires-body=true, tag=Xboy
 
 #91视频🚗下载地址: https://app.nzmn.org/i-W69UW35
-http-request ^https?:\/\/.+((ppapi)|(17gwl)|(sgyrc)|(mnghx)|(czbt)|(jtshuzhiwa)).(info|cc|com)\/m_sns\/(video\/apply_play_permission|film).*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/91sp.js, requires-body=true, tag=91sp
+http-request ^https?:\/\/.+((ppapi)|(17gwl)|(sgyrc)|(mnghx)|(czbt)|(jtshuzhiwa)).(info|cc|com)\/m_sns\/(video\/apply_play_permission|film).*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/91sp.js, requires-body=true, binary-body-mode = true, tag=91sp
 
 [MITM]
 hostname = *milk*,plxk.fhlium.com,xdk.coegcj.com,xuoa.vwymyr.com,*rwut*,*luoli*,*cmw*,*cwc*,api.wy*.com,*jhkjcp*,*xhxxqt*,*wbbcv*,*wbwxe*,*wbtho*,*ouhklw*,*antvapp*,*s400*,*fuaybr*,api.685x.top,tx*.com,*wbbcv*,*wbapi*,*wbwxe*,*wbtho*,*xingman*,*ukids.cn,*palmestore*,*cyapi*,www.dmh*.com,*fuhuida*,smh*.com,*rwut*,api.wy*.com,api.hx*.com,bk*.com,tx*.com,51*.com,*sotong*,gentlemanapp*,*mysteel*,*ubestkid*,91*.com,*pfd*,*twittme*,*zhihuav*,*wbbcv*,*fuaybr*,appapi*,*17gwl*,*sgyrc*,*mnghx*,*czbt*,*snailsleep*,*.caiyunapp.*,*xo2xo*,*hnyiya*,sjk*,*sez*,51h*,*rwut*,*luoli*,*cmw*,*.zymk.cn,*antv*,*sssm*
