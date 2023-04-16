@@ -7,7 +7,7 @@
 
 [Script]
 #Keep
-http-response ^https?:\/\/api\.gotokeep\.com\/ script-path=https://raw.githubusercontent.com/nameking77/Qx/main/Keep.js, requires-body=true, tag=Keep, img-url=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple_Fitness+.png
+http-response ^https?:\/\/api\.gotokeep\.com\/ script-path=https://raw.githubusercontent.com/nameking77/Qx/main/Keep.js, requires-body=true, tag=Keep
 
 [MITM]
 hostname = api.gotokeep.com

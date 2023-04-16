@@ -1,0 +1,61 @@
+#!name = Lsp
+#!desc = by伟人
+#!open= 
+#!author = Winfred
+#!homepage = 
+#!icon = https://raw.githubusercontent.com/LovedGM/Quantumult-X-TuBiao/main/dongzuo/dz5.png
+
+[Rewrite]
+#糖心vlog
+^https?:\/\/tx.*com\/h5\/system\/sendSms url reject-200
+^https?:\/\/tx.*com\/image\?type\=account&username\=.*$ url reject-200
+
+[Script]
+#51本色🚗地址-: https://qd51sqsa.com/?pc=GUF8EN
+http-request ^https?:\/\/(plxk\.fhlium|xdk\.coegcj|xuoa\.vwymyr)\.com\/api\/app\/vid\/h5\/m3u8\/.*\.m3u8\?token\= script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/51bs.js, requires-body=true, tag=51bs
+
+#69萝莉🚗地址-: https://69luolic.com/?us=EHYVIF
+http-request ^https?:\/\/h5.+((cwc)|(rwut)|(luoli)|(cmw)).+(com|cn)\/h5\/(movie/detail|search/movie).*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/69loli.js, requires-body=true, tag=69loli
+
+#Milk🚗地址-: https://mm.snvvyjj.cn/?qcode=mm794361
+http-response ^https?:\/\/(ppt|api).(fuaybr|milk.*).(cn|com)\/\/(Api|Milk)\/(getuserinfo|getstartup|getvideotop).*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/Milk.js, requires-body=true, tag=Milk
+
+#绳师SM🚗地址-：https://ss.atts12.xyz/?invite=LDdwR0Nrb1
+http-request ^https?:\/\/s400\.sssm\.info\/api\/videos\/.*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/ssm.js, requires-body=true, tag=SSM
+
+#AnTv🚗地址-：https://at.atts12.xyz/?antvinvite=pen5qADld7
+http-request ^https?:\/\/.+antvapp.+\/api\/videos\/.*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/antv.js, requires-body=true, tag=AnTv
+
+#CTM🚗下载地址: http://ctm.868gg.top/
+http-response ^https?:\/\/api.685x.top\/api\/(user\/v1\/getUserInfo|dvideo\/v1\/getIndexInfo|dvideo\/v1\/getDvideoDeail|asdv\/v1\/getRotationList|v1\/getSysConfigInfo).*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/CTM.js, requires-body=true, tag=CTM
+
+#糖心vlog🚗播放地址: https://txk003.com/line
+http-response ^https?:\/\/txh.*com\/h5\/user\/info.*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/TX2.js, requires-body=true, tag=TangXin1
+http-request ^https?:\/\/tx[a-zA-Z0-9].+(com|cc|cn)\/h5\/system\/info.*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/TX1.js, requires-body=true, tag=TangXin2
+
+#黑料社🚗下载地址: hlsapp.cc/?pc=85AAYK
+http-request ^https?:\/\/(wbapi|klsui|ixmx|mxjhs)\.(jhkjcp|xhxxqt|wbbcv|wbwxe|wbtho|ouhklw)\.com\/api\/app\/vid\/h5\/m3u8\/.+m3u8.+token.*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/hls.js, requires-body=true, tag=hls
+
+#泡芙短视频🚗-下载地址: https://pfdda.fit/?pc=2PZC99
+http-request ^https?:\/\/.*pf.+(com|cc|cn)\/api\/app\/vid\/h5\/m3u8\/.+\.m3u8\?token\=.*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/paofu.js, requires-body=true, tag=paofu
+
+#快手约炮(解锁轻量版) 下载地址 - https://eg2xe6.com/?pc=WVKDZYAN
+http-request ^https?:\/\/h5\.zhihuav\.com\/api\/h5app\/media\/m3u8.+m3u8.+timestamp.+sign.+nonce.*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/Kuaiyp.js, requires-body=true, tag=Kuaiyp
+
+#红杏短视频🚗-下载地址: https://hx69.app/?pc=ACKZDY
+http-request ^https?:\/\/api\.hx.*\.com\/api\/app\/vid\/h5\/m3u8.*\/.*m3u8\? script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/hxsp.js, requires-body=true, tag=hxsp
+
+#无忧短视频🚗-下载地址: https://wuyds.com/?code=YJMAQTV
+http-request ^https?:\/\/api\.(wyxcvz|wyrweq)\.com\/m3u8\/.*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/wydsp.js, requires-body=true, tag=wydsp
+
+#色中色🚗下载地址- https://oznias.fit/?pc=47QNSE
+http-request ^https?:\/\/.+sez.+m3u8.+m3u8.+ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/szs.js, requires-body=true, tag=szs
+
+#XBoy🚗官网: https://www.xboy6.live/?ivcode=U5K9 。ipa下载: https://wwr.lanzoui.com/xbss
+http-response ^https?:\/\/.+((xo2xo)|(hnyiya)).(live|com)\/api\/(Account\/IndexDetail|movie\/DetailInfo|movie\/watch).*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/Xboy.js, requires-body=true, tag=Xboy
+
+#91视频🚗下载地址: https://app.nzmn.org/i-W69UW35
+http-request ^https?:\/\/.+((ppapi)|(17gwl)|(sgyrc)|(mnghx)|(czbt)|(jtshuzhiwa)).(info|cc|com)\/m_sns\/(video\/apply_play_permission|film).*$ script-path=https://raw.githubusercontent.com/WeiRen0/Scripts/main/91sp.js, requires-body=true, tag=91sp
+
+[MITM]
+hostname = *milk*,plxk.fhlium.com,xdk.coegcj.com,xuoa.vwymyr.com,*rwut*,*luoli*,*cmw*,*cwc*,api.wy*.com,*jhkjcp*,*xhxxqt*,*wbbcv*,*wbwxe*,*wbtho*,*ouhklw*,*antvapp*,*s400*,*fuaybr*,api.685x.top,tx*.com,*wbbcv*,*wbapi*,*wbwxe*,*wbtho*,*xingman*,*ukids.cn,*palmestore*,*cyapi*,www.dmh*.com,*fuhuida*,smh*.com,*rwut*,api.wy*.com,api.hx*.com,bk*.com,tx*.com,51*.com,*sotong*,gentlemanapp*,*mysteel*,*ubestkid*,91*.com,*pfd*,*twittme*,*zhihuav*,*wbbcv*,*fuaybr*,appapi*,*17gwl*,*sgyrc*,*mnghx*,*czbt*,*snailsleep*,*.caiyunapp.*,*xo2xo*,*hnyiya*,sjk*,*sez*,51h*,*rwut*,*luoli*,*cmw*,*.zymk.cn,*antv*,*sssm*
