@@ -5,7 +5,7 @@
 #!homepage = 
 #!icon = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png
 
-[Rewrite]
+[URL Rewrite]
 #>>>>>>>>>>>>>>>>>>>>>>>翻译
 # yd  xxx (有道词典)
 ^https:\/\/duckduckgo.com\/\?q=yd\+([^&]+).+ 302 http://dict.youdao.com/search?q=$1
