@@ -1222,6 +1222,8 @@ DOMAIN-SUFFIX,ali-ad.a.yximgs.com
 DOMAIN,open.e.kuaishou.com
 DOMAIN-SUFFIX,pangolin-sdk-toutiao.com
 DOMAIN-SUFFIX,pangolin-sdk-toutiao-b.com
+# > GPT错误跟踪
+DOMAIN, o33249.ingest.sentry.io
 # > 其他广告
 DOMAIN-SUFFIX,u3.ucweb.com
 DOMAIN-KEYWORD,extlog.snssdk.com
