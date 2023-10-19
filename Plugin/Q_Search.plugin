@@ -77,11 +77,11 @@
 ^https:\/\/duckduckgo.com\/\?q=zdm\+([^&]+).+ https://search.m.smzdm.com/?v=b&s=$1 302
 ^https:\/\/duckduckgo.com\/\?q=([^+]+)\+zdm.+ https://search.m.smzdm.com/?v=b&s=$1 302
 # jd  xxx (京东)
-^https:\/\/duckduckgo.com\/\?q=jd\+([^&]+).+ https://so.m.jd.com/ware/search.action?keyword=$1 302
-^https:\/\/duckduckgo.com\/\?q=([^+]+)\+jd.+ https://so.m.jd.com/ware/search.action?keyword=$1 302
+^https:\/\/duckduckgo.com\/\?q=jd\+([^&]+).+ openapp.jdmobile://virtual?params={"des":"productList","keyWord":"$1","from":"search","category":"jump"} 302
+^https:\/\/duckduckgo.com\/\?q=([^+]+)\+jd.+ openapp.jdmobile://virtual?params={"des":"productList","keyWord":"$1","from":"search","category":"jump"} 302
 # tb  xxx (淘宝)
-^https:\/\/duckduckgo.com\/\?q=tb\+([^&]+).+ https://s.m.taobao.com/h5?q=$1 302
-^https:\/\/duckduckgo.com\/\?q=([^+]+)\+tb.+ https://s.m.taobao.com/h5?q=$1 302
+^https:\/\/duckduckgo.com\/\?q=tb\+([^&]+).+ taobao://s.taobao.com?q=$1 302
+^https:\/\/duckduckgo.com\/\?q=([^+]+)\+tb.+ taobao://s.taobao.com?q=$1 302
 
 
 #>>>>>>>>>>>>>>>>>>>>>>>视频
