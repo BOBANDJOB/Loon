@@ -250,9 +250,9 @@ DOMAIN,xiaoheimi.net,SS_HK
 DOMAIN,xiaobaotv.net,SS_HK
 
 # > 避免迅雷版权问题
-DOMAIN,hub5idx.v6.shub.sandai.net,REJECT-DROP
-DOMAIN,hub5emu.v6.shub.sandai.net,REJECT-DROP
-DOMAIN,hub5btmain.v6.shub.sandai.net,REJECT-DROP
+DOMAIN,hub5idx.v6.shub.sandai.net,REJECT
+DOMAIN,hub5emu.v6.shub.sandai.net,REJECT
+DOMAIN,hub5btmain.v6.shub.sandai.net,REJECT
 
 # >>>>>>>>>>>>>>> ✅ Y ✅ <<<<<<<<<<<<<<
 
