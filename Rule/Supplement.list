@@ -1,0 +1,272 @@
+################################################################
+# > 自用分流补充
+################################################################
+
+# >>>>>>>>>>>>>>> ✅ 0 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 1 ✅ <<<<<<<<<<<<<<
+# > 12306
+DOMAIN,ad.12306.cn,DIRECT
+
+
+# >>>>>>>>>>>>>>> ✅ 2 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 3 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 4 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 5 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 6 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 7 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 8 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 9 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ A ✅ <<<<<<<<<<<<<<
+# > anti-ad
+DOMAIN-KEYWORD,anti-ad.net,DIRECT
+
+# > 爱影视  #分流修正 #欢迎大家补充
+DOMAIN,static.jssp.tv,DIRECT
+DOMAIN,lain.bgm.tv,DIRECT
+DOMAIN,tiao.cjkypo.com,DIRECT
+DOMAIN,ok.zuidapic.com,DIRECT
+DOMAIN,ts.thefileDOMAINing.com,DIRECT
+DOMAIN,deo.shopeemobile.com,DIRECT
+DOMAIN,m3u8.255tv.tk,DIRECT
+DOMAIN,m3u8.mstopq.com,DIRECT
+DOMAIN,ain.bgm.tv,DIRECT
+DOMAIN-KEYWORD,vip.lz-cdn,DIRECT
+DOMAIN-KEYWORD,ax1x.com,DIRECT
+DOMAIN-KEYWORD,o.lencr.org,DIRECT
+DOMAIN-KEYWORD,ttcdn-tos.kkimg.cc,DIRECT
+
+# >>>>>>>>>>>>>>> ✅ B ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ C ✅ <<<<<<<<<<<<<<
+# > ClashRoyale
+DOMAIN-SUFFIX,clashroyale.com,SS_HK
+DOMAIN-SUFFIX,clashroyaleapp.com,SS_HK
+
+# >>>>>>>>>>>>>>> ✅ D ✅ <<<<<<<<<<<<<<
+# > 抖音开屏
+DOMAIN-KEYWORD,asiad.byteactivity,REJECT
+
+# > 大师兄影视  #分流修正 #欢迎大家补充
+DOMAIN,sdk.alibaba.com.ailbaba.me,DIRECT
+DOMAIN,img.ffzypic.com,DIRECT
+DOMAIN,img.liangzipic.com,DIRECT
+DOMAIN,img.bfzypic.com,DIRECT
+DOMAIN,img.kuaikanzy.net,DIRECT
+DOMAIN,vip.imgffzy.com,DIRECT
+DOMAIN,vip.ffzyread.com,DIRECT
+DOMAIN,cdn.jsdelivr.net,DIRECT
+DOMAIN,image.maimn.com,DIRECT
+DOMAIN-KEYWORD,bfzycdn.com,DIRECT
+DOMAIN-KEYWORD,vip.kuaikan-cdn,DIRECT
+DOMAIN-KEYWORD,vip.ffzy-play,DIRECT
+DOMAIN-KEYWORD,vip.ffzy-online,DIRECT
+# 第一动漫
+DOMAIN,d1-dm.online,SS_HK
+
+# >>>>>>>>>>>>>>> ✅ E ✅ <<<<<<<<<<<<<<
+
+
+# >>>>>>>>>>>>>>> ✅ F ✅ <<<<<<<<<<<<<<
+# > freeok视频网
+DOMAIN-SUFFIX,freeok.vip,DIRECT
+
+
+# >>>>>>>>>>>>>>> ✅ G ✅ <<<<<<<<<<<<<<
+# > Google搜索不用韩国节点
+DOMAIN,www.google.com,GoogleSearch
+
+# > Goodnotes6
+DOMAIN-SUFFIX,goodnotes.email,US
+DOMAIN-SUFFIX,goodnotescloud.com,US
+DOMAIN-SUFFIX,goodnotes.com,US
+
+
+# >>>>>>>>>>>>>>> ✅ H ✅ <<<<<<<<<<<<<<
+# > 海角社区
+DOMAIN-SUFFIX,haijiao.com,SS_HK
+
+# > 黑料社
+DOMAIN,h7.zztt72.com,PROXY
+DOMAIN,155.fun,PROXY
+
+
+# >>>>>>>>>>>>>>> ✅ I ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ J ✅ <<<<<<<<<<<<<<
+# > JavDB
+DOMAIN,api.liquidlink.cn,HK
+
+
+
+# >>>>>>>>>>>>>>> ✅ K ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ L ✅ <<<<<<<<<<<<<<
+# > LAN
+DOMAIN-SUFFIX,local,DIRECT
+# 私有网络
+IP-CIDR,10.0.0.0/8,DIRECT
+IP-CIDR,172.16.0.0/12,DIRECT
+IP-CIDR,192.168.0.0/16,DIRECT
+# 运营商级NAT
+IP-CIDR,100.64.0.0/10,DIRECT
+# 环回地址
+IP-CIDR,127.0.0.0/8,DIRECT
+# 多播传输
+IP-CIDR,224.0.0.0/24,DIRECT
+# 苹果服务
+IP-CIDR,17.0.0.0/8,DIRECT
+# 腾讯游戏
+IP-CIDR,182.254.116.0/24,DIRECT
+
+
+# >>>>>>>>>>>>>>> ✅ M ✅ <<<<<<<<<<<<<<
+# > 漫画
+# e-hantai
+DOMAIN,exhentai.org,US
+# 禁漫天堂
+DOMAIN-SUFFIX,18comic.org,SS_HK
+DOMAIN-SUFFIX,18comic.vip,SS_HK
+# copymanga
+DOMAIN-SUFFIX,mangafunc.fun,SS_HK
+DOMAIN-KEYWORD,copymanga,SS_HK
+DOMAIN-SUFFIX,mangafuna.xyz,SS_HK
+DOMAIN,api.mangacopy.com,SS_HK
+DOMAIN,cdn.xsskc.com,SS_HK
+DOMAIN,ulogs.umeng.com,SS_HK
+# 哔咔
+DOMAIN,ad-channel.wikawika.xyz,REJECT-DROP
+DOMAIN,pica-web.wakamoment.tk,SS_HK
+DOMAIN,api.tipatipa.xyz,SS_HK
+DOMAIN-SUFFIX,diwodiwo.xyz,SS_HK
+DOMAIN-SUFFIX,picacomic.com,SS_HK
+
+# > 漫画星球App
+DOMAIN-SUFFIX,chuangke.tv,DIRECT
+
+# > 莫高雷Emby
+IP-CIDR,202.61.255.248/32,PROXY
+
+# >>>>>>>>>>>>>>> ✅ N ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ O ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ P ✅ <<<<<<<<<<<<<<
+# > pikpak
+DOMAIN-SUFFIX,mypikpak.com,PROXY
+
+
+# >>>>>>>>>>>>>>> ✅ Q ✅ <<<<<<<<<<<<<<
+# > QQ空间
+DOMAIN-KEYWORD,ctc.qzs.qzone.qq.com,DIRECT
+
+
+# >>>>>>>>>>>>>>> ✅ R ✅ <<<<<<<<<<<<<<
+# > reddit
+DOMAIN-SUFFIX,reddit.com,US
+
+
+# >>>>>>>>>>>>>>> ✅ S ✅ <<<<<<<<<<<<<<
+# > suppercell
+DOMAIN-SUFFIX,supercell.com,SS_HK
+
+# > 神户直播
+IP-CIDR,18.143.209.231/32,HK
+DOMAIN-SUFFIX,changjiangjin.com,HK
+DOMAIN-SUFFIX,heshuangde.com,HK
+DOMAIN-SUFFIX,lyjinaojixie.com,HK
+
+# >>>>>>>>>>>>>>> ✅ T ✅ <<<<<<<<<<<<<<
+# > terabox网盘
+DOMAIN,www.terabox.com,PROXY
+DOMAIN-SUFFIX,1024tera.com,PROXY
+
+# > Talkatone
+DOMAIN-SUFFIX,tktn.be,SS_US
+IP-CIDR,50.117.27.0/24,SS_US
+IP-CIDR,69.46.75.0/24,SS_US
+IP-CIDR,205.164.56.29/24,SS_US
+IP-CIDR,63.251.124.0/24,SS_US
+
+
+# >>>>>>>>>>>>>>> ✅ U ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ V ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ W ✅ <<<<<<<<<<<<<<
+# > 微博
+HOST,sdkapp.uve.weibo.com,DIRECT
+
+# > 豌豆Pro影视
+DOMAIN,www.wandou.la,DIRECT
+
+# >>>>>>>>>>>>>>> ✅ X ✅ <<<<<<<<<<<<<<
+# > 携程
+DOMAIN-KEYWORD,aw-s.tripcdn.com,DIRECT
+DOMAIN-KEYWORD,trip.com,DIRECT
+
+# > 小宝影院
+DOMAIN,xiaoheimi.net,SS_HK
+DOMAIN,xiaobaotv.net,SS_HK
+
+# > 避免迅雷版权问题
+DOMAIN,hub5idx.v6.shub.sandai.net,REJECT-DROP
+DOMAIN,hub5emu.v6.shub.sandai.net,REJECT-DROP
+DOMAIN,hub5btmain.v6.shub.sandai.net,REJECT-DROP
+
+# >>>>>>>>>>>>>>> ✅ Y ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ Z ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 其他 ✅ <<<<<<<<<<<<<<
+# > 路由器后台
+IP-CIDR,192.168.0.1/24,DIRECT
+# > 天翼网关
+IP-CIDR,192.168.1.1/24,DIRECT
+
+
+
