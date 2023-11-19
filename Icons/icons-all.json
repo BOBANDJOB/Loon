@@ -1,0 +1,10 @@
+{
+    "name": "Winfred图标订阅",
+    "description": "收集一些自己常用的图标，尺寸为108px或144px",
+    "icons": [
+      {
+        "name": "Winfred",
+        "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/author/fmz200-01.png"
+      }
+    ]
+  }
