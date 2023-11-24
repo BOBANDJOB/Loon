@@ -38,7 +38,7 @@
 ^https:\/\/img\.killcovid2021\.com\/0527\.mp4$ url reject
 
 # > 屏蔽B站4480等垃圾端口
-^http:\/\/.+:(4480|4483|8000|9102|3478)\/upgcxcode url reject
+# ^http:\/\/.+:(4480|4483|8000|9102|3478)\/upgcxcode url reject
 
 #************************************#
 
