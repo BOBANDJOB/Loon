@@ -1,0 +1,54 @@
+#!name = Winfred自用去广告
+#!desc = 过滤自用广告
+#!openUrl = 
+#!author = Winfred
+#!homepage = 
+#!icon = 
+#!date = 2023-11-24 12:20
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# > "reject" 策略会返回 HTTP 状态码 404,不附带任何额外内容
+# > "reject-200" 策略会返回 HTTP 状态码 200,不附带任何额外内容
+# > "reject-img" 策略返回 HTTP 状态码 200,同时附带 1px gif
+# > "reject-dict" 策略返回 HTTP 状态码 200,同时附带一个空的 JSON 对象
+# > "reject-array" 策略返回 HTTP 状态码 200,同时附带一个空的 JSON 数组
+# > [a-zA-Z0-9]{32} 匹配32位的数字和大小写字母混合  [4-9]{1} 匹配4到9之间的其中一个数字
+# > [0-9]+\.(jpg|png)只拦截纯数字的jpg和png格式图片
+# > reject-img 解压失败,进度100%   reject-200解压失败,进度0%
+# > .*.png url reject-200 所有png类型图片都拦截
+# >  url 302 将前面的链接替换（重定向）为后面的链接
+# > 202205\d{18}\.(png|jpg) url reject-200  202205后面18位数字的jpg和png格式的图片都拦截
+# > 20220\d{3}\.(png|jpg) url reject-200  20220后面3位数字的jpg和png格式的图片都拦截
+# > \d{25}\.(png|jpg) url reject-img 只拦截25位纯数字命名的png和jpg格式图片
+# > d{10} 10位纯数字-\d{4}4位纯数字 $ 结尾符号 ：只拦截10位纯数字-4位纯数字结尾的短连接,后面带尾巴的长连接不拦截。
+# > 如果想拦截1234567890-1234?wx类的长连接就加长规则,不加结尾符,只要前面的匹配了都会拦截。
+# > [0-9]{3,4}匹配3位或者4位纯数字 [a-zA-Z0-9]{16}$ 匹配16位大小写英文+数字组合 $结束
+# > img0[1-9]{1}\.luckincoffeecdn\.com  img01-img09前缀的域名都匹配 主机名*代替
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+[URL Rewrite]
+# 谷歌重定向
+^https?:\/\/(www.)?(g|google)\.(cn|com\.hk) 302 https://www.google.com
+
+# terabox
+^https?:\/\/(d5|data)\.1024tera\.com\/issue\/terabox\/ts_ad\/ugh reject-200
+^https?:\/\/assets\.mintegral\.com\/vm\/\d{2}\/\d{2}\/\d{2}\/\d{2}\/[a-z0-9-]{36}\.mp4 reject
+^https?:\/\/www\.1024tera\.com\/adx\/v1\/common\/getad\?.* reject
+
+[Script]
+# keep开屏广告
+http-response ^https:\/\/api\.gotokeep\.com\/op-engine-webapp\/v1\/configs script-path=https://raw.githubusercontent.com/BOBANDJOB/PrivateQX/main/Scripts/keepScreenAd.js, requires-body=true, timeout=10, tag=keep开屏广告, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/erdongchanyo/Paolu.png
+
+# terabox开屏广告
+http-response ^https:\/\/www\.(1024tera|terabox)\.com\/api\/ad\/getconfig\? script-path=https://raw.githubusercontent.com/BOBANDJOB/PrivateQX/main/Scripts/terabox.js, requires-body=true, timeout=10, tag=terabox开屏广告, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/Twoandz9/Wd1.png
+
+# BiliBili解锁高码率画质
+http-response ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/(mine(\/ipad)?|myinfo)\? script-path=https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/bilibili/bili.js, requires-body=true, timeout=10, tag=BiliBili解锁高码率画质, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/BiliBiliTV.png
+
+# pornhubPremium
+http-request ^https?:\/\/cn\.pornhubpremium\.com\/ script-path=https://raw.githubusercontent.com/yqc007/QuantumultX/master/PornHubPremiumCrack.js, requires-body=true, timeout=10, tag=pornhubPremium, img-url=https://raw.githubusercontent.com/LovedGM/Quantumult-X-TuBiao/main/dongzuo/dz4.png
+
+# 前途无忧开屏广告
+http-response ^https:\/\/appapi\.51job\.com\/api\/market\/get_launch\.php\?productname=51job&version=\d{2}\.\d\.\d&format=json&partner=[a-z0-9]{32}&uuid=[a-z0-9]{32}&guid=[a-z0-9]{32} script-path=https://raw.githubusercontent.com/BOBANDJOB/PrivateQX/main/Scripts/51job.js, requires-body=true, timeout=10, tag=前途无忧开屏广告
+
+[MITM]
+hostname = %APPEND% api.gotokeep.com, www.terabox.com, www.google.com.hk, www.google.cn, appapi.51job.com, data.1024tera.com, d5.1024tera.com, assets.mintegral.com, www.1024tera.com
