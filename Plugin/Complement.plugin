@@ -51,7 +51,6 @@ http-response ^https:\/\/www\.(1024tera|terabox)\.com\/api\/ad\/getconfig\? scri
 
 # BiliBili解锁高码率画质
 http-response ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/(mine(\/ipad)?|myinfo)\? script-path=https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/bilibili/json.js, requires-body=true, timeout=10, tag=BiliBili解锁高码率画质, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/BiliBiliTV.png
-http-response ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\? script-path=https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/bilibili/json.js, requires-body=true, timeout=10, tag=BiliBili皮肤, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/lige47/bilibili(1).png
 
 # pornhubPremium
 http-request ^https?:\/\/cn\.pornhubpremium\.com\/ script-path=https://raw.githubusercontent.com/yqc007/QuantumultX/master/PornHubPremiumCrack.js, requires-body=true, timeout=10, tag=pornhubPremium, img-url=https://raw.githubusercontent.com/LovedGM/Quantumult-X-TuBiao/main/dongzuo/dz4.png
