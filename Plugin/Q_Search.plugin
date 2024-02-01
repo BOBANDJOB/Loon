@@ -103,9 +103,9 @@
 # af  xxx (Acfun)
 ^https:\/\/duckduckgo.com\/\?q=af\+([^&]+).+ https://www.acfun.cn/search?keyword=$1 302
 ^https:\/\/duckduckgo.com\/\?q=([^+]+)\+af.+ https://www.acfun.cn/search?keyword=$1 302
-# ys  xxx (茶杯狐cupfox)
-^https:\/\/duckduckgo.com\/\?q=ys\+([^&]+).+ https://cupfox.app/search?key=$1 302
-^https:\/\/duckduckgo.com\/\?q=([^+]+)\+ys.+ https://cupfox.app/search?key=$1 302
+# ys  xxx (搜片)
+^https:\/\/duckduckgo.com\/\?q=ys\+([^&]+).+ https://soupian.icu/search?key=$1 302
+^https:\/\/duckduckgo.com\/\?q=([^+]+)\+ys.+ https://soupian.icu/search?key=$1 302
 
 
 #>>>>>>>>>>>>>>>>>>>>>>>苹果商店切换
