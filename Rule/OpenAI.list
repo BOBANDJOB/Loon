@@ -6,6 +6,7 @@ DOMAIN, bard.google.com
 # ChatGPT
 DOMAIN, api.statsig.com
 DOMAIN, browser-intake-datadoghq.com
+DOMAIN, ab.chatgpt.com
 DOMAIN, cdn.openai.com
 DOMAIN, chat.openai.com
 DOMAIN, chat.openai.com.cdn.cloudflare.net
@@ -18,6 +19,7 @@ DOMAIN, production-openaicom-storage.azureedge.net
 DOMAIN, static.cloudflareinsights.com
 DOMAIN-SUFFIX, algolia.net
 DOMAIN-SUFFIX, auth0.com
+DOMAIN-SUFFIX, chatgpt.com
 DOMAIN-SUFFIX, cdn.cloudflare.net
 DOMAIN-SUFFIX, challenges.cloudflare.com
 DOMAIN-SUFFIX, client-api.arkoselabs.com
