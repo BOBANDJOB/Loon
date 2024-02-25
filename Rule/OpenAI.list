@@ -3,7 +3,7 @@ DOMAIN-SUFFIX, chat.openai.com
 # 谷歌bard及其它
 DOMAIN, bard.google.com
 
-# ChatGPT
+# ChatGPT 2024/2/25
 DOMAIN, api.statsig.com
 DOMAIN, browser-intake-datadoghq.com
 DOMAIN, ab.chatgpt.com
