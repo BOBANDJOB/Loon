@@ -61,7 +61,7 @@
 http-response ^https:\/\/api\.gotokeep\.com\/op-engine-webapp\/v1\/configs script-path=https://raw.githubusercontent.com/BOBANDJOB/PrivateQX/main/Scripts/keepScreenAd.js, requires-body=true, timeout=10, tag=keep开屏广告, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/erdongchanyo/Paolu.png
 
 # terabox开屏广告
-http-response ^https:\/\/www\.(1024tera|terabox)\.com\/api\/ad\/getconfig\? script-path=https://raw.githubusercontent.com/BOBANDJOB/PrivateQX/main/Scripts/terabox.js, requires-body=true, timeout=10, tag=terabox开屏广告, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/Twoandz9/Wd1.png
+http-response ^https:\/\/www\.(1024tera|terabox)\.(com|app)\/api\/ad\/getconfig\? script-path=https://raw.githubusercontent.com/BOBANDJOB/PrivateQX/main/Scripts/terabox.js, requires-body=true, timeout=10, tag=terabox开屏广告, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/Twoandz9/Wd1.png
 
 # BiliBili解锁高码率画质
 http-response ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/(mine(\/ipad)?|myinfo)\? script-path=https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/bilibili/json.js, requires-body=true, timeout=10, tag=BiliBili解锁高码率画质, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/BiliBiliTV.png
