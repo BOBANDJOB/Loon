@@ -26,6 +26,13 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 [URL Rewrite]
+# > 浦发银行
+# hostname = lban.spdb.com.cn, wap.spdb.com.cn
+^https?:\/\/lban\.spdb\.com\.cn\/mspmk-web-component\/getAdvList\.ah$ reject
+^https?:\/\/lban\.spdb\.com\.cn\/mspmk-web-component\/getAdvertisementList\.ah reject
+^https?:\/\/lban\.spdb\.com\.cn\/mspmk-web-component\/prefetchAdvList\.ah reject
+^https?:\/\/wap\.spdb\.com\.cn\/mspmk-web-homeassist\/OpenScreenAdv\.ah$ reject
+
 # > 谷歌重定向
 ^https?:\/\/(www.)?(g|google)\.(cn|com\.hk) 302 https://www.google.com
 
@@ -52,7 +59,7 @@
 ^https?:\/\/www\.1024tera\.com\/adx\/v1\/common\/getad\?.* reject
 
 # > 91Pron去视频广告🤪 
-^https:\/\/img\.killcovid2021\.com\/0527\.mp4$ url reject
+^https:\/\/img\.killcovid2021\.com\/0527\.mp4$ reject
 
 #************************************#
 
@@ -74,4 +81,4 @@ http-request ^https?:\/\/cn\.pornhubpremium\.com\/ script-path=https://raw.githu
 http-response ^https:\/\/appapi\.51job\.com\/api\/market\/get_launch\.php\?productname=51job&version=\d{2}\.\d\.\d&format=json&partner=[a-z0-9]{32}&uuid=[a-z0-9]{32}&guid=[a-z0-9]{32} script-path=https://raw.githubusercontent.com/BOBANDJOB/PrivateQX/main/Scripts/51job.js, requires-body=true, timeout=10, tag=前途无忧开屏广告
 
 [MITM]
-hostname = %APPEND% pingtas.qq.com, c.pc.qq.com, cgi.connect.qq.com, img.killcovid2021.com, app.bilibili.com, api.gotokeep.com, www.terabox.com, www.google.com.hk, www.google.cn, appapi.51job.com, data.1024tera.com, d5.1024tera.com, assets.mintegral.com, www.1024tera.com
+hostname = %APPEND% pingtas.qq.com, c.pc.qq.com, cgi.connect.qq.com, img.killcovid2021.com, app.bilibili.com, api.gotokeep.com, www.terabox.com, www.google.com.hk, www.google.cn, appapi.51job.com, data.1024tera.com, d5.1024tera.com, assets.mintegral.com, www.1024tera.com, lban.spdb.com.cn, wap.spdb.com.cn
