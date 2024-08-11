@@ -64,9 +64,6 @@
 #************************************#
 
 [Script]
-# Github pro   hostname = api.github.com
-http-response ^https?:\/\/api\.github\.com\/graphql script-path=https://raw.githubusercontent.com/BOBANDJOB/PrivateQX/main/Scripts/Github.js, requires-body=true, timeout=10, tag=GithubPro, img-url=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/icon/task/github.png
-
 # keep开屏广告
 http-response ^https:\/\/api\.gotokeep\.com\/op-engine-webapp\/v1\/configs script-path=https://raw.githubusercontent.com/BOBANDJOB/PrivateQX/main/Scripts/keepScreenAd.js, requires-body=true, timeout=10, tag=keep开屏广告, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/erdongchanyo/Paolu.png
 
@@ -84,4 +81,4 @@ http-request ^https?:\/\/cn\.pornhubpremium\.com\/ script-path=https://raw.githu
 http-response ^https:\/\/appapi\.51job\.com\/api\/market\/get_launch\.php\?productname=51job&version=\d{2}\.\d\.\d&format=json&partner=[a-z0-9]{32}&uuid=[a-z0-9]{32}&guid=[a-z0-9]{32} script-path=https://raw.githubusercontent.com/BOBANDJOB/PrivateQX/main/Scripts/51job.js, requires-body=true, timeout=10, tag=前途无忧开屏广告
 
 [MITM]
-hostname = %APPEND% api.github.com, pingtas.qq.com, c.pc.qq.com, cgi.connect.qq.com, img.killcovid2021.com, app.bilibili.com, api.gotokeep.com, www.terabox.com, www.google.com.hk, www.google.cn, appapi.51job.com, data.1024tera.com, d5.1024tera.com, assets.mintegral.com, www.1024tera.com, lban.spdb.com.cn, wap.spdb.com.cn
+hostname = %APPEND% pingtas.qq.com, c.pc.qq.com, cgi.connect.qq.com, img.killcovid2021.com, app.bilibili.com, api.gotokeep.com, www.terabox.com, www.google.com.hk, www.google.cn, appapi.51job.com, data.1024tera.com, d5.1024tera.com, assets.mintegral.com, www.1024tera.com, lban.spdb.com.cn, wap.spdb.com.cn
