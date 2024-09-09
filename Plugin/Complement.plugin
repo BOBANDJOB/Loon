@@ -37,7 +37,7 @@
 ^https?:\/\/(www.)?(g|google)\.(cn|com\.hk) 302 https://www.google.com
 
 # > 哔咔去广告  hostname = manhuapica.com
-^https:\/\/manhuapica\.com\/ad\/\?cat= reject
+^https:\/\/manhuapica\.com\/ad\/\?cat= reject-dict
 
 # > BiliBili
 # 移除视频链接跟踪参数
