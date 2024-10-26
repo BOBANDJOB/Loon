@@ -1,7 +1,7 @@
 #!name = 拼多多
 #!desc = 广告就不用拼着看了吧。
-#!author = ZenmoFeiShi[https://github.com/ZenmoFeiShi], 可莉🅥[https://gitlab.com/lodepuly/vpn_tool], RuCu6[https://github.com/RuCu6]
-#!icon = https://raw.githubusercontent.com/RuCu6/Loon/main/Icons/app/pinduoduo.png
+#!author = ZenmoFeiShi[https://github.com/ZenmoFeiShi], 可莉🅥[https://gitlab.com/lodepuly/vpn_tool], BOBANDJOB[https://github.com/BOBANDJOB]
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/pinduoduo.png
 #!date = 2024-10-18 10:25
 
 [Rule]
@@ -34,7 +34,7 @@ DOMAIN, titan.pinduoduo.com, REJECT
 ^https:\/\/api\.pinduoduo\.com\/search_hotquery\? reject-dict
 
 [Script]
-http-response ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? script-path = https://raw.githubusercontent.com/RuCu6/Loon/main/Scripts/pdd.js, requires-body = true, tag = 精简首页
+http-response ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\? script-path = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/pdd.js, requires-body = true, tag = 精简首页
 
 [MITM]
 hostname = api.pinduoduo.com, api.yangkeduo.com
