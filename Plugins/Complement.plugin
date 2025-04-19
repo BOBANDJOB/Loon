@@ -26,6 +26,10 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 [URL Rewrite]
+# > 京东开屏广告
+# hostname = m.360buyimg.com
+^https?:\/\/m\.360buyimg\.com\/mobilecms\/s1125x2436_jfs reject-200
+
 # > 一汽奥迪开屏广告
 # hostname = audi2c.faw-vw.com
 ^https:\/\/audi2c\.faw-vw\.com\/capi\/v1\/loading_page\/get reject-dict
@@ -88,4 +92,4 @@ http-request ^https?:\/\/cn\.pornhubpremium\.com\/ script-path=https://raw.githu
 http-response ^https:\/\/appapi\.51job\.com\/api\/market\/get_launch\.php\?productname=51job&version=\d{2}\.\d\.\d&format=json&partner=[a-z0-9]{32}&uuid=[a-z0-9]{32}&guid=[a-z0-9]{32} script-path=https://raw.githubusercontent.com/BOBANDJOB/PrivateQX/main/Scripts/51job.js, requires-body=true, timeout=10, tag=前途无忧开屏广告
 
 [MITM]
-hostname = audi2c.faw-vw.com, pingtas.qq.com, manhuapica.com, c.pc.qq.com, cgi.connect.qq.com, img.killcovid2021.com, app.bilibili.com, api.gotokeep.com, www.terabox.com, www.google.com.hk, www.google.cn, appapi.51job.com, data.1024tera.com, d5.1024tera.com, assets.mintegral.com, www.1024tera.com, lban.spdb.com.cn, wap.spdb.com.cn
+hostname = m.360buyimg.com, audi2c.faw-vw.com, pingtas.qq.com, manhuapica.com, c.pc.qq.com, cgi.connect.qq.com, img.killcovid2021.com, app.bilibili.com, api.gotokeep.com, www.terabox.com, www.google.com.hk, www.google.cn, appapi.51job.com, data.1024tera.com, d5.1024tera.com, assets.mintegral.com, www.1024tera.com, lban.spdb.com.cn, wap.spdb.com.cn
