@@ -21,8 +21,9 @@ $httpClient.get(
   },
   (error, response, data) => {
     if (error) {
-      console.log(`解析油价信息失败, URL=${query_addr}`);
-      done({});
+      console.log(`解析油价信息失败, URL=${query_addr}, Error: ${error}`);
+      $notification.post("油价查询", "请求失败", "请检查网络连接");
+      $done({});
     } else {
       const reg_price =
         /<dl>[\s\S]+?<dt>(.*油)<\/dt>[\s\S]+?<dd>(.*)\(元\)<\/dd>/gm;
@@ -78,10 +79,15 @@ $httpClient.get(
       const friendly_tips = `下次${adjust_date}调整 ${adjust_trend} ${adjust_value}`;
 
       if (prices.length !== 4) {
-        console.log( `解析油价信息失败, 数量=${prices.length},  URL=${query_addr}`);
-        done();
+        console.log(`解析油价信息失败, 数量=${prices.length}, URL=${query_addr}`);
+        $notification.post("油价查询", "解析失败", "请检查脚本或反馈给开发者");
+        $done({});
       } else {
-        $done($notification.post("实时油价信息", `${friendly_tips}`, `${prices[0].name}  ${prices[0].value}\n${prices[1].name}  ${prices[1].value}\n${prices[2].name}  ${prices[2].value}\n${prices[3].name}  ${prices[3].value}`, "http://m.qiyoujiage.com/${region}.shtml"));
+        const content = `${prices[0].name}  ${prices[0].value}\n${prices[1].name}  ${prices[1].value}\n${prices[2].name}  ${prices[2].value}\n${prices[3].name}  ${prices[3].value}`;
+        
+        $notification.post("实时油价信息", friendly_tips, content);
+        console.log(`油价查询成功：\n${content}\n${friendly_tips}`);
+        $done({});
       }
     }
   }
