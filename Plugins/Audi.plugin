@@ -1,0 +1,17 @@
+
+#!name = 一汽奥迪去广告
+#!desc = 过滤自用广告
+#!openUrl = 
+#!author = Winfred
+#!homepage = 
+#!icon = 
+#!date = 2025-05-29 00:20
+
+# > 一汽奥迪开屏广告
+# hostname = audi2c.faw-vw.com
+^https:\/\/audi2c\.faw-vw\.com\/capi\/v1\/loading_page\/get reject-dict
+^https:\/\/audi2c\.faw-vw\.com\/cnapi\/v2\/carouse_figure\/get\/on_shelf\?nonce reject-dict
+^https:\/\/audi2c\.faw-vw\.com\/cnapi\/v1\/loading_page\/get\?nonce reject-dict
+
+[MITM]
+hostname = audi2c.faw-vw.com
