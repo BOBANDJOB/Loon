@@ -1,5 +1,6 @@
 DOMAIN,cdn.usefathom.com
 DOMAIN-SUFFIX,anthropic.com
 DOMAIN-SUFFIX,claude.ai
+USER-AGENT,Claude*
 IP-CIDR, 160.79.104.0/23
 IP-CIDR6, 2607:6bc0::/48
