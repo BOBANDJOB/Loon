@@ -7,6 +7,7 @@
 #!icon = 
 #!date = 2025-05-29 00:20
 
+[Rewrite]
 # > 一汽奥迪开屏广告
 # hostname = audi2c.faw-vw.com
 ^https:\/\/audi2c\.faw-vw\.com\/capi\/v1\/loading_page\/get reject-dict
