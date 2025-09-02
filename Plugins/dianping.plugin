@@ -8,7 +8,7 @@
 #!date=2025-08-21 22:37:00
 #############################################
 
-[Rewrite]
+[Script]
 # 开屏广告
 http-response ^https?:\/\/img\.meituan\.net\/dpmobile\/ script-path=https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/dianping.js, requires-body=true, tag=DianPingCrack
 #^https?:\/\/img\.meituan\.net\/dpmobile\/.+93241\.png reject-dict
