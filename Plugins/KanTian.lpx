@@ -1,0 +1,17 @@
+#!name=看天去广告
+#!desc=破解会员，全功能可用。
+#!openUrl=https://apps.apple.com/app/id1623788622
+#!author=阿蛮
+#!tag=去广告
+#!system=
+#!system_version=
+#!loon_version=3.3.3(894)
+#!homepage=
+#!icon=https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/b4/50/e3/b450e34b-6e33-b99b-049e-d481115c8616/AppIcon-0-0-1x_U007emarketing-0-8-0-sRGB-85-220.png/180x180bb.png
+#!date=2025-09-13 03:34:06
+
+[Rewrite]
+^https:\/\/kantianapi\.geovisearth\.com\/v2\/user\/(ssoLogin$|((mine|guest\/info)\/query\?)) response-body-json-replace msg.isVip 1 msg.isLifeVip null msg.vipStart 2025-09-13 msg.vipEnd 2999-12-31
+
+[MitM]
+hostname=kantianapi.geovisearth.com
