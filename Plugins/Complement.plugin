@@ -68,7 +68,7 @@
 # > 91Pron去视频广告🤪 
 ^https:\/\/img\.killcovid2021\.com\/0527\.mp4$ reject
 
-#************************************#
+#================================================================#
 
 [Script]
 # keep开屏广告
@@ -89,3 +89,360 @@ http-response ^https:\/\/appapi\.51job\.com\/api\/market\/get_launch\.php\?produ
 
 [MITM]
 hostname = m.360buyimg.com, pingtas.qq.com, manhuapica.com, c.pc.qq.com, cgi.connect.qq.com, img.killcovid2021.com, app.bilibili.com, api.gotokeep.com, www.terabox.com, www.google.com.hk, www.google.cn, appapi.51job.com, data.1024tera.com, d5.1024tera.com, assets.mintegral.com, www.1024tera.com, lban.spdb.com.cn, wap.spdb.com.cn
+
+#================================================================#
+
+[Rule]
+# >>>>>>>>>>>>>>> ✅ 0 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 1 ✅ <<<<<<<<<<<<<<
+# > 12306
+DOMAIN,ad.12306.cn,DIRECT
+
+
+# >>>>>>>>>>>>>>> ✅ 2 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 3 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 4 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 5 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 6 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 7 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 8 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 9 ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ A ✅ <<<<<<<<<<<<<<
+# > anti-ad
+DOMAIN-KEYWORD,anti-ad.net,DIRECT
+
+# > 爱影视  #分流修正 #欢迎大家补充
+DOMAIN,static.jssp.tv,DIRECT
+DOMAIN,lain.bgm.tv,DIRECT
+DOMAIN,tiao.cjkypo.com,DIRECT
+DOMAIN,ok.zuidapic.com,DIRECT
+DOMAIN,ts.thefiledomaining.com,DIRECT
+DOMAIN,deo.shopeemobile.com,DIRECT
+DOMAIN,m3u8.255tv.tk,DIRECT
+DOMAIN,m3u8.mstopq.com,DIRECT
+DOMAIN,ain.bgm.tv,DIRECT
+DOMAIN-KEYWORD,vip.lz-cdn,DIRECT
+DOMAIN-KEYWORD,ax1x.com,DIRECT
+DOMAIN-KEYWORD,o.lencr.org,DIRECT
+DOMAIN-KEYWORD,ttcdn-tos.kkimg.cc,DIRECT
+
+# > Apple
+# Apple Music
+DOMAIN,xp.apple.com,DIRECT
+# 屏蔽系统更新
+DOMAIN,ns.itunes.apple.com,AppleUpdate
+DOMAIN,appldnld.apple.com,AppleUpdate
+DOMAIN,mesu.apple.com,AppleUpdate
+DOMAIN,gdmf.apple.com,AppleUpdate
+DOMAIN-SUFFIX,iadsdk.apple.com,AppleUpdate
+DOMAIN-SUFFIX,ads.internal.unity3d.com,AppleUpdate
+DOMAIN-SUFFIX,ads.prd.ie.internal.unity3d.com,AppleUpdate
+DOMAIN-SUFFIX,unityads.unity3d.com,AppleUpdate
+
+# >>>>>>>>>>>>>>> ✅ B ✅ <<<<<<<<<<<<<<
+# 禁止B站白嫖上传
+AND,((PROTOCOL,STUN), (DOMAIN-KEYWORD,bilibili)),REJECT
+
+
+# >>>>>>>>>>>>>>> ✅ C ✅ <<<<<<<<<<<<<<
+# > 插件网站
+DOMAIN-SUFFIX,crxsoso.com,US
+
+# > ClashRoyale
+DOMAIN-SUFFIX,clashroyale.com,US
+DOMAIN-SUFFIX,clashroyaleapp.com,US
+
+# > 菜鸟新建地址
+DOMAIN-SUFFIX,mmstat.com,DIRECT
+
+# >>>>>>>>>>>>>>> ✅ D ✅ <<<<<<<<<<<<<<
+# > 抖音开屏
+DOMAIN-KEYWORD,asiad.byteactivity,REJECT
+# 登录设备管理
+DOMAIN-SUFFIX,bytegoofy.com,DIRECT
+
+# >>>>>>>>>>>>>>> ✅ E ✅ <<<<<<<<<<<<<<
+
+
+# >>>>>>>>>>>>>>> ✅ F ✅ <<<<<<<<<<<<<<
+# > freeok视频网
+DOMAIN-SUFFIX,freeok.vip,US
+
+
+# >>>>>>>>>>>>>>> ✅ G ✅ <<<<<<<<<<<<<<
+# > 高德地图（防reject卡顿）
+DOMAIN,www.qchannel01.cn,DIRECT
+DOMAIN,awaken.amap.com,DIRECT
+
+# > Google 
+# Gemini
+DOMAIN,alkalimakersuite-pa.clients6.google.com,OpenAI
+DOMAIN,generativelanguage.googleapis.com,OpenAI
+# Google搜索不用韩国节点
+DOMAIN,www.google.com,GoogleSearch
+
+# > Goodnotes6
+DOMAIN-SUFFIX,goodnotes.email,US
+DOMAIN-SUFFIX,goodnotescloud.com,US
+DOMAIN-SUFFIX,goodnotes.com,US
+
+
+# >>>>>>>>>>>>>>> ✅ H ✅ <<<<<<<<<<<<<<
+# > 海角社区
+DOMAIN-SUFFIX,haijiao.com,DIRECT
+
+# > 黑料社
+DOMAIN,h7.zztt72.com,US
+DOMAIN,155.fun,US
+
+
+# >>>>>>>>>>>>>>> ✅ I ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ J ✅ <<<<<<<<<<<<<<
+# > 捷顺停车
+DOMAIN-SUFFIX,jszctech.com,DIRECT
+
+# > JavDB
+DOMAIN,api.liquidlink.cn,US
+DOMAIN,jdforrepam.com,US
+
+# > JapanAV
+DOMAIN,av.jkforum.net,US
+
+# > JavDay每日新闻
+DOMAIN,cdn.jsdelivr.net,US
+DOMAIN,javday.tv,PROXY
+DOMAIN,javday.app,PROXY
+
+# >>>>>>>>>>>>>>> ✅ K ✅ <<<<<<<<<<<<<<
+# > Keep 防闪退
+DOMAIN,apm.gotokeep.com,DIRECT
+DOMAIN,kad.gotokeep.com,DIRECT
+
+# >>>>>>>>>>>>>>> ✅ L ✅ <<<<<<<<<<<<<<
+# > LAN
+DOMAIN-SUFFIX,local,DIRECT
+# 私有网络
+IP-CIDR,10.0.0.0/8,DIRECT
+IP-CIDR,172.16.0.0/12,DIRECT
+IP-CIDR,192.168.0.0/16,DIRECT
+# 运营商级NAT
+IP-CIDR,100.64.0.0/10,DIRECT
+# 环回地址
+IP-CIDR,127.0.0.0/8,DIRECT
+# 多播传输
+IP-CIDR,224.0.0.0/24,DIRECT
+# 苹果服务
+IP-CIDR,17.0.0.0/8,DIRECT
+# 腾讯游戏
+IP-CIDR,182.254.116.0/24,DIRECT
+
+
+# >>>>>>>>>>>>>>> ✅ M ✅ <<<<<<<<<<<<<<
+# > 漫画
+# e-hantai
+DOMAIN,exhentai.org,US
+# 禁漫天堂
+DOMAIN-SUFFIX,18comic.org,US
+DOMAIN-SUFFIX,18comic.vip,US
+DOMAIN-SUFFIX,www.cdnmhwscc.vip,US
+DOMAIN-SUFFIX,www.cdnuc.vip,US
+# JM图片分流
+DOMAIN-SUFFIX,cdn-msp2.jmapinodeudzn.net,US
+DOMAIN-SUFFIX,cdn-msp3.jmapinodeudzn.net,US
+DOMAIN-SUFFIX,cdn-msp2.jmapiproxy2.cc,US
+DOMAIN-SUFFIX,cdn-msp2.jmapiproxy1.cc,US
+# copymanga
+DOMAIN-SUFFIX,mangafunc.fun,US
+DOMAIN-KEYWORD,copymanga,US
+DOMAIN-SUFFIX,mangafuna.xyz,US
+DOMAIN,api.mangacopy.com,US
+DOMAIN,cdn.xsskc.com,US
+# 哔咔
+DOMAIN,ad-channel.wikawika.xyz,REJECT
+DOMAIN,ad-channel.diwodiwo.xyz,REJECT
+DOMAIN,ad-display.diwodiwo.xyz,REJECT
+DOMAIN,manhuapica.com,US
+DOMAIN,pica-web.wakamoment.tk,US
+DOMAIN,api.tipatipa.xyz,US
+DOMAIN-SUFFIX,diwodiwo.xyz,US
+DOMAIN-SUFFIX,picacomic.com,US
+
+# > 漫画星球App
+DOMAIN-SUFFIX,chuangke.tv,US
+
+# >>>>>>>>>>>>>>> ✅ N ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ O ✅ <<<<<<<<<<<<<<
+# platform.openai使用US节点
+DOMAIN,platform.openai.com,US
+
+
+# >>>>>>>>>>>>>>> ✅ P ✅ <<<<<<<<<<<<<<
+# > pikpak
+DOMAIN-SUFFIX,mypikpak.com,US
+
+# > 拼多多百亿补贴分流
+#DOMAIN,m.pinduoduo.net,DIRECT
+
+# > PockytShop分流
+DOMAIN,shop.pockyt.io,DIRECT
+
+# >>>>>>>>>>>>>>> ✅ Q ✅ <<<<<<<<<<<<<<
+# > QQ空间
+DOMAIN-KEYWORD,ctc.qzs.qzone.qq.com,DIRECT
+
+# > QQ音乐开屏
+DOMAIN,us.l.qq.com,REJECT
+
+# > 起点请求风暴
+DOMAIN,otheve.beacon.qq.com,REJECT-DROP
+
+# >>>>>>>>>>>>>>> ✅ R ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ S ✅ <<<<<<<<<<<<<<
+# > strava跑步
+DOMAIN-SUFFIX,strava.com,US
+DOMAIN,strava.app.link,US
+
+# > subStore
+DOMAIN-SUFFIX,vercel.app,US
+# > suppercell
+DOMAIN-SUFFIX,supercell.com,US
+
+# > 神户直播
+IP-CIDR,18.143.209.231/32,DIRECT
+DOMAIN-SUFFIX,changjiangjin.com,DIRECT
+DOMAIN-SUFFIX,heshuangde.com,DIRECT
+DOMAIN-SUFFIX,lyjinaojixie.com,DIRECT
+
+# >>>>>>>>>>>>>>> ✅ T ✅ <<<<<<<<<<<<<<
+# > terabox网盘
+DOMAIN,www.terabox.com,US
+DOMAIN-SUFFIX,1024tera.com,US
+
+# > Talkatone
+# 内部广告域名
+DOMAIN,creatives.smadex.com,REJECT
+DOMAIN-SUFFIX,tktn.be,US
+IP-CIDR,50.117.27.0/24,US
+IP-CIDR,69.46.75.0/24,US
+IP-CIDR,205.164.56.29/24,US
+IP-CIDR,63.251.124.0/24,US
+
+# > telegram
+# 防止加载转圈
+IP-CIDR,95.161.76.100/31,REJECT-NO-DROP,no-resolve
+
+# >>>>>>>>>>>>>>> ✅ U ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ V ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ W ✅ <<<<<<<<<<<<<<
+# > 微博
+DOMAIN,sdkapp.uve.weibo.com,DIRECT
+
+# > 微信支付，支付宝支付卡顿
+DOMAIN,s3.pstatp.com,DIRECT
+
+# >>>>>>>>>>>>>>> ✅ X ✅ <<<<<<<<<<<<<<
+# > 喜马拉雅
+IP-CIDR,114.114.114.114/32,REJECT,no-resolve
+
+# > 小说
+DOMAIN-SUFFIX,ixdzs8.com,DIRECT
+DOMAIN,wap.rourouwu.co,US
+
+# > 携程
+DOMAIN-KEYWORD,aw-s.tripcdn.com,DIRECT
+DOMAIN-KEYWORD,trip.com,DIRECT
+
+# > 避免迅雷版权问题
+DOMAIN,hub5idx.v6.shub.sandai.net,REJECT
+DOMAIN,hub5emu.v6.shub.sandai.net,REJECT
+DOMAIN,hub5btmain.v6.shub.sandai.net,REJECT
+
+# >>>>>>>>>>>>>>> ✅ Y ✅ <<<<<<<<<<<<<<
+# > 影视
+# 小宝影院
+DOMAIN,xiaoheimi.net,PROXY
+DOMAIN,xiaobaotv.net,PROXY
+DOMAIN,xiaoxintv.net,PROXY
+# 豌豆Pro影视
+DOMAIN,www.wandou.la,PROXY
+# x1hub
+DOMAIN-SUFFIX,qoocdn.com,PROXY
+# 莫高雷Emby
+IP-CIDR,202.61.255.248/32,PROXY
+# 大师兄影视  #分流修正 #欢迎大家补充
+DOMAIN,sdk.alibaba.com.ailbaba.me,DIRECT
+DOMAIN,img.ffzypic.com,DIRECT
+DOMAIN,img.liangzipic.com,DIRECT
+DOMAIN,img.bfzypic.com,DIRECT
+DOMAIN,img.kuaikanzy.net,DIRECT
+DOMAIN,vip.imgffzy.com,DIRECT
+DOMAIN,vip.ffzyread.com,DIRECT
+DOMAIN,image.maimn.com,DIRECT
+DOMAIN-KEYWORD,bfzycdn.com,DIRECT
+DOMAIN-KEYWORD,vip.kuaikan-cdn,DIRECT
+DOMAIN-KEYWORD,vip.ffzy-play,DIRECT
+DOMAIN-KEYWORD,vip.ffzy-online,DIRECT
+# 第一动漫
+DOMAIN,d1-dm.online,DIRECT
+# 影猫的仓库
+DOMAIN,www.xlys02.com,DIRECT
+
+# > 医保
+DOMAIN,v1.cnzz.com,DIRECT
+
+# > yqc破解
+# 糖心VLOG,泡芙短视频
+IP-CIDR,172.233.81.206/32,DIRECT
+
+
+# >>>>>>>>>>>>>>> ✅ Z ✅ <<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>> ✅ 其他 ✅ <<<<<<<<<<<<<<
+# > 路由器后台
+IP-CIDR,192.168.0.1/24,DIRECT
+# > 天翼网关
+IP-CIDR,192.168.1.1/24,DIRECT
