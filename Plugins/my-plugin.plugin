@@ -203,10 +203,10 @@ DOMAIN,awaken.amap.com,DIRECT
 
 # > Google 
 # Gemini
-DOMAIN,alkalimakersuite-pa.clients6.google.com,OpenAI
-DOMAIN,generativelanguage.googleapis.com,OpenAI
+DOMAIN,alkalimakersuite-pa.clients6.google.com,US
+DOMAIN,generativelanguage.googleapis.com,US
 # Google搜索不用韩国节点
-DOMAIN,www.google.com,GoogleSearch
+DOMAIN,www.google.com,US
 
 # > Goodnotes6
 DOMAIN-SUFFIX,goodnotes.email,US
