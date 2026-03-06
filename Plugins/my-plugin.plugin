@@ -240,8 +240,8 @@ DOMAIN,av.jkforum.net,US
 
 # > JavDay每日新闻
 DOMAIN,cdn.jsdelivr.net,US
-DOMAIN,javday.tv,Auto
-DOMAIN,javday.app,Auto
+DOMAIN,javday.tv,US
+DOMAIN,javday.app,US
 
 # >>>>>>>>>>>>>>> ✅ K ✅ <<<<<<<<<<<<<<
 # > Keep 防闪退
@@ -402,15 +402,15 @@ DOMAIN,hub5btmain.v6.shub.sandai.net,REJECT
 # >>>>>>>>>>>>>>> ✅ Y ✅ <<<<<<<<<<<<<<
 # > 影视
 # 小宝影院
-DOMAIN,xiaoheimi.net,Auto
-DOMAIN,xiaobaotv.net,Auto
-DOMAIN,xiaoxintv.net,Auto
+DOMAIN,xiaoheimi.net,US
+DOMAIN,xiaobaotv.net,US
+DOMAIN,xiaoxintv.net,US
 # 豌豆Pro影视
-DOMAIN,www.wandou.la,Auto
+DOMAIN,www.wandou.la,US
 # x1hub
-DOMAIN-SUFFIX,qoocdn.com,Auto
+DOMAIN-SUFFIX,qoocdn.com,US
 # 莫高雷Emby
-IP-CIDR,202.61.255.248/32,Auto
+IP-CIDR,202.61.255.248/32,US
 # 大师兄影视  #分流修正 #欢迎大家补充
 DOMAIN,sdk.alibaba.com.ailbaba.me,DIRECT
 DOMAIN,img.ffzypic.com,DIRECT
