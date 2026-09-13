@@ -1,0 +1,13 @@
+#!name = Github429
+#!desc = 规避github raw文件访问实效
+#!author = BOBANDJOB[https://github.com/BOBANDJOB]
+#!icon = https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/GitHub.png
+#!date = 2026-09-13 21:50
+
+[Rewrite]
+# 解决github速率限制返回429问题
+^https:\/\/(raw|gist)\.githubusercontent\.com\/ header-replace Accept-Language en-us
+^https:\/\/github\.com\/ header-replace Accept-Language en-us
+
+[MITM]
+hostname = raw.githubusercontent.com,gist.githubusercontent.com,github.com,*.githubusercontent.com,
