@@ -1,10 +1,12 @@
-#!name=实时油价信息
-#!desc=定时监控每日油价（通知）地区可以填入省份拼音，如果有同音地区 就去下方url找对应的地区 例如http://m.qiyoujiage.com/shanxi-3/xian.shtml 就填写 shanxi-3/xian 在地区里
+#!name = 实时油价信息
+#!desc = 定时推送每日油价。地区填省份拼音（如 zhejiang）；同名地区请到 http://m.qiyoujiage.com/ 找对应路径，例如 http://m.qiyoujiage.com/shanxi-3/xian.shtml 就填 shanxi-3/xian
 #!openUrl = http://m.qiyoujiage.com/
 #!icon = https://raw.githubusercontent.com/Keywos/rule/main/tv/app/144px/yj.png
-#!input = 地区
 
+[Argument]
+region = input,"zhejiang",tag=地区,desc=省份拼音或 qiyoujiage 的路径，如 zhejiang、shanxi-3/xian
+cron = input,"15 9 * * *",tag=推送时间,desc=cron 表达式，默认每天 9:15
+enabled = switch,true,type=boolean,tag=启用
 
 [Script]
-
-cron "0 18 * * *" script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/loonyj.js, tag=每日油价
+cron ${cron} then script("https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/loonyj.js", {${region}}) with enable=${enabled}, timeout=15, tag="每日油价"

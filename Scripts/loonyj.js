@@ -1,12 +1,12 @@
 //转自https://raw.githubusercontent.com/RS0485/network-rules/main/scripts/gas-price.js
 //只兼容loon
-var region = "zhejiang";
-
-const loondq = $persistentStore.read("地区");
-
-if (loondq !== undefined) {
-  region = loondq;
-}
+const ARG = typeof $argument === "object" && $argument !== null ? $argument : {};
+// 去掉首尾空格、斜杠以及误填的 .shtml 后缀
+const region =
+  String(ARG.region || "zhejiang")
+    .trim()
+    .replace(/^\/+|\/+$/g, "")
+    .replace(/\.shtml$/, "") || "zhejiang";
 
 const query_addr = `http://m.qiyoujiage.com/${region}.shtml`;
 
