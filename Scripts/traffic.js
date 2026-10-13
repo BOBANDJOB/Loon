@@ -1,5 +1,5 @@
 // proxy-meter: 每天推送一次 VPS 当月流量；超过阈值时标题改为提醒。
-// 通知只放摘要（总量 + 本周期按人前 5）；完整明细写到脚本日志（Loon 里脚本 → 日志）。
+// 通知只放摘要（总量 + 本周期按人前 5）；完整明细和每人前 5 网站写到脚本日志（Loon 里脚本 → 日志）。
 // 作为插件使用时（proxy-meter.plugin），节点和阈值来自插件参数，请求经 node 指定的节点发出；
 // 不带参数运行时，走 Loon 的分流规则，需要 DOMAIN,stats.noble.internal,<Noble 的节点>。
 
@@ -41,6 +41,12 @@ function report(s) {
     lines.push("", "近 7 天按人：", ...rankLines(d.users_7d, TOP));
     lines.push("", "本周期按协议：", ...rankLines(d.inbounds, TOP));
     lines.push("", "注：明细是代理层数据，网卡总量 ≈ 明细合计 × 2 + 额外开销");
+  }
+  const sites = s.sites || {};
+  const people = (d.users || []).map((r) => r.name).filter((n) => sites[n] && sites[n].length);
+  if (people.length) {
+    lines.push("", "本周期每人前 " + TOP + " 网站：");
+    for (const name of people) lines.push(name + "：", ...rankLines(sites[name], TOP).map((l) => "  " + l));
   }
   lines.push("", "更新于 " + s.updated);
   return lines.join("\n");
