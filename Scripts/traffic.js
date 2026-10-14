@@ -94,6 +94,14 @@ function policyLines(s) {
     }
     lines.push("永不限速：" + p.exempt.join("、"));
   }
+  const sh = p.shaper;
+  if (!sh) lines.push("实际执行：pm-shaper 未安装");
+  else if (!sh.initialized) lines.push("实际执行：pm-shaper 未初始化，全部不限速");
+  else {
+    lines.push("实际执行（pm-shaper " + when(sh.updated) + "）：" + Object.keys(sh.applied).sort()
+      .map((u) => u + " " + (sh.applied[u] ? sh.applied[u] + " Mbps" : "不限速")).join(" · "));
+    if (sh.error) lines.push("  " + sh.error + "，已清除所有限速");
+  }
   const ev = p.events.slice(-SHOW_EVENTS).reverse();
   lines.push("最近事件" + (ev.length ? "（新的在前）：" : "：无"), ...eventLines(ev).map((l) => "  " + l));
   return lines;
