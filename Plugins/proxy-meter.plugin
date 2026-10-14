@@ -1,16 +1,18 @@
 #!name = VPS 流量
-#!desc = 每天推送 DMIT VPS 当月流量（网卡总量 + 按人明细），超过阈值时提醒。完整明细见脚本日志。
+#!desc = 每天推送 DMIT VPS 当月流量（网卡总量 + 按人明细），超过阈值时提醒；每小时检查限速策略，有变化立即推送。完整明细见脚本日志。
 #!author = Noble
 #!homepage = https://github.com/BOBANDJOB/Loon
 #!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/common/global.png
 
 [Argument]
 node = input,"US",tag=查询节点,desc=Noble 自己的节点或策略组名（不要选 WARP 用户的节点）
-cron = input,"0 9 * * *",tag=推送时间,desc=cron 表达式，默认每天 9:00
+cron = input,"0 * * * *",tag=运行时间,desc=cron 表达式，默认每小时整点；每次检查限速事件，日报每天只推一次
+report_hour = input,9,type=number,tag=日报时间（点）,desc=当天到这个钟点后的第一次运行推送日报（0-23），默认 9
 warn = input,70,type=number,tag=提醒阈值（%）
 alert = input,90,type=number,tag=警告阈值（%）
+forecast = input,90,type=number,tag=预计超额阈值（%）,desc=预计周期末用量超过额度的这个比例时提醒
 enabled = switch,true,type=boolean,tag=启用
 
 [Script]
 # 脚本用 $httpClient 的 node 参数直接经指定节点请求 stats.noble.internal，不需要额外的分流规则
-cron ${cron} then script("https://raw.githubusercontent.com/BOBANDJOB/Loon/refs/heads/main/Scripts/traffic.js", {${node}, ${warn}, ${alert}}) with enable=${enabled}, timeout=15, tag="VPS 流量"
+cron ${cron} then script("https://raw.githubusercontent.com/BOBANDJOB/Loon/refs/heads/main/Scripts/traffic.js", {${node}, ${warn}, ${alert}, ${forecast}, ${report_hour}}) with enable=${enabled}, timeout=15, tag="VPS 流量"
