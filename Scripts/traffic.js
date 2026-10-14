@@ -78,7 +78,8 @@ function policyLines(s) {
       "整体预计 " + o.projected_pct + "%（warn " + o.warn + "% / alert " + o.alert + "%）" +
         (o.mature ? "" : "，周期刚开始，暂只看熔断和保底"),
     );
-    if (o.uncalibrated) lines.push("⚠️ offset_gb 未填写，vnstat 没覆盖整个周期，已用和预计偏低");
+    if (o.offset_stale) lines.push("offset 属于旧周期（" + o.offset_cycle + " 起），已忽略");
+    if (o.uncalibrated) lines.push("⚠️ 本周期 offset 未填写，vnstat 没覆盖整个周期，已用和预计偏低");
     lines.push("ratio " + o.ratio + (o.ratio_fallback ? "（实测 " + o.ratio_raw + " 缺失或异常，用默认值）" : "（实测）"));
     lines.push("个人节奏自 " + o.personal_since + " 起算（已过周期 " + pct(o.personal_frac) + "）" +
       (o.personal_since > s.cycle.start ? "，本周期此前没有按人数据" : ""));
