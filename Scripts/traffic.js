@@ -1,4 +1,4 @@
-// proxy-meter: 每天推送一次 VPS 当月流量；超过阈值时标题改为提醒。
+// proxy-meter: 每天推送一次 VPS 当月流量；超过阈值或预计周期末超过阈值时标题改为提醒。
 // 通知只放摘要（总量 + 预计周期末 + 本周期按人前 5）；完整明细和每人前 5 网站写到脚本日志（Loon 里脚本 → 日志）。
 // 作为插件使用时（proxy-meter.plugin），节点和阈值来自插件参数，请求经 node 指定的节点发出；
 // 不带参数运行时，走 Loon 的分流规则，需要 DOMAIN,stats.noble.internal,<Noble 的节点>。
@@ -8,6 +8,7 @@ const ARG = typeof $argument === "object" && $argument !== null ? $argument : {}
 const NODE = ARG.node || "";
 const WARN = Number(ARG.warn) || 70;
 const ALERT = Number(ARG.alert) || 90;
+const FORECAST = Number(ARG.forecast) || 90; // 预计周期末用量占额度的提醒阈值（%）
 const TOP = 5;
 
 function fmt(bytes) {
@@ -90,6 +91,7 @@ $httpClient.get(request, (error, response, data) => {
 
     let title = "VPS 流量";
     if (t.percent >= ALERT) title = "⚠️ VPS 流量已超过 " + ALERT + "%";
+    else if (t.projected && t.projected.bytes > t.quota * FORECAST / 100) title = "⚠️ 预计本周期将超过 " + FORECAST + "%";
     else if (t.percent >= WARN) title = "⚠️ VPS 流量已超过 " + WARN + "%";
 
     const body = ["↓ " + fmt(t.rx) + "  ↑ " + fmt(t.tx)];
