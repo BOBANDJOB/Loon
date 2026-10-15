@@ -9,7 +9,8 @@
 //   - 快速失败：请求超时 3 秒，另有 5 秒兜底计时器；按错误类型（连接被拒 / 超时 / 非 200 / 响应格式异常）给出提示。
 // 每次查询都在脚本日志里记录耗时（ms），便于评估超时阈值。
 //   - 结果用 $done({title, content}) 返回（不超过 10 行），从节点入口运行时只弹窗，不推送通知；
-//     从脚本列表运行时同时推送通知。不改任何已推送状态。
+//     从脚本列表运行时同时推送通知（内容相同）。完整报告只写脚本日志（Loon 没有打开脚本日志的 URL Scheme）。
+//     不改任何已推送状态。
 // 网站排行里认不出的 IP 显示为"IP（AS号 运营商名称）"，用 Loon 自带的 $utils.ipasn / ipaso，服务器端不做 ASN 查询。
 // 不带参数运行时，走 Loon 的分流规则，需要 DOMAIN,stats.noble.internal,<Noble 的节点>。
 
@@ -56,6 +57,7 @@ const MAX_LINES = 10; // 手动查询弹窗 content 的最大行数
 // 手动查询的入口参数：长按节点 / 策略组运行时才有
 const ENV = typeof $environment === "object" && $environment !== null && $environment.params ? $environment.params : null;
 const ENTRY = ENV ? String(ENV.node || ENV.policyGroup || "") : "";
+const ENTRY_FROM = ENV ? (ENV.node ? "node" : ENV.policyGroup ? "policyGroup" : "") : "";
 const TIMEOUT_MS = MANUAL ? 3000 : 10000; // 手动查询要快速失败；定时运行保持原来的 10 秒
 const GUARD_MS = 5000;                    // 手动查询兜底：回调迟迟不返回时强制结束
 const MAX_STR = 200;                      // 显示前把响应里的每个字符串截断到这么长
@@ -135,7 +137,7 @@ function policyLines(s) {
     const o = p.overall;
     lines.push(
       "校准后已用 " + fmt(o.used) + "（vnstat " + fmt(o.nic_used) + (o.offset ? (o.offset > 0 ? " + " : " − ") + "offset " + fmt(Math.abs(o.offset)) : "") + "）",
-      "实际剩余 " + fmt(o.remaining) + "（低于 " + fmt(o.floor_remaining) + " 进入保底）",
+      "实际剩余 " + fmt(o.remaining) + "（保底线 " + Number((o.floor_remaining / 1024 ** 3).toFixed(2)) + " GB）",
       "整体预计 " + o.projected_pct + "%（" + METHOD[o.projected_method || "cycle"] + "；warn " + o.warn + "% / alert " + o.alert + "%）" +
         (o.mature ? "" : "，周期刚开始，暂只看熔断和保底"),
       "  " + METHOD.cycle + " " + (o.projected_cycle_pct !== undefined ? o.projected_cycle_pct : o.projected_pct) + "% · " + METHOD.recent + " " +
@@ -370,7 +372,7 @@ function manualContent(s, via) {
   if (d.users && d.users.length) lines.push("按人前 3：" + d.users.slice(0, 3).map((r) => r.name + " " + fmt(r.total)).join(" · "));
   const ps = policySummary(s.policy);
   if (ps) lines.push(ps);
-  lines.push("经 " + via + " 查询（完整明细见脚本日志）");
+  lines.push("经 " + via + " 查询");
   return lines;
 }
 
@@ -386,10 +388,11 @@ let finished = false;
 const STARTED = Date.now();
 
 // 返回结果（只生效一次）：从节点入口运行只弹窗；从脚本列表运行同时推送通知。不写任何存储
-function finish(title, lines) {
+// ok：查询成功时在最后加一行"完整报告：Loon 脚本日志"。从节点入口运行只弹窗；从脚本列表运行同时推送通知（内容相同）
+function finish(title, lines, ok) {
   if (finished) return;
   finished = true;
-  const content = lines.slice(0, MAX_LINES).join("\n");
+  const content = lines.slice(0, ok ? MAX_LINES - 1 : MAX_LINES).concat(ok ? ["完整报告：Loon 脚本日志"] : []).join("\n");
   if (!ENTRY) $notification.post(title + "（手动查询）", "", content);
   console.log("手动查询结果：" + title + "\n" + content);
   $done({ title: title, content: content });
@@ -398,7 +401,8 @@ function finish(title, lines) {
 function manual() {
   // 两种入口互不回退：长按入口只用长按的节点，脚本列表只用存储的查询节点
   const via = ENTRY || NODE;
-  console.log("手动查询：入口参数 " + JSON.stringify(ENV) + "；存储的查询节点 " + (NODE || "(无)") + "；经由 " + (via || "(无)"));
+  // 只记节点名，不记 nodeInfo（地址、端口等）
+  console.log("手动查询：" + (ENTRY ? "长按入口 " + ENTRY_FROM + "=" + ENTRY : "脚本列表入口") + "；存储的查询节点 " + (NODE || "(无)") + "；经由 " + (via || "(无)"));
   if (!via) return finish("VPS 流量", ["尚未获取到查询节点，请等待下一次定时运行（整点）后再试"]);
   // 兜底：回调 5 秒还没返回（$httpClient 的 timeout 没生效等）就强制结束
   setTimeout(() => {
@@ -412,7 +416,7 @@ function manual() {
       return finish("VPS 流量查询失败", [failMessage(err, via)]);
     }
     console.log("\n" + report(s));
-    finish(reportTitle(s.total), manualContent(s, via));
+    finish(reportTitle(s.total), manualContent(s, via), true);
   });
 }
 
