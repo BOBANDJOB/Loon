@@ -16,6 +16,6 @@ enabled = switch,true,type=boolean,tag=启用
 [Script]
 # 脚本用 $httpClient 的 node 参数直接经指定节点请求 stats.noble.internal，不需要额外的分流规则
 cron ${cron} then script("https://raw.githubusercontent.com/BOBANDJOB/Loon/refs/heads/main/Scripts/traffic.js", {${node}, ${warn}, ${alert}, ${forecast}, ${report_hour}}) with enable=${enabled}, timeout=15, tag="VPS 流量"
-# 手动查询：在 Loon 的脚本列表里手动运行，立即推送完整日报，不影响每天的定时日报。
-# generic 的字符串参数不能带插件的 ${node}，脚本用最近一次定时运行存下的查询节点和阈值
+# 手动查询：长按节点运行时经由长按的节点查询（只有 noble 的节点能查到），在脚本列表里运行时经由查询节点；
+# 弹窗显示摘要，不影响每天的定时日报。generic 的字符串参数不能带插件的 ${node}，查询节点和阈值用最近一次定时运行存下的值
 generic then script("https://raw.githubusercontent.com/BOBANDJOB/Loon/refs/heads/main/Scripts/traffic.js", "mode=manual") with enable=${enabled}, timeout=15, tag="VPS 流量（手动查询）"

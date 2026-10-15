@@ -1,13 +1,16 @@
 // proxy-meter: 定时（cron）每小时运行一次。
 //   - 限速策略有新事件（档位变化、配置损坏 / 数据缺失导致清除等）时立即推送；已推送到哪条事件记在 $persistentStore。
 //   - 每天到 report_hour 后的第一次运行推送日报（当天已推送过就跳过）；超过阈值或预计周期末超过阈值时标题改为提醒。
-// 手动查询（插件里的 generic 入口，参数为字符串 "mode=manual"）：立即推送完整日报，不改任何已推送状态。
-//   还没有定时运行过（没有存下查询节点）时只提示，不发请求。
+//   通知只放摘要；完整明细、限速策略和每人前 5 网站写到脚本日志（Loon 里脚本 → 日志）。
+// 手动查询（插件里的 generic 入口，参数为字符串 "mode=manual"；Loon 的 $script 没有触发类型字段，只能用参数区分）：
+//   - 查询节点：长按节点运行时只用 $environment.params 的 node（没有时用 policyGroup），失败直接报失败；
+//     从脚本列表运行时只用存储的查询节点（最近一次定时运行存下的 KEY_ARGS，generic 的字符串参数不能带 ${node}）。
+//     两种入口互不回退；没有存储的节点时只提示，不发请求。
+//   - 快速失败：请求超时 3 秒，另有 5 秒兜底计时器；按错误类型（连接被拒 / 超时 / 非 200 / 响应格式异常）给出提示。
+// 每次查询都在脚本日志里记录耗时（ms），便于评估超时阈值。
+//   - 结果用 $done({title, content}) 返回（不超过 10 行），从节点入口运行时只弹窗，不推送通知；
+//     从脚本列表运行时同时推送通知。不改任何已推送状态。
 // 网站排行里认不出的 IP 显示为"IP（AS号 运营商名称）"，用 Loon 自带的 $utils.ipasn / ipaso，服务器端不做 ASN 查询。
-//   Loon 的 $script 没有触发类型字段，所以用参数区分；generic 的字符串参数不能带插件的 ${node}，
-//   查询节点和阈值用最近一次定时运行存下的值（KEY_ARGS）。
-// 通知只放摘要（总量 + 预计周期末 + 本周期按人前 5 + 限速档位）；完整明细、限速策略和每人前 5 网站写到脚本日志（Loon 里脚本 → 日志）。
-// 作为插件使用时（proxy-meter.plugin），节点和阈值来自插件参数，请求经 node 指定的节点发出；
 // 不带参数运行时，走 Loon 的分流规则，需要 DOMAIN,stats.noble.internal,<Noble 的节点>。
 
 const URL = "http://stats.noble.internal/stats";
@@ -48,6 +51,14 @@ const KEY_EVENT = "proxy-meter.lastEvent";   // 已推送的最新一条事件�
 const KEY_REPORT = "proxy-meter.reportDate"; // 已推送日报的日期
 const KEY_FAIL = "proxy-meter.failDate";     // 已推送查询失败的日期，避免每小时重复提醒
 const TIER = { none: "不限速", light: "轻度", medium: "中度", floor: "保底" };
+const MAX_LINES = 10; // 手动查询弹窗 content 的最大行数
+
+// 手动查询的入口参数：长按节点 / 策略组运行时才有
+const ENV = typeof $environment === "object" && $environment !== null && $environment.params ? $environment.params : null;
+const ENTRY = ENV ? String(ENV.node || ENV.policyGroup || "") : "";
+const TIMEOUT_MS = MANUAL ? 3000 : 10000; // 手动查询要快速失败；定时运行保持原来的 10 秒
+const GUARD_MS = 5000;                    // 手动查询兜底：回调迟迟不返回时强制结束
+const MAX_STR = 200;                      // 显示前把响应里的每个字符串截断到这么长
 
 function fmt(bytes) {
   const units = ["B", "KB", "MB", "GB", "TB"];
@@ -229,52 +240,112 @@ function report(s) {
   return lines.join("\n");
 }
 
-const request = { url: URL, timeout: 10000 };
-if (NODE) request.node = NODE;
-
 const now = new Date();
 const today = day(now);
 const reportDue = !MANUAL && now.getHours() >= REPORT_HOUR && $persistentStore.read(KEY_REPORT) !== today;
 
+// 把响应里的每个字符串截断到 MAX_STR 字以内（防止异常数据撑爆通知和日志）
+function clip(v) {
+  if (typeof v === "string") return v.length > MAX_STR ? v.slice(0, MAX_STR) + "…" : v;
+  if (Array.isArray(v)) return v.map(clip);
+  if (v && typeof v === "object") {
+    const o = {};
+    for (const k of Object.keys(v)) o[k] = clip(v[k]);
+    return o;
+  }
+  return v;
+}
+
+// 最基本的格式校验：关键字段存在且类型正确；返回缺失或类型不对的字段列表
+function badFields(s) {
+  const bad = [];
+  const num = (o, k, name) => { if (!o || typeof o[k] !== "number" || !isFinite(o[k])) bad.push(name); };
+  const str = (o, k, name) => { if (!o || typeof o[k] !== "string") bad.push(name); };
+  if (!s || typeof s !== "object") return ["(根)"];
+  if (!s.total || typeof s.total !== "object") bad.push("total");
+  else for (const k of ["rx", "tx", "used", "quota", "percent"]) num(s.total, k, "total." + k);
+  if (!s.cycle || typeof s.cycle !== "object") bad.push("cycle");
+  else for (const k of ["start", "reset"]) str(s.cycle, k, "cycle." + k);
+  str(s, "updated", "updated");
+  return bad;
+}
+
+// 经指定节点请求 /stats；node 为空时走 Loon 的分流规则。每次都在日志里记录耗时。
+// 失败时回调 {kind, message}：kind 为 timeout（超时）、conn（连接被拒绝 / 断开）、http（非 200）、
+// format（响应格式异常）、other
+function query(node, cb) {
+  const req = { url: URL, timeout: TIMEOUT_MS };
+  if (node) req.node = node;
+  const t0 = Date.now();
+  const log = (result) => console.log("查询耗时 " + (Date.now() - t0) + " ms（" + (MANUAL ? "手动" : "定时") + "，节点 " +
+    (node || "按分流规则") + "，超时设置 " + TIMEOUT_MS + " ms，结果 " + result + "）");
+  $httpClient.get(req, (error, response, data) => {
+    if (error) {
+      const m = String(error).slice(0, MAX_STR);
+      let kind = "other";
+      if (/timed? ?out|超时/i.test(m)) kind = "timeout";
+      else if (/refused|reset|closed|lost|abort|broken|eof|hang up|not connect|拒绝|断开|中断/i.test(m)) kind = "conn";
+      log(kind);
+      return cb({ kind: kind, message: m });
+    }
+    if (response.status !== 200) {
+      log("http " + response.status);
+      return cb({ kind: "http", message: "HTTP " + response.status + "：" + String(data || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 80) });
+    }
+    let s;
+    try {
+      s = clip(JSON.parse(data));
+    } catch (e) {
+      log("format");
+      return cb({ kind: "format", message: "响应格式异常（不是 JSON）" });
+    }
+    const bad = badFields(s);
+    if (bad.length) {
+      log("format");
+      return cb({ kind: "format", message: "响应格式异常（缺少或类型不对：" + bad.slice(0, 5).join("、") + "）" });
+    }
+    log("ok");
+    cb(null, s);
+  });
+}
+
+function reportTitle(t) {
+  if (t.percent >= ALERT) return "⚠️ VPS 流量已超过 " + ALERT + "%";
+  if (t.projected && t.projected.bytes > t.quota * FORECAST / 100) return "⚠️ 预计本周期将超过 " + FORECAST + "%";
+  if (t.percent >= WARN) return "⚠️ VPS 流量已超过 " + WARN + "%";
+  return "VPS 流量";
+}
+
+function projectedShort(p, quota) {
+  return "预计周期末 " + fmt(p.bytes) + "（" + pct(p.bytes / quota) + "，" + METHOD[p.method || "cycle"] + "）";
+}
+
 function dailyReport(s) {
   const t = s.total;
   const d = s.detail || {};
-
-  let title = "VPS 流量";
-  if (t.percent >= ALERT) title = "⚠️ VPS 流量已超过 " + ALERT + "%";
-  else if (t.projected && t.projected.bytes > t.quota * FORECAST / 100) title = "⚠️ 预计本周期将超过 " + FORECAST + "%";
-  else if (t.percent >= WARN) title = "⚠️ VPS 流量已超过 " + WARN + "%";
-  if (MANUAL) title += "（手动查询）";
-
   const body = ["↓ " + fmt(t.rx) + "  ↑ " + fmt(t.tx)];
-  if (t.projected) {
-    body.push("预计周期末 " + fmt(t.projected.bytes) + "（" + pct(t.projected.bytes / t.quota) + "，" + METHOD[t.projected.method || "cycle"] + "）");
-  }
+  if (t.projected) body.push(projectedShort(t.projected, t.quota));
   if (d.users && d.users.length) {
     body.push("本周期按人：" + d.users.slice(0, TOP).map((r) => r.name + " " + fmt(r.total)).join(" · "));
   }
   const ps = policySummary(s.policy);
   if (ps) body.push(ps);
   body.push(s.cycle.reset + " 重置");
-
-  $notification.post(title, "已用 " + fmt(t.used) + " / " + fmt(t.quota) + "（" + t.percent + "%）", body.join("\n"));
+  $notification.post(reportTitle(t), "已用 " + fmt(t.used) + " / " + fmt(t.quota) + "（" + t.percent + "%）", body.join("\n"));
   console.log("\n" + report(s));
 }
 
-if (MANUAL && !NODE) {
-  // 部署后还没有过定时运行，不知道该经哪个节点查询；不发请求，以免走错节点
-  $notification.post("VPS 流量（手动查询）", "", "尚未获取到查询节点，请等待下一次定时运行（整点）后再试");
-  console.log("手动查询：$persistentStore 里没有查询节点（" + KEY_ARGS + "），未发起请求");
-  $done();
-} else $httpClient.get(request, (error, response, data) => {
-  try {
-    if (error) throw new Error(String(error));
-    if (response.status !== 200) throw new Error("HTTP " + response.status + " " + data);
-    const s = JSON.parse(data);
-    if (MANUAL) {
-      // 手动查询：推送完整日报，不改日报 / 事件 / 失败的已推送状态
-      dailyReport(s);
-      console.log("手动查询（节点：" + (NODE || "按分流规则") + "），未更新任何已推送状态");
+// ---- 定时运行 ----
+
+function scheduled() {
+  query(NODE, (err, s) => {
+    if (err) {
+      console.log("VPS 流量查询失败（节点：" + (NODE || "按分流规则") + "）：" + err.message);
+      // 只在该推日报时提醒，每天最多一次；日报会在之后每小时重试
+      if (reportDue && $persistentStore.read(KEY_FAIL) !== today) {
+        $notification.post("VPS 流量查询失败", "", err.message);
+        $persistentStore.write(today, KEY_FAIL);
+      }
     } else {
       notifyEvents(s.policy);
       if (reportDue) {
@@ -284,16 +355,66 @@ if (MANUAL && !NODE) {
         console.log("已检查限速事件；日报 " + ($persistentStore.read(KEY_REPORT) === today ? "今天已推送" : REPORT_HOUR + " 点后推送"));
       }
     }
-  } catch (e) {
-    const msg = String(e.message || e);
-    console.log("VPS 流量查询失败（节点：" + (NODE || "按分流规则") + "）：" + msg);
-    // 手动查询失败总是提醒；定时运行只在该推日报时提醒，每天最多一次，日报会在之后每小时重试
-    if (MANUAL) {
-      $notification.post("VPS 流量查询失败（手动查询）", "", msg);
-    } else if (reportDue && $persistentStore.read(KEY_FAIL) !== today) {
-      $notification.post("VPS 流量查询失败", "", msg);
-      $persistentStore.write(today, KEY_FAIL);
+    $done();
+  });
+}
+
+// ---- 手动查询 ----
+
+// 弹窗内容：已用 / 额度、预计周期末、按人前 3、限速档位、查询所经节点
+function manualContent(s, via) {
+  const t = s.total;
+  const d = s.detail || {};
+  const lines = ["已用 " + fmt(t.used) + " / " + fmt(t.quota) + "（" + t.percent + "%）"];
+  if (t.projected) lines.push(projectedShort(t.projected, t.quota));
+  if (d.users && d.users.length) lines.push("按人前 3：" + d.users.slice(0, 3).map((r) => r.name + " " + fmt(r.total)).join(" · "));
+  const ps = policySummary(s.policy);
+  if (ps) lines.push(ps);
+  lines.push("经 " + via + " 查询（完整明细见脚本日志）");
+  return lines;
+}
+
+function failMessage(err, via) {
+  if (err.kind === "timeout") return "经 " + via + " 查询超时（" + TIMEOUT_MS / 1000 + " 秒），节点可能不可用";
+  if (err.kind === "conn") return "节点 " + via + " 无法访问统计接口（仅 noble 节点可查询）";
+  if (err.kind === "http") return "统计接口返回 " + err.message;
+  if (err.kind === "format") return "经 " + via + " 查询：" + err.message;
+  return "经 " + via + " 查询失败：" + err.message;
+}
+
+let finished = false;
+const STARTED = Date.now();
+
+// 返回结果（只生效一次）：从节点入口运行只弹窗；从脚本列表运行同时推送通知。不写任何存储
+function finish(title, lines) {
+  if (finished) return;
+  finished = true;
+  const content = lines.slice(0, MAX_LINES).join("\n");
+  if (!ENTRY) $notification.post(title + "（手动查询）", "", content);
+  console.log("手动查询结果：" + title + "\n" + content);
+  $done({ title: title, content: content });
+}
+
+function manual() {
+  // 两种入口互不回退：长按入口只用长按的节点，脚本列表只用存储的查询节点
+  const via = ENTRY || NODE;
+  console.log("手动查询：入口参数 " + JSON.stringify(ENV) + "；存储的查询节点 " + (NODE || "(无)") + "；经由 " + (via || "(无)"));
+  if (!via) return finish("VPS 流量", ["尚未获取到查询节点，请等待下一次定时运行（整点）后再试"]);
+  // 兜底：回调 5 秒还没返回（$httpClient 的 timeout 没生效等）就强制结束
+  setTimeout(() => {
+    if (!finished) console.log("手动查询：" + GUARD_MS / 1000 + " 秒内没有返回，强制结束（已等待 " + (Date.now() - STARTED) + " ms）");
+    finish("VPS 流量查询失败", ["经 " + via + " 查询 " + GUARD_MS / 1000 + " 秒内没有返回，节点可能不可用"]);
+  }, GUARD_MS);
+  query(via, (err, s) => {
+    if (finished) return console.log("手动查询：兜底计时器已结束，忽略迟到的回调");
+    if (err) {
+      console.log("手动查询失败（" + err.kind + "）：" + err.message);
+      return finish("VPS 流量查询失败", [failMessage(err, via)]);
     }
-  }
-  $done();
-});
+    console.log("\n" + report(s));
+    finish(reportTitle(s.total), manualContent(s, via));
+  });
+}
+
+if (MANUAL) manual();
+else scheduled();
