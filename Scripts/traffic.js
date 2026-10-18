@@ -1,7 +1,9 @@
 // proxy-meter: 定时（cron）每小时运行一次。
 //   - 限速策略有新事件（档位变化、配置损坏 / 数据缺失导致清除等）时立即推送；已推送到哪条事件记在 $persistentStore。
 //   - 每天到 report_hour 后的第一次运行推送日报（当天已推送过就跳过）；超过阈值或预计周期末超过阈值时标题改为提醒。
-//   通知只放摘要；完整明细、限速策略和每人前 5 网站写到脚本日志（Loon 里脚本 → 日志）。
+//   通知只放摘要；完整报告按【概览】【限速策略】【本周期按人】【每人前 5 网站】【诊断】写到脚本日志。
+//   和额度比较的数字（已用、百分比、预计周期末、预警）一律用校准后的值（offset + scale × vnstat）；
+//   vnstat 原始读数只出现在【诊断】。
 // 手动查询（插件里的 generic 入口，参数为字符串 "mode=manual"；Loon 的 $script 没有触发类型字段，只能用参数区分）：
 //   - 查询节点：长按节点运行时只用 $environment.params 的 node（没有时用 policyGroup），失败直接报失败；
 //     从脚本列表运行时只用存储的查询节点（最近一次定时运行存下的 KEY_ARGS，generic 的字符串参数不能带 ${node}）。
@@ -98,18 +100,6 @@ function pct(r) {
 
 const METHOD = { cycle: "按周期平均速度", recent: "按最近 3 天速度" };
 
-function projectedLine(p, quota) {
-  if (!p) return [];
-  const c = p.cycle || p; // 兼容旧版 stats-api
-  const lines = ["预计周期末 " + fmt(p.bytes) + "（" + pct(p.bytes / quota) + "，取两种外推的较大者：" + METHOD[p.method || "cycle"] + "）"];
-  let line = "  " + METHOD.cycle + "：" + fmt(c.bytes) + "（" + pct(c.bytes / quota) + "）";
-  if (c.partial) line += "，vnstat 自 " + c.basis.slice(0, 10) + " 起计数，此前按同样速度估算";
-  lines.push(line);
-  if (p.recent) lines.push("  " + METHOD.recent + "：" + fmt(p.recent.bytes) + "（" + pct(p.recent.bytes / quota) + "，" + when(p.recent.since) + " 起 72 小时）");
-  else lines.push("  " + METHOD.recent + "：vnstat 数据不足 72 小时，未计算");
-  return lines;
-}
-
 function day(d) {
   const p = (n) => (n < 10 ? "0" : "") + n;
   return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
@@ -131,31 +121,90 @@ const GB = (b) => Number((b / 1024 ** 3).toFixed(2)) + " GB";
 const signed = (b) => (b >= 0 ? "+" : "−") + fmt(Math.abs(b));
 const signedPt = (x) => (x >= 0 ? "+" : "−") + Math.abs(x).toFixed(1) + " 个百分点";
 
+// 和额度比较的数字（已用、百分比、剩余、预计周期末、预警）一律用校准后的值：offset + scale × vnstat，来自限速策略。
+// 策略不可用时（stats-api 刚启动、配置无效等）退回 vnstat 原始读数，calibrated 为 false。
+function cal(s) {
+  const p = s.policy;
+  if (p && p.status === "ok" && p.overall) {
+    const o = p.overall;
+    return {
+      used: o.used, quota: o.quota, remaining: o.remaining, percent: o.used * 100 / o.quota,
+      projPct: o.projected_pct, projBytes: o.projected_pct * o.quota / 100, method: o.projected_method || "cycle",
+      calibrated: true, o: o,
+    };
+  }
+  const t = s.total;
+  const pr = t.projected;
+  return {
+    used: t.used, quota: t.quota, remaining: t.quota - t.used, percent: t.percent,
+    projPct: pr ? pr.bytes * 100 / t.quota : null, projBytes: pr ? pr.bytes : null, method: (pr && pr.method) || "cycle",
+    calibrated: false, o: null,
+  };
+}
+
+const pct2 = (x) => x.toFixed(2) + "%";
+
+function usedLine(c) {
+  return "已用 " + fmt(c.used) + " / " + fmt(c.quota) + "（" + pct2(c.percent) + "）" + (c.calibrated ? "" : "（未校准：vnstat 原始读数）");
+}
+
+function projectedShort(c) {
+  return c.projPct === null ? "预计周期末：数据不足" :
+    "预计周期末 " + fmt(c.projBytes) + "（" + pct2(c.projPct) + "，" + METHOD[c.method] + "）";
+}
+
 // 目标相关：周期末预计达成率、目标轨迹、今日额度（旧版 stats-api 没有这些字段时不显示）
 function targetLines(o) {
   if (o.target_percent === undefined) return [];
-  const lines = [
+  return [
     "周期末预计达成率 " + o.projected_pct + "%（目标 " + o.target_percent + "%，偏差 " + signedPt(o.projected_vs_target) + "）",
     "目标轨迹（" + o.target_percent + "%）：现在应用到 " + fmt(o.trajectory) + "，实际 " + fmt(o.used) + "，偏差 " + signed(o.trajectory_deviation) +
       "（" + (o.trajectory_deviation >= 0 ? "超前" : "落后") + "）",
     "今日额度 " + fmt(o.daily_quota) + "（剩余 " + o.days_left + " 天，含今天），今日已用 " + fmt(o.today_used) +
       (o.daily_over ? "，已超出 " + fmt(o.today_used - o.daily_quota) : "，还剩 " + fmt(o.daily_quota - o.today_used)),
   ];
+}
+
+function policySummary(p) {
+  if (!p) return null;
+  const tag = p.dry_run ? "（dry_run）" : "";
+  if (p.status !== "ok") return "限速：全部不限速" + tag + "，" + p.error;
+  const names = Object.keys(p.users);
+  if (!names.length) return null;
+  return "限速" + tag + "：" + names.map((n) => n + " " + TIER[p.users[n].tier]).join(" · ");
+}
+
+// ---- 日志报告：【概览】【限速策略】【本周期按人】【每人前 5 网站】【诊断】 ----
+
+function section(title, lines) {
+  return ["", "【" + title + "】"].concat(lines);
+}
+
+function overviewLines(s, c) {
+  const lines = [usedLine(c) + "，剩余 " + fmt(c.remaining) + " · " + s.cycle.reset + " 重置"];
+  const parts = [];
+  if (c.o && c.o.target_percent !== undefined) {
+    parts.push("预计达成 " + pct2(c.projPct) + "（目标 " + c.o.target_percent + "%，" + signedPt(c.o.projected_vs_target) + "）",
+      "今日额度 " + fmt(c.o.daily_quota) + "，已用 " + fmt(c.o.today_used));
+  } else {
+    parts.push(projectedShort(c));
+  }
+  const ps = policySummary(s.policy);
+  if (ps) parts.push(ps);
+  lines.push(parts.join(" · "));
   return lines;
 }
 
 function policyLines(s) {
   const p = s.policy;
-  if (!p) return ["", "限速策略：stats-api 刚启动，尚未计算"];
-  const lines = ["", "限速策略（" + (p.dry_run ? "dry_run，只计算不执行；" : "") + when(p.evaluated) + " 计算）："];
+  if (!p) return ["stats-api 刚启动，尚未计算"];
+  const lines = [when(p.evaluated) + " 计算" + (p.dry_run ? "；dry_run，只计算不执行" : "")];
   if (p.v2_active === false) lines.push("新规则（每日额度、动态保底、紧急档）自 " + p.v2_from + " 起执行，此前只显示预览");
   if (p.status !== "ok") {
     lines.push(p.error + "，当前不限速");
   } else {
     const o = p.overall;
     lines.push(
-      "校准后已用 " + fmt(o.used) + "（" + (o.offset ? fmt(Math.abs(o.offset)) + (o.offset > 0 ? " + " : " − ") : "") +
-        (o.scale && o.scale !== 1 ? o.scale + " × " : "") + "vnstat " + fmt(o.nic_used) + "）",
       "实际剩余 " + fmt(o.remaining) + "（" + (o.floor_line === undefined ? "保底线 " + GB(o.floor_remaining)
         : p.v2_active === false ? "保底线 " + GB(o.floor_remaining) + "；新规则：保底线 " + GB(o.floor_line) + "、紧急线 " + GB(o.critical_line)
         : "保底线 " + GB(o.floor_line) + "、紧急线 " + GB(o.critical_line)) + "）",
@@ -167,9 +216,9 @@ function policyLines(s) {
     lines.push(...targetLines(o));
     if (o.offset_stale) lines.push("offset 属于旧周期（" + o.offset_cycle + " 起），已忽略");
     if (o.uncalibrated) lines.push("⚠️ 本周期 offset 未填写，vnstat 没覆盖整个周期，已用和预计偏低");
-    lines.push("ratio " + o.ratio + (o.ratio_fallback ? "（实测 " + o.ratio_raw + " 缺失或异常，用默认值）" : "（实测）"));
     lines.push("个人节奏自 " + o.personal_since + " 起算（已过周期 " + pct(o.personal_frac) + "）" +
-      (o.personal_since > s.cycle.start ? "，本周期此前没有按人数据" : ""));
+      (o.personal_since > s.cycle.start ? "，本周期此前没有按人数据" : "") + "；ratio " + o.ratio +
+      (o.ratio_fallback ? "（实测 " + o.ratio_raw + " 缺失或异常，用默认值）" : "（实测）"));
     for (const name of Object.keys(p.users)) {
       const m = p.users[name];
       lines.push(name + "：" + tierName(p, m.tier) + (m.fuse_active ? "（熔断）" : m.daily_active ? "（今日超额）" : ""),
@@ -190,18 +239,62 @@ function policyLines(s) {
       .map((u) => u + " " + (sh.applied[u] ? sh.applied[u] + " Mbps" : "不限速")).join(" · "));
     if (sh.error) lines.push("  " + sh.error + "，已清除所有限速");
   }
-  const ev = p.events.slice(-SHOW_EVENTS).reverse();
-  lines.push("最近事件" + (ev.length ? "（新的在前）：" : "：无"), ...eventLines(ev).map((l) => "  " + l));
   return lines;
 }
 
-function policySummary(p) {
-  if (!p) return null;
-  const tag = p.dry_run ? "（dry_run）" : "";
-  if (p.status !== "ok") return "限速：全部不限速" + tag + "，" + p.error;
-  const names = Object.keys(p.users);
-  if (!names.length) return null;
-  return "限速" + tag + "：" + names.map((n) => n + " " + TIER[p.users[n].tier]).join(" · ");
+function peopleLines(d) {
+  if (!d.since) return ["暂无数据（v2ray_api 未开启或尚未采集）"];
+  const lines = ["明细自 " + d.since + " 起（代理层字节）：", ...rankLines(d.users, TOP)];
+  if (d.users_7d_ready) lines.push("近 7 天：", ...rankLines(d.users_7d, TOP));
+  else lines.push("近 7 天：数据不足 7 天（明细自 " + d.first + " 起）");
+  return lines;
+}
+
+function siteLines(s, d) {
+  const sites = s.sites || {};
+  const people = (d.users || []).map((r) => r.name).filter((n) => sites[n] && sites[n].length);
+  if (!people.length) return null;
+  const cov = s.sites_coverage;
+  const lines = ["网站统计自 " + String(s.sites_since).slice(0, 16).replace("T", " ") + " 起，ⓐ 为多个域名合并"];
+  for (const name of people) {
+    const c = cov && cov.users[name];
+    const head = c ? name + "：网站覆盖率 " + pct(c.ratio) + "（" + cov.since + " 起 " + fmt(c.sites) + " / " + fmt(c.user) + "）" : name + "：";
+    const list = sites[name].map((r) => Object.assign({}, r, { name: ipLabel(r.name) }));
+    lines.push(head, ...rankLines(list, TOP).map((l) => "  " + l));
+  }
+  return lines;
+}
+
+// vnstat 原始读数只出现在这里
+function diagLines(s, d) {
+  const t = s.total;
+  const lines = ["周期 " + s.cycle.start + " → " + s.cycle.reset + "（" + s.interface + "）",
+    "vnstat 原始读数 " + fmt(t.used) + "（↓ " + fmt(t.rx) + " ↑ " + fmt(t.tx) + "）"];
+  const o = s.policy && s.policy.status === "ok" ? s.policy.overall : null;
+  if (o) {
+    lines.push("校准：已用 " + fmt(o.used) + " = " + (o.offset ? "offset " + fmt(Math.abs(o.offset)) + (o.offset > 0 ? " + " : " − ") : "") +
+      (o.scale !== undefined ? o.scale : 1) + " × vnstat " + fmt(o.nic_used) + "（" + when(s.policy.evaluated) + " 计算时）");
+  }
+  const pr = t.projected;
+  if (pr) {
+    const cy = pr.cycle || pr; // 兼容旧版 stats-api
+    let line = "vnstat 原始外推（未校准）：" + METHOD.cycle + " " + fmt(cy.bytes);
+    if (cy.partial) line += "（vnstat 自 " + cy.basis.slice(0, 10) + " 起计数，此前按同样速度估算）";
+    line += " · " + METHOD.recent + " " + (pr.recent ? fmt(pr.recent.bytes) + "（" + when(pr.recent.since) + " 起 72 小时）" : "数据不足 72 小时");
+    lines.push(line);
+  }
+  const c = s.detail_check;
+  if (c && c.ratio) {
+    lines.push("核对：" + c.since + " 起（明细第一个完整日）网卡 " + fmt(c.nic) + " ÷ 明细 " + fmt(c.detail) + " = " + c.ratio + "（正常在 2 出头）");
+  }
+  if (d.since) lines.push("本周期按协议（代理层）：", ...rankLines(d.inbounds, TOP));
+  const p = s.policy;
+  if (p) {
+    const ev = p.events.slice(-SHOW_EVENTS).reverse();
+    lines.push("最近事件" + (ev.length ? "（新的在前）：" : "：无"), ...eventLines(ev).map((l) => "  " + l));
+  }
+  lines.push("更新于 " + s.updated);
+  return lines;
 }
 
 // 只推送上次之后的新事件；第一次运行只记基线，不补推历史事件
@@ -224,44 +317,14 @@ function notifyEvents(p) {
 }
 
 function report(s) {
-  const t = s.total;
   const d = s.detail || {};
-  const lines = [
-    "周期 " + s.cycle.start + " → " + s.cycle.reset + "（" + s.interface + "）",
-    "网卡总量 " + fmt(t.used) + " / " + fmt(t.quota) + "（" + t.percent + "%）",
-    "  ↓ " + fmt(t.rx) + "  ↑ " + fmt(t.tx),
-    ...projectedLine(t.projected, t.quota),
-  ];
-  if (!d.since) {
-    lines.push("按人 / 按协议明细：暂无数据（v2ray_api 未开启或尚未采集）");
-  } else {
-    lines.push("", "本周期按人（明细自 " + d.since + " 起）：", ...rankLines(d.users, TOP));
-    if (d.users_7d_ready) lines.push("", "近 7 天按人：", ...rankLines(d.users_7d, TOP));
-    else lines.push("", "近 7 天按人：数据不足 7 天（明细自 " + d.first + " 起）");
-    lines.push("", "本周期按协议：", ...rankLines(d.inbounds, TOP));
-    const c = s.detail_check;
-    if (c && c.ratio) {
-      lines.push("", "核对：" + c.since + " 起（明细第一个完整日）网卡 " + fmt(c.nic) + " ÷ 明细 " + fmt(c.detail) +
-        " = " + c.ratio + "（正常在 2 出头）");
-    } else {
-      lines.push("", "注：明细是代理层数据，网卡总量 ≈ 明细合计 × 2 + 额外开销");
-    }
-  }
-  const sites = s.sites || {};
-  const people = (d.users || []).map((r) => r.name).filter((n) => sites[n] && sites[n].length);
-  if (people.length) {
-    const cov = s.sites_coverage;
-    lines.push("", "本周期每人前 " + TOP + " 网站（网站统计自 " + String(s.sites_since).slice(0, 16).replace("T", " ") +
-      " 起，ⓐ 为多个域名合并）：");
-    for (const name of people) {
-      const c = cov && cov.users[name];
-      const head = c ? name + "：网站覆盖率 " + pct(c.ratio) + "（" + cov.since + " 起 " + fmt(c.sites) + " / " + fmt(c.user) + "）" : name + "：";
-      const list = sites[name].map((r) => Object.assign({}, r, { name: ipLabel(r.name) }));
-      lines.push(head, ...rankLines(list, TOP).map((l) => "  " + l));
-    }
-  }
-  lines.push(...policyLines(s));
-  lines.push("", "更新于 " + s.updated);
+  const c = cal(s);
+  const lines = ["【概览】"].concat(overviewLines(s, c));
+  lines.push(...section("限速策略", policyLines(s)));
+  lines.push(...section("本周期按人", peopleLines(d)));
+  const sl = siteLines(s, d);
+  if (sl) lines.push(...section("每人前 " + TOP + " 网站", sl));
+  lines.push(...section("诊断", diagLines(s, d)));
   return lines.join("\n");
 }
 
@@ -334,34 +397,28 @@ function query(node, cb) {
   });
 }
 
-function reportTitle(t) {
-  if (t.percent >= ALERT) return "⚠️ VPS 流量已超过 " + ALERT + "%";
-  if (t.projected && t.projected.bytes > t.quota * FORECAST / 100) return "⚠️ 预计本周期将超过 " + FORECAST + "%";
-  if (t.percent >= WARN) return "⚠️ VPS 流量已超过 " + WARN + "%";
+// 预警用校准后的数字
+function reportTitle(c) {
+  if (c.percent >= ALERT) return "⚠️ VPS 流量已超过 " + ALERT + "%";
+  if (c.projPct !== null && c.projPct > FORECAST) return "⚠️ 预计本周期将超过 " + FORECAST + "%";
+  if (c.percent >= WARN) return "⚠️ VPS 流量已超过 " + WARN + "%";
   return "VPS 流量";
 }
 
-function projectedShort(p, quota) {
-  return "预计周期末 " + fmt(p.bytes) + "（" + pct(p.bytes / quota) + "，" + METHOD[p.method || "cycle"] + "）";
-}
-
 function dailyReport(s) {
-  const t = s.total;
   const d = s.detail || {};
-  const body = ["↓ " + fmt(t.rx) + "  ↑ " + fmt(t.tx)];
-  if (t.projected) body.push(projectedShort(t.projected, t.quota));
+  const c = cal(s);
+  const body = ["剩余 " + fmt(c.remaining) + " · " + projectedShort(c)];
+  if (c.o && c.o.target_percent !== undefined) {
+    body.push("目标 " + c.o.target_percent + "%，偏差 " + signedPt(c.o.projected_vs_target) + " · 今日额度 " + fmt(c.o.daily_quota) + "，已用 " + fmt(c.o.today_used));
+  }
   if (d.users && d.users.length) {
     body.push("本周期按人：" + d.users.slice(0, TOP).map((r) => r.name + " " + fmt(r.total)).join(" · "));
   }
   const ps = policySummary(s.policy);
   if (ps) body.push(ps);
-  const o = s.policy && s.policy.status === "ok" ? s.policy.overall : null;
-  if (o && o.target_percent !== undefined) {
-    body.push("预计达成 " + o.projected_pct + "%（目标 " + o.target_percent + "%，" + signedPt(o.projected_vs_target) + "）· 今日额度 " +
-      fmt(o.daily_quota) + "，已用 " + fmt(o.today_used));
-  }
   body.push(s.cycle.reset + " 重置");
-  $notification.post(reportTitle(t), "已用 " + fmt(t.used) + " / " + fmt(t.quota) + "（" + t.percent + "%）", body.join("\n"));
+  $notification.post(reportTitle(c), usedLine(c), body.join("\n"));
   console.log("\n" + report(s));
 }
 
@@ -391,12 +448,11 @@ function scheduled() {
 
 // ---- 手动查询 ----
 
-// 弹窗内容：已用 / 额度、预计周期末、按人前 3、限速档位、查询所经节点
+// 弹窗内容：已用 / 额度、预计周期末（校准后）、按人前 3、限速档位、查询所经节点
 function manualContent(s, via) {
-  const t = s.total;
   const d = s.detail || {};
-  const lines = ["已用 " + fmt(t.used) + " / " + fmt(t.quota) + "（" + t.percent + "%）"];
-  if (t.projected) lines.push(projectedShort(t.projected, t.quota));
+  const c = cal(s);
+  const lines = [usedLine(c), projectedShort(c)];
   if (d.users && d.users.length) lines.push("按人前 3：" + d.users.slice(0, 3).map((r) => r.name + " " + fmt(r.total)).join(" · "));
   const ps = policySummary(s.policy);
   if (ps) lines.push(ps);
@@ -444,7 +500,7 @@ function manual() {
       return finish("VPS 流量查询失败", [failMessage(err, via)]);
     }
     console.log("\n" + report(s));
-    finish(reportTitle(s.total), manualContent(s, via), true);
+    finish(reportTitle(cal(s)), manualContent(s, via), true);
   });
 }
 
