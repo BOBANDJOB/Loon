@@ -182,16 +182,14 @@ function section(title, lines) {
 
 function overviewLines(s, c) {
   const lines = [usedLine(c) + "，剩余 " + fmt(c.remaining) + " · " + s.cycle.reset + " 重置"];
-  const parts = [];
-  if (c.o && c.o.target_percent !== undefined) {
-    parts.push("预计达成 " + pct2(c.projPct) + "（目标 " + c.o.target_percent + "%，" + signedPt(c.o.projected_vs_target) + "）",
-      "今日额度 " + fmt(c.o.daily_quota) + "，已用 " + fmt(c.o.today_used));
-  } else {
-    parts.push(projectedShort(c));
-  }
   const ps = policySummary(s.policy);
-  if (ps) parts.push(ps);
-  lines.push(parts.join(" · "));
+  if (c.o && c.o.target_percent !== undefined) {
+    lines.push("预计达成 " + pct2(c.projPct) + "（目标 " + c.o.target_percent + "%，偏差 " + signedPt(c.o.projected_vs_target) + "）",
+      "今日额度 " + fmt(c.o.daily_quota) + "，已用 " + fmt(c.o.today_used) + (ps ? " · " + ps : ""));
+  } else {
+    lines.push(projectedShort(c));
+    if (ps) lines.push(ps);
+  }
   return lines;
 }
 
