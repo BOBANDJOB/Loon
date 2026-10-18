@@ -222,8 +222,8 @@ function policyLines(s) {
       lines.push(name + "：" + tierName(p, m.tier) + (m.fuse_active ? "（熔断）" : m.daily_active ? "（今日超额）" : ""),
         "  网卡等效 " + fmt(m.nic_equiv) + " / 份额 " + fmt(m.budget) + "，节奏 " + m.pace.toFixed(2) +
         "，今日代理层 " + fmt(m.today) + "（熔断线 " + p.daily_fuse_gb + " GB）");
-      if (m.why.length) lines.push("  原因：" + m.why.join("；"));
-      if (m.tier !== "none") lines.push("  自 " + when(m.since) + " 起");
+      if (m.why.length) lines.push("  " + (m.why_at ? "触发原因（" + when(m.why_at) + "）：" : "原因：") + m.why.join("；"));
+      if (m.tier !== "none" && m.since) lines.push("  自 " + when(m.since) + " 起");
       if (m.pending) lines.push("  待降档：→ " + tierName(p, m.pending.to) + "，" + when(m.pending.at) + " 满 " + p.hold_hours + " 小时");
       if (m.preview) lines.push("  新规则预览：" + tierName(p, m.preview.tier) + (m.preview.why.length ? "（" + m.preview.why.join("；") + "）" : ""));
     }
