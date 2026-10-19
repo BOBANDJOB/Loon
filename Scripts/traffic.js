@@ -118,7 +118,6 @@ function eventLines(events) {
 }
 
 const GB = (b) => Number((b / 1024 ** 3).toFixed(2)) + " GB";
-const signed = (b) => (b >= 0 ? "+" : "−") + fmt(Math.abs(b));
 const signedPt = (x) => (x >= 0 ? "+" : "−") + Math.abs(x).toFixed(1) + " 个百分点";
 
 // 和额度比较的数字（已用、百分比、剩余、预计周期末、预警）一律用校准后的值：offset + scale × vnstat，来自限速策略。
@@ -143,6 +142,17 @@ function cal(s) {
 }
 
 const pct2 = (x) => x.toFixed(2) + "%";
+const METHOD_SHORT = { cycle: "按周期平均", recent: "按近期速度" };
+
+// "按近期速度预计达成 99.90%（目标 90%，+9.9 个百分点）"
+function reachText(c) {
+  return (METHOD_SHORT[c.method] || "") + "预计达成 " + pct2(c.projPct) + "（目标 " + c.o.target_percent + "%，" + signedPt(c.o.projected_vs_target) + "）";
+}
+
+// 新规则执行前，今日额度只是预览
+function previewTag(p) {
+  return p && p.v2_active === false ? "（预览，" + String(p.v2_from || "").slice(5) + " 起执行）" : "";
+}
 
 function usedLine(c) {
   return "已用 " + fmt(c.used) + " / " + fmt(c.quota) + "（" + pct2(c.percent) + "）" + (c.calibrated ? "" : "（未校准：vnstat 原始读数）");
@@ -157,9 +167,9 @@ function projectedShort(c) {
 function targetLines(o) {
   if (o.target_percent === undefined) return [];
   return [
-    "周期末预计达成率 " + o.projected_pct + "%（目标 " + o.target_percent + "%，偏差 " + signedPt(o.projected_vs_target) + "）",
-    "目标轨迹（" + o.target_percent + "%）：现在应用到 " + fmt(o.trajectory) + "，实际 " + fmt(o.used) + "，偏差 " + signed(o.trajectory_deviation) +
-      "（" + (o.trajectory_deviation >= 0 ? "超前" : "落后") + "）",
+    (METHOD_SHORT[o.projected_method] || "") + "预计达成 " + o.projected_pct + "%（目标 " + o.target_percent + "%，" + signedPt(o.projected_vs_target) + "）",
+    "当前进度：应用到 " + fmt(o.trajectory) + "，实际 " + fmt(o.used) + "（" + (o.trajectory_deviation >= 0 ? "超前 " : "落后 ") +
+      fmt(Math.abs(o.trajectory_deviation)) + "）",
     "今日额度 " + fmt(o.daily_quota) + "（剩余 " + o.days_left + " 天，含今天），今日已用 " + fmt(o.today_used) +
       (o.daily_over ? "，已超出 " + fmt(o.today_used - o.daily_quota) : "，还剩 " + fmt(o.daily_quota - o.today_used)),
   ];
@@ -184,8 +194,8 @@ function overviewLines(s, c) {
   const lines = [usedLine(c) + "，剩余 " + fmt(c.remaining) + " · " + s.cycle.reset + " 重置"];
   const ps = policySummary(s.policy);
   if (c.o && c.o.target_percent !== undefined) {
-    lines.push("预计达成 " + pct2(c.projPct) + "（目标 " + c.o.target_percent + "%，偏差 " + signedPt(c.o.projected_vs_target) + "）",
-      "今日额度 " + fmt(c.o.daily_quota) + "，已用 " + fmt(c.o.today_used) + (ps ? " · " + ps : ""));
+    lines.push(reachText(c),
+      "今日额度 " + fmt(c.o.daily_quota) + "，已用 " + fmt(c.o.today_used) + previewTag(s.policy) + (ps ? " · " + ps : ""));
   } else {
     lines.push(projectedShort(c));
     if (ps) lines.push(ps);
@@ -227,7 +237,13 @@ function policyLines(s) {
       if (m.pending) lines.push("  待降档：→ " + tierName(p, m.pending.to) + "，" + when(m.pending.at) + " 满 " + p.hold_hours + " 小时");
       if (m.preview) lines.push("  新规则预览：" + tierName(p, m.preview.tier) + (m.preview.why.length ? "（" + m.preview.why.join("；") + "）" : ""));
     }
-    lines.push("永不限速：" + p.exempt.join("、"));
+    // 永不限速的人也显示网卡等效（本周期代理层 × ratio × scale），≥ 1 GB 才显示
+    const proxy = {};
+    for (const r of (s.detail && s.detail.users) || []) proxy[r.name] = r.total;
+    lines.push("永不限速：" + p.exempt.map((u) => {
+      const eq = (proxy[u] || 0) * o.ratio * (o.scale || 1);
+      return eq >= 1024 ** 3 ? u + "（网卡等效 " + fmt(eq) + "）" : u;
+    }).join("、"));
   }
   const sh = p.shaper;
   if (!sh) lines.push("实际执行：pm-shaper 未安装");
@@ -256,7 +272,8 @@ function siteLines(s, d) {
   const lines = ["网站统计自 " + String(s.sites_since).slice(0, 16).replace("T", " ") + " 起，ⓐ 为多个域名合并"];
   for (const name of people) {
     const c = cov && cov.users[name];
-    const head = c ? name + "：网站覆盖率 " + pct(c.ratio) + "（" + cov.since + " 起 " + fmt(c.sites) + " / " + fmt(c.user) + "）" : name + "：";
+    const head = c ? name + "：覆盖率 " + pct(c.ratio) + "（按 " + cov.since.slice(5) + " 起完整日核对：" +
+      (c.user >= 1024 ** 3 ? (c.sites / 1024 ** 3).toFixed(2) + " / " + fmt(c.user) : fmt(c.sites) + " / " + fmt(c.user)) + "）" : name + "：";
     const list = sites[name].map((r) => Object.assign({}, r, { name: ipLabel(r.name) }));
     lines.push(head, ...rankLines(list, TOP).map((l) => "  " + l));
   }
@@ -267,7 +284,7 @@ function siteLines(s, d) {
 function diagLines(s, d) {
   const t = s.total;
   const lines = ["周期 " + s.cycle.start + " → " + s.cycle.reset + "（" + s.interface + "）",
-    "vnstat 原始读数 " + fmt(t.used) + "（↓ " + fmt(t.rx) + " ↑ " + fmt(t.tx) + "）"];
+    "vnstat 原始读数 " + fmt(t.used) + "（实时，↓ " + fmt(t.rx) + " ↑ " + fmt(t.tx) + "）"];
   const o = s.policy && s.policy.status === "ok" ? s.policy.overall : null;
   if (o) {
     lines.push("校准：已用 " + fmt(o.used) + " = " + (o.offset ? "offset " + fmt(Math.abs(o.offset)) + (o.offset > 0 ? " + " : " − ") : "") +
@@ -408,7 +425,7 @@ function dailyReport(s) {
   const c = cal(s);
   const body = ["剩余 " + fmt(c.remaining) + " · " + projectedShort(c)];
   if (c.o && c.o.target_percent !== undefined) {
-    body.push("目标 " + c.o.target_percent + "%，偏差 " + signedPt(c.o.projected_vs_target) + " · 今日额度 " + fmt(c.o.daily_quota) + "，已用 " + fmt(c.o.today_used));
+    body.push(reachText(c) + " · 今日额度 " + fmt(c.o.daily_quota) + "，已用 " + fmt(c.o.today_used) + previewTag(s.policy));
   }
   if (d.users && d.users.length) {
     body.push("本周期按人：" + d.users.slice(0, TOP).map((r) => r.name + " " + fmt(r.total)).join(" · "));
