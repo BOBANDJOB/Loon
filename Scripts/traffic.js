@@ -53,6 +53,8 @@ const API_EVENTS = 20; // /stats 返回的最近事件条数（policy.py 的 SHO
 const KEY_EVENT = "proxy-meter.lastEvent";   // 已推送的最新一条事件的时间
 const KEY_REPORT = "proxy-meter.reportDate"; // 已推送日报的日期
 const KEY_FAIL = "proxy-meter.failDate";     // 已推送查询失败的日期，避免每小时重复提醒
+const KEY_OVER = "proxy-meter.overCycle";    // 处于"已超额"状态时记下周期开始日；回到额度以下时清除
+const OVER_NOTE = "DMIT 已限速（unmetered 4 Mbps）";
 const TIER = { none: "不限速", light: "轻度", medium: "中度", floor: "保底", critical: "紧急" };
 const MAX_LINES = 10; // 手动查询弹窗 content 的最大行数
 
@@ -99,6 +101,12 @@ function pct(r) {
 }
 
 const METHOD = { cycle: "按周期平均速度", recent: "按最近 3 天速度" };
+
+// 外推方式的名称；近期窗口天数来自 policy.json 的 recent_days（旧版 stats-api 没有时按 3 天）
+function methodLabel(m, o) {
+  if (m !== "recent") return METHOD.cycle;
+  return "按最近 " + ((o && o.recent_days) || 3) + " 天速度" + (o && o.recent_basis === "day" ? "（按日数据）" : "");
+}
 
 function day(d) {
   const p = (n) => (n < 10 ? "0" : "") + n;
@@ -154,13 +162,22 @@ function previewTag(p) {
   return p && p.v2_active === false ? "（预览，" + String(p.v2_from || "").slice(5) + " 起执行）" : "";
 }
 
+// 超额：已用 ≥ 额度（校准后）
+function isOver(c) {
+  return c.used >= c.quota;
+}
+
+function overText(c) {
+  return "已超额 " + fmt(c.used - c.quota) + "，" + OVER_NOTE;
+}
+
 function usedLine(c) {
   return "已用 " + fmt(c.used) + " / " + fmt(c.quota) + "（" + pct2(c.percent) + "）" + (c.calibrated ? "" : "（未校准：vnstat 原始读数）");
 }
 
 function projectedShort(c) {
   return c.projPct === null ? "预计周期末：数据不足" :
-    "预计周期末 " + fmt(c.projBytes) + "（" + pct2(c.projPct) + "，" + METHOD[c.method] + "）";
+    "预计周期末 " + fmt(c.projBytes) + "（" + pct2(c.projPct) + "，" + methodLabel(c.method, c.o) + "）";
 }
 
 // 目标相关：周期末预计达成率、目标轨迹、今日额度（旧版 stats-api 没有这些字段时不显示）
@@ -170,8 +187,9 @@ function targetLines(o) {
     (METHOD_SHORT[o.projected_method] || "") + "预计达成 " + o.projected_pct + "%（目标 " + o.target_percent + "%，" + signedPt(o.projected_vs_target) + "）",
     "当前进度：应用到 " + fmt(o.trajectory) + "，实际 " + fmt(o.used) + "（" + (o.trajectory_deviation >= 0 ? "超前 " : "落后 ") +
       fmt(Math.abs(o.trajectory_deviation)) + "）",
-    "今日额度 " + fmt(o.daily_quota) + "（剩余 " + o.days_left + " 天，含今天），今日已用 " + fmt(o.today_used) +
-      (o.daily_over ? "，已超出 " + fmt(o.today_used - o.daily_quota) : "，还剩 " + fmt(o.daily_quota - o.today_used)),
+    o.remaining <= 0 ? "今日额度：已超额，无今日额度（剩余 " + o.days_left + " 天，含今天），今日已用 " + fmt(o.today_used)
+      : "今日额度 " + fmt(o.daily_quota) + "（剩余 " + o.days_left + " 天，含今天），今日已用 " + fmt(o.today_used) +
+        (o.daily_over ? "，已超出 " + fmt(o.today_used - o.daily_quota) : "，还剩 " + fmt(o.daily_quota - o.today_used)),
   ];
 }
 
@@ -191,8 +209,14 @@ function section(title, lines) {
 }
 
 function overviewLines(s, c) {
-  const lines = [usedLine(c) + "，剩余 " + fmt(c.remaining) + " · " + s.cycle.reset + " 重置"];
   const ps = policySummary(s.policy);
+  if (isOver(c)) {
+    // 超额后不再显示剩余、预计达成和今日额度
+    const lines = [usedLine(c) + " · " + s.cycle.reset + " 重置", overText(c)];
+    if (ps) lines.push(ps);
+    return lines;
+  }
+  const lines = [usedLine(c) + "，剩余 " + fmt(c.remaining) + " · " + s.cycle.reset + " 重置"];
   if (c.o && c.o.target_percent !== undefined) {
     lines.push(reachText(c),
       "今日额度 " + fmt(c.o.daily_quota) + "，已用 " + fmt(c.o.today_used) + previewTag(s.policy) + (ps ? " · " + ps : ""));
@@ -213,12 +237,12 @@ function policyLines(s) {
   } else {
     const o = p.overall;
     lines.push(
-      "实际剩余 " + fmt(o.remaining) + "（" + (o.floor_line === undefined ? "保底线 " + GB(o.floor_remaining)
+      (o.remaining < 0 ? "已超额 " + fmt(-o.remaining) : "实际剩余 " + fmt(o.remaining)) + "（" + (o.floor_line === undefined ? "保底线 " + GB(o.floor_remaining)
         : p.v2_active === false ? "保底线 " + GB(o.floor_remaining) + "；新规则：保底线 " + GB(o.floor_line) + "、紧急线 " + GB(o.critical_line)
         : "保底线 " + GB(o.floor_line) + "、紧急线 " + GB(o.critical_line)) + "）",
-      "整体预计 " + o.projected_pct + "%（" + METHOD[o.projected_method || "cycle"] + "；warn " + o.warn + "% / alert " + o.alert + "%）" +
+      "整体预计 " + o.projected_pct + "%（" + methodLabel(o.projected_method, o) + "；warn " + o.warn + "% / alert " + o.alert + "%）" +
         (o.mature ? "" : "，周期刚开始，暂只看熔断和保底"),
-      "  " + METHOD.cycle + " " + (o.projected_cycle_pct !== undefined ? o.projected_cycle_pct : o.projected_pct) + "% · " + METHOD.recent + " " +
+      "  " + METHOD.cycle + " " + (o.projected_cycle_pct !== undefined ? o.projected_cycle_pct : o.projected_pct) + "% · " + methodLabel("recent", o) + " " +
         (o.projected_recent_pct === null || o.projected_recent_pct === undefined ? "数据不足 72 小时" : o.projected_recent_pct + "%"),
     );
     lines.push(...targetLines(o));
@@ -295,7 +319,7 @@ function diagLines(s, d) {
     const cy = pr.cycle || pr; // 兼容旧版 stats-api
     let line = "vnstat 原始外推（未校准）：" + METHOD.cycle + " " + fmt(cy.bytes);
     if (cy.partial) line += "（vnstat 自 " + cy.basis.slice(0, 10) + " 起计数，此前按同样速度估算）";
-    line += " · " + METHOD.recent + " " + (pr.recent ? fmt(pr.recent.bytes) + "（" + when(pr.recent.since) + " 起 72 小时）" : "数据不足 72 小时");
+    line += " · 按最近 72 小时速度 " + (pr.recent ? fmt(pr.recent.bytes) + "（" + when(pr.recent.since) + " 起）" : "数据不足 72 小时");
     lines.push(line);
   }
   const c = s.detail_check;
@@ -414,6 +438,7 @@ function query(node, cb) {
 
 // 预警用校准后的数字
 function reportTitle(c) {
+  if (isOver(c)) return "VPS 流量（已超额）"; // 一次性的超额预警另外推送，见 notifyOver
   if (c.percent >= ALERT) return "⚠️ VPS 流量已超过 " + ALERT + "%";
   if (c.projPct !== null && c.projPct > FORECAST) return "⚠️ 预计本周期将超过 " + FORECAST + "%";
   if (c.percent >= WARN) return "⚠️ VPS 流量已超过 " + WARN + "%";
@@ -423,8 +448,8 @@ function reportTitle(c) {
 function dailyReport(s) {
   const d = s.detail || {};
   const c = cal(s);
-  const body = ["剩余 " + fmt(c.remaining) + " · " + projectedShort(c)];
-  if (c.o && c.o.target_percent !== undefined) {
+  const body = [isOver(c) ? overText(c) : "剩余 " + fmt(c.remaining) + " · " + projectedShort(c)];
+  if (!isOver(c) && c.o && c.o.target_percent !== undefined) {
     body.push(reachText(c) + " · 今日额度 " + fmt(c.o.daily_quota) + "，已用 " + fmt(c.o.today_used) + previewTag(s.policy));
   }
   if (d.users && d.users.length) {
@@ -439,6 +464,25 @@ function dailyReport(s) {
 
 // ---- 定时运行 ----
 
+// 超额预警按状态推送：进入"已超额"时推送一次并记下周期；加购等原因让校准后已用回到额度以下时清除，
+// 同一周期再次超额会重新推送；新周期旧记录自然失效
+function notifyOver(s) {
+  const c = cal(s);
+  const flagged = $persistentStore.read(KEY_OVER) === s.cycle.start;
+  if (!isOver(c)) {
+    if (flagged) {
+      $persistentStore.write(null, KEY_OVER);
+      console.log("已用回到额度以下（" + fmt(c.used) + " / " + fmt(c.quota) + "），清除超额状态");
+    }
+    return;
+  }
+  if (flagged) return;
+  const ps = policySummary(s.policy);
+  $notification.post("⛔ VPS 流量已超额", usedLine(c), [overText(c), ps, s.cycle.reset + " 重置"].filter(Boolean).join("\n"));
+  console.log("超额预警已推送，记为已超额（回到额度以下前不再推送）");
+  $persistentStore.write(s.cycle.start, KEY_OVER);
+}
+
 function scheduled() {
   query(NODE, (err, s) => {
     if (err) {
@@ -450,6 +494,7 @@ function scheduled() {
       }
     } else {
       notifyEvents(s.policy);
+      notifyOver(s);
       if (reportDue) {
         dailyReport(s);
         $persistentStore.write(today, KEY_REPORT);
@@ -467,7 +512,7 @@ function scheduled() {
 function manualContent(s, via) {
   const d = s.detail || {};
   const c = cal(s);
-  const lines = [usedLine(c), projectedShort(c)];
+  const lines = [usedLine(c), isOver(c) ? overText(c) : projectedShort(c)];
   if (d.users && d.users.length) lines.push("按人前 3：" + d.users.slice(0, 3).map((r) => r.name + " " + fmt(r.total)).join(" · "));
   const ps = policySummary(s.policy);
   if (ps) lines.push(ps);
