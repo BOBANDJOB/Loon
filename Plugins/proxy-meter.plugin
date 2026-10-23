@@ -2,7 +2,7 @@
 #!desc = 每天推送 DMIT VPS 当月流量（网卡总量 + 按人明细），超过阈值时提醒；每小时检查限速策略，有变化立即推送。完整明细见脚本日志。
 #!author = Noble
 #!homepage = https://github.com/BOBANDJOB/Loon
-#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/ai/vps.png?v=2
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/ai/vps_meter.png
 
 [Argument]
 node = input,"US",tag=查询节点,desc=Noble 自己的节点或策略组名（不要选 WARP 用户的节点）
