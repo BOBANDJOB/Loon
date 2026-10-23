@@ -1,7 +1,7 @@
 #!name = XPTV
 #!desc = XPTV视频源分流。
 #!author = fangkuia[https://github.com/fangkuia/XPTV]
-#!icon = https://raw.githubusercontent.com/RuCu6/Loon/main/Icons/app/xptv.png
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/xptv.png
 #!date = 2024-10-01 15:35
 
 [Rule]

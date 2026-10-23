@@ -3,6 +3,7 @@
 #!open = 
 #!author = Winfred
 #!homepage = 
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/xmind.png
 
 [Script]
 http-response ^https:\/\/www\.xmind\.cn\/_res\/devices script-path=https://raw.githubusercontent.com/89996462/Quantumult-X/main/ycdz/xmind.js, requires-body=true, tag=xmind

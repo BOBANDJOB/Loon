@@ -1,6 +1,7 @@
 #!name = 高德地图
 #!desc = 缺德地图有治了。
 #!date = 2024-10-19 22:45
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/amap.png
 
 [Rule]
 # 移除广告下发请求

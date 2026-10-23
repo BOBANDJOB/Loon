@@ -1,6 +1,7 @@
 #!name = 百度地图
 #!desc = 移除广告
 #!date = 2023-05-05 18:35
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/bdmap.png
 
 [Rule]
 DOMAIN, afd.baidu.com, REJECT
