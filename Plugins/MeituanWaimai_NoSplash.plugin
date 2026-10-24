@@ -1,5 +1,5 @@
 #!name=美团外卖去开屏广告
-#!desc=拦截开屏广告接口与素材（图片、视频）。不封 Shark 长连接，否则结算页报 H-152##NUTCBH 无法下单。首次启用后请重装美团外卖，清掉已缓存的开屏素材。
+#!desc=【实验性】重装后若仍有开屏，说明素材走 Shark 隧道，本插件无效，可停用。拦截开屏广告接口与素材（图片、视频）。不封 Shark 长连接，否则结算页报 H-152##NUTCBH 无法下单。首次启用后请重装美团外卖，清掉已缓存的开屏素材。
 #!author=Noble
 #!homepage=
 #!icon=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/meituan.png
