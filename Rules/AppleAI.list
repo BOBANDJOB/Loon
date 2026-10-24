@@ -11,10 +11,13 @@ DOMAIN-SUFFIX,apple-relay.cloudflare.com
 DOMAIN-SUFFIX,apple-relay.fastly-edge.com
 DOMAIN-SUFFIX,apple-relay.mask.apple-dns.net
 DOMAIN-SUFFIX,cp4.cloudflare.com
+# 设备地区判定（v2fly domain-list-community 的 apple-intelligence 列表收录），Apple Intelligence 必需
 DOMAIN-SUFFIX,gspe1-ssl.ls.apple.com
 DOMAIN-SUFFIX,gateway.icloud.com
+# Apple 定位/地图服务的总域名，已包含上面的 gspe1-ssl；无法确认其他子域不参与地区判定，暂时保留
 DOMAIN-SUFFIX,ls.apple.com
 DOMAIN-SUFFIX,mask-h2.icloud.com
 DOMAIN-SUFFIX,mask.icloud.com
-DOMAIN-SUFFIX,apps.mzstatic.com
+# App Store 图片等静态资源，与 Siri / Apple Intelligence 无关
+# DOMAIN-SUFFIX,apps.mzstatic.com
 DOMAIN-KEYWORD,siri

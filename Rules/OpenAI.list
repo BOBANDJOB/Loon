@@ -1,41 +1,28 @@
-# platform.openai使用US节点
-DOMAIN, platform.openai.com, SS_US
-# 防止匹配到Global分流的chat.openai.com
-DOMAIN-SUFFIX, chat.openai.com
+# OpenAI / ChatGPT / Sora
+# 由 tools/rules_merge.py 生成，请勿手改
+# 上游：可莉 https://kelee.one/Tool/Loon/Lsr/AI.lsr（# OpenAI 段，2026-10-07 22:40:50）
+# 生成时间：2026-10-24 21:50
 
-DOMAIN, ab.chatgpt.com
-DOMAIN, api.statsig.com
-DOMAIN, browser-intake-datadoghq.com
-DOMAIN, cdn.openai.com
-DOMAIN, chat.openai.com
-DOMAIN, chat.openai.com.cdn.cloudflare.net
-DOMAIN, ios.chat.openai.com
-DOMAIN, o33249.ingest.sentry.io
-DOMAIN, openai-api.arkoselabs.com
-DOMAIN, openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
+AND, ((DOMAIN-KEYWORD, chatgpt-async-webps-prod-), (DOMAIN-SUFFIX, webpubsub.azure.com))
+AND, ((DOMAIN-KEYWORD, openaicom-api-), (DOMAIN-SUFFIX, azurefd.net))
+DOMAIN, chatgpt.livekit.cloud
+DOMAIN, host.livekit.cloud
+DOMAIN, openai.com.cdn.cloudflare.net
+DOMAIN, openaiapi-site.azureedge.net
 DOMAIN, openaicomproductionae4b.blob.core.windows.net
 DOMAIN, production-openaicom-storage.azureedge.net
-DOMAIN, static.cloudflareinsights.com
-DOMAIN-SUFFIX, algolia.net
-DOMAIN-SUFFIX, auth0.com
+DOMAIN, turn.livekit.cloud
+DOMAIN, openaicom.imgix.net
+DOMAIN-SUFFIX, chat.com
 DOMAIN-SUFFIX, chatgpt.com
-DOMAIN-SUFFIX, cdn.cloudflare.net
-DOMAIN-SUFFIX, challenges.cloudflare.com
-DOMAIN-SUFFIX, client-api.arkoselabs.com
-DOMAIN-SUFFIX, events.statsigapi.net
-DOMAIN-SUFFIX, featuregates.org
-DOMAIN-SUFFIX, identrust.com
-DOMAIN-SUFFIX, intercom.io
-DOMAIN-SUFFIX, intercomcdn.com
-DOMAIN-SUFFIX, launchdarkly.com
+DOMAIN-SUFFIX, crixet.com
 DOMAIN-SUFFIX, oaistatic.com
 DOMAIN-SUFFIX, oaiusercontent.com
-DOMAIN-SUFFIX, observeit.net
 DOMAIN-SUFFIX, openai.com
-DOMAIN-SUFFIX, openaiapi-site.azureedge.net
-DOMAIN-SUFFIX, openaicom.imgix.net
-DOMAIN-SUFFIX, poe.com
-DOMAIN-SUFFIX, segment.io
-DOMAIN-SUFFIX, sentry.io
-DOMAIN-SUFFIX, stripe.com
-DOMAIN-KEYWORD, openaicom-api
+DOMAIN-SUFFIX, sora.com
+DOMAIN-SUFFIX, chatgpt.site
+
+# 本地补充
+DOMAIN-SUFFIX, ai.com
+DOMAIN, openai-api.arkoselabs.com
+DOMAIN-SUFFIX, client-api.arkoselabs.com
