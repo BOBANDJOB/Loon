@@ -1,18 +1,20 @@
 #!name=美团外卖去开屏广告
-#!desc=阻断 Shark 长连接调度迫使 App 降级为 HTTPS，再拦截开屏广告接口与素材。首次启用后请删除并重装美团外卖（或清缓存）以清掉已预下载的开屏素材。
+#!desc=封锁 Shark 加密长连接，迫使美团外卖改走可 MITM 的 HTTPS，再拦截开屏接口与素材。注意：规则优先级为本地 > 插件 > 订阅，本地若有 GEOIP,CN,DIRECT，本插件的 IP 规则会失效，请把 GEOIP,CN 移到订阅规则末尾（或把 IP-CIDR 复制到本地 GEOIP 之前）。首次启用后重装美团外卖以清掉已缓存的开屏素材。
 #!author=Noble
 #!homepage=
-#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Meituan.png
+#!icon=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/meituan.png
 #!date=2026-10-24
 
 [Rule]
 # ---- 第一步：干掉 Shark 长连接（开屏接口走这条加密 TCP 隧道，MITM 看不到） ----
 DOMAIN,shark-wm.meituan.com,REJECT
 DOMAIN-SUFFIX,shark.meituan.com,REJECT
-# Shark SDK 用内置 IP 列表同时直连多个 IP（2026-10-24 请求记录），谁先连上用谁，必须全部封掉；
-# no-resolve 只匹配直连 IP 的连接，不影响走域名的正常业务。同网段有正常业务，不封整段
+# Shark SDK 用内置 IP 列表同时直连多个 IP:443（无 SNI，2026-10-24 请求记录），谁先连上用谁，必须全部封掉；
+# 其余显示 Client canceled before request 的是落选的候选，不是被拦截。
+# no-resolve 只匹配直连 IP 的连接，不影响走域名的正常业务。同网段有正常业务，不封整段。
 # 注意：Loon 规则来源优先级是 本地 > 插件 > 订阅，本地有 GEOIP,CN,DIRECT 时这里不会生效，
-# 需把下面这些 IP-CIDR 复制到本地规则并放在 GEOIP,CN 之前
+# 用订阅规则 Rules/GeoIP_CN.list 代替本地 GEOIP，或把下面这些 IP-CIDR 复制到本地 GEOIP 之前。
+# 开屏再次出现时：请求记录筛 GEOIP + 443，找连接成功、没有域名的 IP 补到这里
 IP-CIDR,103.63.160.61/32,REJECT,no-resolve
 IP-CIDR,113.45.175.45/32,REJECT,no-resolve
 IP-CIDR,103.37.152.162/32,REJECT,no-resolve
@@ -25,10 +27,10 @@ IP-CIDR,119.29.126.181/32,REJECT,no-resolve
 
 [Rewrite]
 # Shark 的 HTTPDNS 调度接口（抓包 #78：http://103.37.152.97/fetch?dm=shark-wm.meituan.com）
-# 拿不到隧道 IP，SDK 会回退到普通 HTTPS 短连接
+# 只拦这个不够：SDK 还有内置 IP 列表，需配合上面的 IP-CIDR
 ^http:\/\/103\.37\.\d{1,3}\.\d{1,3}\/fetch\?dm=shark reject
 
-# ---- 第二步：降级后，开屏广告走的 HTTPS 接口 ----
+# ---- 第二步：隧道封死后，开屏广告走的 HTTPS 接口 ----
 ^https?:\/\/wmapi\.meituan\.com\/api\/v\d+\/(loadInfo|openscreen|startpicture) reject-dict
 
 # ---- 第三步：开屏素材（图片 / 视频 / 预下载包） ----
