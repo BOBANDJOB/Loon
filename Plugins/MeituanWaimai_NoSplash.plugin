@@ -11,6 +11,8 @@ DOMAIN,shark-wm.meituan.com,REJECT
 DOMAIN-SUFFIX,shark.meituan.com,REJECT
 # Shark SDK 用内置 IP 列表同时直连多个 IP（2026-10-24 请求记录），谁先连上用谁，必须全部封掉；
 # no-resolve 只匹配直连 IP 的连接，不影响走域名的正常业务。同网段有正常业务，不封整段
+# 注意：Loon 规则来源优先级是 本地 > 插件 > 订阅，本地有 GEOIP,CN,DIRECT 时这里不会生效，
+# 需把下面这些 IP-CIDR 复制到本地规则并放在 GEOIP,CN 之前
 IP-CIDR,103.63.160.61/32,REJECT,no-resolve
 IP-CIDR,113.45.175.45/32,REJECT,no-resolve
 IP-CIDR,103.37.152.162/32,REJECT,no-resolve
