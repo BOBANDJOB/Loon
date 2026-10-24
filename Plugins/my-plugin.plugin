@@ -3,7 +3,7 @@
 #!openUrl = 
 #!author = Winfred
 #!homepage = 
-#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/ai/adblock.png
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/ai/winfred_adblock.png
 #!date = 2023-11-24 12:20
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # > "reject" 策略会返回 HTTP 状态码 404,不附带任何额外内容
