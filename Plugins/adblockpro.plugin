@@ -1,7 +1,7 @@
 #!name = AdBlock Pro
 #!desc = AdBlock Pro 10.7.5 解锁
 #!author = Yu9191[https://github.com/Yu9191], BOBANDJOB[https://github.com/BOBANDJOB]
-#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/ai/adblock.png
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/adblockpro.png
 #!date = 2026-10-24 19:55
 
 # 原为 PrivateQX 的 QX 重写（Rewrites/AdBlock.conf），经 Script Hub 转换使用，现改为 Loon 原生插件
