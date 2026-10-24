@@ -1,0 +1,13 @@
+#!name = 马士兵
+#!desc = 马士兵教育：编程语言学习、测试学习课程解锁
+#!author = BOBANDJOB[https://github.com/BOBANDJOB]
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/mashibing.png
+#!date = 2026-10-24 19:55
+
+# 原为 PrivateQX 的 QX 重写（Scripts/msb.js），经 Script Hub 转换使用，现改为 Loon 原生插件
+
+[Script]
+http-response ^https:\/\/gateway\.mashibing\.com\/edu-course\/(coursePackage\/app\/1|app\/systemCourse|courseWeb) script-path = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/mashibing.js, requires-body = true, tag = 马士兵解锁
+
+[MITM]
+hostname = gateway.mashibing.com

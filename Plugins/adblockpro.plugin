@@ -1,0 +1,14 @@
+#!name = AdBlock Pro
+#!desc = AdBlock Pro 10.7.5 解锁
+#!author = Yu9191[https://github.com/Yu9191], BOBANDJOB[https://github.com/BOBANDJOB]
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/ai/adblock.png
+#!date = 2026-10-24 19:55
+
+# 原为 PrivateQX 的 QX 重写（Rewrites/AdBlock.conf），经 Script Hub 转换使用，现改为 Loon 原生插件
+# 脚本来源：Yu9191/Rewrite adblockpro.js
+
+[Script]
+http-response ^https:\/\/api\.adblockpro\.app\/verify script-path = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/adblockpro.js, requires-body = true, tag = AdBlock Pro解锁
+
+[MITM]
+hostname = api.adblockpro.app

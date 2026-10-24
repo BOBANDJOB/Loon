@@ -1,6 +1,6 @@
 {
   "name": "Winfred图标订阅",
-  "description": "自用图标合集，共 5028 个，已按链接与图片内容去重，更新于 2026-10-23 21:49。感谢各位作者的图标：可莉(356)、可莉彩色静态旗帜(259)、fmz200(1599)、离歌(907)、blackmatrix7(1800)。图标版权归原作者及商标持有人所有。",
+  "description": "自用图标合集，共 5030 个，已按链接与图片内容去重，更新于 2026-10-24 20:05。感谢各位作者的图标：可莉(356)、可莉彩色静态旗帜(259)、fmz200(1599)、离歌(908)、blackmatrix7(1800)。图标版权归原作者及商标持有人所有。",
   "icons": [
     {
       "name": "Auto",
@@ -141,6 +141,10 @@
     {
       "name": "line",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/line.png"
+    },
+    {
+      "name": "mashibing",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/mashibing.png"
     },
     {
       "name": "meituan",
@@ -9629,6 +9633,10 @@
     {
       "name": "Stash",
       "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/02ProxySoftLogo/Stash.png"
+    },
+    {
+      "name": "Surfboard",
+      "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/02ProxySoftLogo/Surfboard.png"
     },
     {
       "name": "Surge(1)",
