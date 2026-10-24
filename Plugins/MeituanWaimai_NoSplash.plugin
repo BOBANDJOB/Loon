@@ -1,48 +1,25 @@
 #!name=美团外卖去开屏广告
-#!desc=封锁 Shark 加密长连接，迫使美团外卖改走可 MITM 的 HTTPS，再拦截开屏接口与素材。注意：规则优先级为本地 > 插件 > 订阅，本地若有 GEOIP,CN,DIRECT，本插件的 IP 规则会失效，请把 GEOIP,CN 移到订阅规则末尾（或把 IP-CIDR 复制到本地 GEOIP 之前）。首次启用后重装美团外卖以清掉已缓存的开屏素材。
+#!desc=拦截开屏广告接口与素材（图片、视频）。不封 Shark 长连接，否则结算页报 H-152##NUTCBH 无法下单。首次启用后请重装美团外卖，清掉已缓存的开屏素材。
 #!author=Noble
 #!homepage=
 #!icon=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/meituan.png
 #!date=2026-10-24
 
-[Rule]
-# ---- 第一步：干掉 Shark 长连接（开屏接口走这条加密 TCP 隧道，MITM 看不到） ----
-DOMAIN,shark-wm.meituan.com,REJECT
-DOMAIN-SUFFIX,shark.meituan.com,REJECT
-# Shark SDK 用内置 IP 列表同时直连多个 IP:443（无 SNI，2026-10-24 请求记录），谁先连上用谁，必须全部封掉；
-# 其余显示 Client canceled before request 的是落选的候选，不是被拦截。
-# no-resolve 只匹配直连 IP 的连接，不影响走域名的正常业务。同网段有正常业务，不封整段。
-# 注意：Loon 规则来源优先级是 本地 > 插件 > 订阅，本地有 GEOIP,CN,DIRECT 时这里不会生效，
-# 用订阅规则 Rules/GeoIP_CN.list 代替本地 GEOIP，或把下面这些 IP-CIDR 复制到本地 GEOIP 之前。
-# 开屏再次出现时：请求记录筛 GEOIP + 443，找连接成功、没有域名的 IP 补到这里
-IP-CIDR,103.63.160.61/32,REJECT,no-resolve
-IP-CIDR,113.45.175.45/32,REJECT,no-resolve
-IP-CIDR,103.37.152.162/32,REJECT,no-resolve
-IP-CIDR,202.90.110.47/32,REJECT,no-resolve
-IP-CIDR,202.90.108.60/32,REJECT,no-resolve
-IP-CIDR,203.76.217.163/32,REJECT,no-resolve
-IP-CIDR,203.76.217.37/32,REJECT,no-resolve
-IP-CIDR,101.50.8.62/32,REJECT,no-resolve
-IP-CIDR,119.29.126.181/32,REJECT,no-resolve
+# 2026-10-24 排查记录：
+# - 首页、店铺、购物车等接口走 Shark 加密长连接，MITM 看不到。Shark SDK 用内置 IP 列表同时直连多个 IP:443
+#   （无 SNI，命中 GEOIP），谁先连上用谁。曾用 IP-CIDR 全部封掉，App 会改走 http://wmapi.meituan.com，
+#   开屏也能拦，但结算页只认隧道，报 H-152##NUTCBH 无法下单；把 loadInfo 里的 shark_switch_x 改成 0 也无效。
+# - 因此放行隧道，只拦开屏素材：素材走 CDN 下载，不经过隧道。
+# - waimai-alita/*.zip 是 Alita 业务包（appupdate/alita/checkUpdate 下发），不是开屏素材，不要拦。
 
 [Rewrite]
-# Shark 的 HTTPDNS 调度接口（抓包 #78：http://103.37.152.97/fetch?dm=shark-wm.meituan.com）
-# 只拦这个不够：SDK 还有内置 IP 列表，需配合上面的 IP-CIDR
-^http:\/\/103\.37\.\d{1,3}\.\d{1,3}\/fetch\?dm=shark reject
-
-# ---- 第二步：隧道封死后，开屏广告走的 HTTPS 接口 ----
-# loadInfo 是整体初始化配置（含 shark_switch_x 开关），不能整条拦，改由下方脚本修改
+# 开屏接口（隧道不可用、App 回退到 HTTP 时生效）
 ^https?:\/\/wmapi\.meituan\.com\/api\/v\d+\/(openscreen|startpicture) reject-dict
 
-# ---- 第三步：开屏素材（图片 / 视频 / 预下载包） ----
+# 开屏素材（图片 / 视频）
 ^https?:\/\/(s3plus|flowplus)\.meituan\.net\/v\d\/\w+\/linglong\/\w+\.(gif|jpg|png|webp|mp4) reject-img
 ^https?:\/\/img\.meituan\.net\/bizad\/bizad_brandCpt_\d+\.(jpg|png|webp) reject-img
-# waimai-alita 是 Alita 端智能/业务包（appupdate/alita/checkUpdate 下发），拦掉疑似导致结算页打不开，暂不拦
 ^https?:\/\/s3plus\.meituan\.net\/v1\/mss_\w+\/brandcpt-vedio\/\w+\.zip$ reject-dict
-
-[Script]
-# 只封隧道会导致结算页报 H-152##NUTCBH 无法下单：关掉 loadInfo 里的 Shark 开关，让 App 主动走 HTTP
-http-response ^https?:\/\/wmapi\.meituan\.com\/api\/v\d+\/loadInfo script-path = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/meituan_waimai.js, requires-body = true, tag = 关闭 Shark 开关
 
 [MITM]
 hostname = wmapi.meituan.com, s3plus.meituan.net, flowplus.meituan.net, img.meituan.net
