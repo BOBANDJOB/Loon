@@ -1,6 +1,6 @@
 {
   "name": "Winfred图标订阅",
-  "description": "自用图标合集，共 5032 个，已按链接与图片内容去重，更新于 2026-10-24 20:37。感谢各位作者的图标：可莉(356)、可莉彩色静态旗帜(259)、fmz200(1599)、离歌(908)、blackmatrix7(1800)。图标版权归原作者及商标持有人所有。",
+  "description": "自用图标合集，共 5033 个，已按链接与图片内容去重，更新于 2026-10-24 22:03。感谢各位作者的图标：可莉(356)、可莉彩色静态旗帜(259)、fmz200(1599)、离歌(908)、blackmatrix7(1800)。图标版权归原作者及商标持有人所有。",
   "icons": [
     {
       "name": "Auto",
@@ -105,6 +105,10 @@
     {
       "name": "emby",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/emby.png"
+    },
+    {
+      "name": "exchange_rate",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/exchange_rate.png"
     },
     {
       "name": "gemini",

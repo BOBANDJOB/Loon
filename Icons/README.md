@@ -15,3 +15,4 @@
 - [离歌 / lige47/QuanX-icon-rule](https://github.com/lige47/QuanX-icon-rule)
 - [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script)
 - [RuCu6/Loon](https://github.com/RuCu6/Loon)
+- [chxm1023/Task](https://github.com/chxm1023/Task)：`app/exchange_rate.png`（汇率监控）
