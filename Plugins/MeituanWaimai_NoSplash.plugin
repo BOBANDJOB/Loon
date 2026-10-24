@@ -31,7 +31,8 @@ IP-CIDR,119.29.126.181/32,REJECT,no-resolve
 ^http:\/\/103\.37\.\d{1,3}\.\d{1,3}\/fetch\?dm=shark reject
 
 # ---- 第二步：隧道封死后，开屏广告走的 HTTPS 接口 ----
-^https?:\/\/wmapi\.meituan\.com\/api\/v\d+\/(loadInfo|openscreen|startpicture) reject-dict
+# loadInfo 是整体初始化配置，整条拦掉疑似导致无法下单（2026-10-24 对照测试中），暂不拦
+^https?:\/\/wmapi\.meituan\.com\/api\/v\d+\/(openscreen|startpicture) reject-dict
 
 # ---- 第三步：开屏素材（图片 / 视频 / 预下载包） ----
 ^https?:\/\/(s3plus|flowplus)\.meituan\.net\/v\d\/\w+\/linglong\/\w+\.(gif|jpg|png|webp|mp4) reject-img
