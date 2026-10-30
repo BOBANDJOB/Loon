@@ -1,6 +1,6 @@
 {
   "name": "Winfred图标订阅",
-  "description": "自用图标合集，共 5037 个，已按链接与图片内容去重，更新于 2026-10-30 18:18。感谢各位作者的图标：可莉(349)、可莉彩色静态旗帜(259)、fmz200(1599)、离歌(912)、blackmatrix7(1800)。图标版权归原作者及商标持有人所有。",
+  "description": "自用图标合集，共 5037 个，已按链接与图片内容去重，更新于 2026-10-30 18:31。感谢各位作者的图标：可莉(322)、可莉彩色静态旗帜(259)、fmz200(1599)、离歌(912)、blackmatrix7(1800)。图标版权归原作者及商标持有人所有。",
   "icons": [
     {
       "name": "Auto",
@@ -31,12 +31,24 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/123pan.png"
     },
     {
+      "name": "2bulu",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/2bulu.png"
+    },
+    {
+      "name": "51job",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/51job.png"
+    },
+    {
       "name": "adblockpro",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/adblockpro.png"
     },
     {
       "name": "adguard",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/adguard.png"
+    },
+    {
+      "name": "aiqicha",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/aiqicha.png"
     },
     {
       "name": "alipay",
@@ -61,6 +73,14 @@
     {
       "name": "audi",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/audi.png"
+    },
+    {
+      "name": "autohome",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/autohome.png"
+    },
+    {
+      "name": "baidupan",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/baidupan.png"
     },
     {
       "name": "bdmap",
@@ -99,8 +119,16 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/copilot.png"
     },
     {
+      "name": "damai",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/damai.png"
+    },
+    {
       "name": "deepseek",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/deepseek.png"
+    },
+    {
+      "name": "didi",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/didi.png"
     },
     {
       "name": "discord",
@@ -117,6 +145,14 @@
     {
       "name": "exchange_rate",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/exchange_rate.png"
+    },
+    {
+      "name": "ezviz",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/ezviz.png"
+    },
+    {
+      "name": "fcbox",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/fcbox.png"
     },
     {
       "name": "gemini",
@@ -155,6 +191,14 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/keep.png"
     },
     {
+      "name": "kuaikan",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/kuaikan.png"
+    },
+    {
+      "name": "kuaishou",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/kuaishou.png"
+    },
+    {
       "name": "lanhua",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/lanhua.png"
     },
@@ -163,8 +207,20 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/line.png"
     },
     {
+      "name": "luckin",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/luckin.png"
+    },
+    {
+      "name": "maimai",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/maimai.png"
+    },
+    {
       "name": "mashibing",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/mashibing.png"
+    },
+    {
+      "name": "meitu",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/meitu.png"
     },
     {
       "name": "meituan",
@@ -175,8 +231,20 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/microsoft.png"
     },
     {
+      "name": "mobilecloud",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/mobilecloud.png"
+    },
+    {
+      "name": "moji",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/moji.png"
+    },
+    {
       "name": "myblockads",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/myblockads.png"
+    },
+    {
+      "name": "neteasemusic",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/neteasemusic.png"
     },
     {
       "name": "netflix",
@@ -195,12 +263,28 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/perplexity.png"
     },
     {
+      "name": "picc",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/picc.png"
+    },
+    {
       "name": "pinduoduo",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/pinduoduo.png"
     },
     {
+      "name": "qidian",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/qidian.png"
+    },
+    {
       "name": "qq",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/qq.png"
+    },
+    {
+      "name": "qqksong",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/qqksong.png"
+    },
+    {
+      "name": "quark",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/quark.png"
     },
     {
       "name": "qx",
@@ -215,8 +299,16 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/safari.png"
     },
     {
+      "name": "sf",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/sf.png"
+    },
+    {
       "name": "signal",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/signal.png"
+    },
+    {
+      "name": "smzdm",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/smzdm.png"
     },
     {
       "name": "soul",
@@ -279,6 +371,10 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/weibo.png"
     },
     {
+      "name": "wps",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/wps.png"
+    },
+    {
       "name": "x",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/x.png"
     },
@@ -291,12 +387,20 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/xiaohongshu.png"
     },
     {
+      "name": "ximalaya",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/ximalaya.png"
+    },
+    {
       "name": "xmind",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/xmind.png"
     },
     {
       "name": "xptv",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/xptv.png"
+    },
+    {
+      "name": "xunlei",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/xunlei.png"
     },
     {
       "name": "yiyan",
@@ -317,6 +421,10 @@
     {
       "name": "zhilian",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/zhilian.png"
+    },
+    {
+      "name": "zhuanzhuan",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/zhuanzhuan.png"
     },
     {
       "name": "eu",
@@ -639,28 +747,12 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/SevenCat.png"
     },
     {
-      "name": "中国人保",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/PICC_Insurance.png"
-    },
-    {
-      "name": "中国移动云盘",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/mobileClouds.png"
-    },
-    {
       "name": "云闪付",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/UnionPay.png"
     },
     {
-      "name": "什么值得买",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/smzdm.png"
-    },
-    {
       "name": "优酷视频",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/YouKu_Video.png"
-    },
-    {
-      "name": "全民K歌",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QQKSong.png"
     },
     {
       "name": "半次元",
@@ -673,10 +765,6 @@
     {
       "name": "唱吧",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Changba.png"
-    },
-    {
-      "name": "喜马拉雅",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Himalaya.png"
     },
     {
       "name": "宝宝树孕育",
@@ -707,10 +795,6 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/SearchPicture.png"
     },
     {
-      "name": "爱企查",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Aiinquiry.png"
-    },
-    {
       "name": "爱奇艺",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/iQiYi_Video.png"
     },
@@ -721,10 +805,6 @@
     {
       "name": "百度",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png"
-    },
-    {
-      "name": "百度网盘",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/BaiduNetDisk.png"
     },
     {
       "name": "百度输入法",
@@ -741,10 +821,6 @@
     {
       "name": "稿定设计",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/GaoDing.png"
-    },
-    {
-      "name": "网易云音乐",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/NeteaseCloudMusic.png"
     },
     {
       "name": "网易新闻",
@@ -775,10 +851,6 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Tieba.png"
     },
     {
-      "name": "起点读书",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QiDian.png"
-    },
-    {
       "name": "酷安",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/CoolApk.png"
     },
@@ -799,16 +871,8 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/PuPuMall.png"
     },
     {
-      "name": "滴滴出行",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/DiDi.png"
-    },
-    {
       "name": "启信宝",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QiXinBao.png"
-    },
-    {
-      "name": "转转",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ZhuanZhuan.png"
     },
     {
       "name": "风鸟",
@@ -837,10 +901,6 @@
     {
       "name": "360摄像机",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/360SmartCamera.png"
-    },
-    {
-      "name": "萤石云视频",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/VideoGo.png"
     },
     {
       "name": "飞客",
@@ -875,14 +935,6 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/KingdeeMyMoney.png"
     },
     {
-      "name": "迅雷",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/XunLei.png"
-    },
-    {
-      "name": "夸克",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QuarkBrowser.png"
-    },
-    {
       "name": "书旗小说",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ShuQiCenterReader.png"
     },
@@ -897,10 +949,6 @@
     {
       "name": "堆糖",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/DuiTang.png"
-    },
-    {
-      "name": "汽车之家",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/AutoHome.png"
     },
     {
       "name": "酷狗音乐",
@@ -925,10 +973,6 @@
     {
       "name": "腾讯动漫",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/TencentComic.png"
-    },
-    {
-      "name": "快看漫画",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/KuaiKanComic.png"
     },
     {
       "name": "哔哩哔哩漫画",
@@ -1091,16 +1135,8 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/BooHee.png"
     },
     {
-      "name": "脉脉",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/MaiMai.png"
-    },
-    {
       "name": "网易有道词典",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/YoudaoDict.png"
-    },
-    {
-      "name": "美图秀秀",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/MeiTu.png"
     },
     {
       "name": "555电影",
@@ -1117,10 +1153,6 @@
     {
       "name": "剑网三无界",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/SeasunJX3.png"
-    },
-    {
-      "name": "快手",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/KuaiShou.png"
     },
     {
       "name": "红果短剧",
@@ -1147,10 +1179,6 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/YY_Voice.png"
     },
     {
-      "name": "顺丰速运",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/SF-Express.png"
-    },
-    {
       "name": "健康160",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/91160.png"
     },
@@ -1167,10 +1195,6 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ChengFenMiao.png"
     },
     {
-      "name": "丰巢",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/FC_Box.png"
-    },
-    {
       "name": "威锋",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/WPForum.png"
     },
@@ -1179,16 +1203,8 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/KGRing.png"
     },
     {
-      "name": "WPS",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/WPS.png"
-    },
-    {
       "name": "FollowRSS",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/FollowRSS.png"
-    },
-    {
-      "name": "前程无忧",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/51Job.png"
     },
     {
       "name": "美柚",
@@ -1235,10 +1251,6 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/BitqiuPan.png"
     },
     {
-      "name": "墨迹天气",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/MojiWeather.png"
-    },
-    {
       "name": "美食杰",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/MeiShiJie.png"
     },
@@ -1253,10 +1265,6 @@
     {
       "name": "直播吧",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Zhibo8.png"
-    },
-    {
-      "name": "瑞幸咖啡",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/LuckinCoffee.png"
     },
     {
       "name": "韩小圈",
@@ -1433,10 +1441,6 @@
     {
       "name": "微脉圈",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weimai.png"
-    },
-    {
-      "name": "大麦",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Damai.png"
     },
     {
       "name": "掌上英雄联盟",
@@ -1617,10 +1621,6 @@
     {
       "name": "虎嗅",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Huxiu.png"
-    },
-    {
-      "name": "两步路户外助手",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/2bulu.png"
     },
     {
       "name": "行者户外",
