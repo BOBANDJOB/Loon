@@ -1,6 +1,6 @@
 {
   "name": "Winfred图标订阅",
-  "description": "自用图标合集，共 5033 个，已按链接与图片内容去重，更新于 2026-10-24 22:03。感谢各位作者的图标：可莉(356)、可莉彩色静态旗帜(259)、fmz200(1599)、离歌(908)、blackmatrix7(1800)。图标版权归原作者及商标持有人所有。",
+  "description": "自用图标合集，共 5037 个，已按链接与图片内容去重，更新于 2026-10-30 17:45。感谢各位作者的图标：可莉(352)、可莉彩色静态旗帜(259)、fmz200(1599)、离歌(912)、blackmatrix7(1800)。图标版权归原作者及商标持有人所有。",
   "icons": [
     {
       "name": "Auto",
@@ -21,6 +21,10 @@
     {
       "name": "winfred_adblock",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/ai/winfred_adblock.png"
+    },
+    {
+      "name": "12306",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/12306.png"
     },
     {
       "name": "adblockpro",
@@ -175,6 +179,10 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/netflix.png"
     },
     {
+      "name": "okok",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/okok.png"
+    },
+    {
       "name": "paypal",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/paypal.png"
     },
@@ -235,12 +243,20 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/telegram.png"
     },
     {
+      "name": "terabox",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/terabox.png"
+    },
+    {
       "name": "testflight",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/testflight.png"
     },
     {
       "name": "tiktok",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/tiktok.png"
+    },
+    {
+      "name": "umetrip",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/umetrip.png"
     },
     {
       "name": "webpage",
@@ -453,10 +469,6 @@
     {
       "name": "1.1.1.1",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/1.1.1.1.png"
-    },
-    {
-      "name": "12306",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/12306.png"
     },
     {
       "name": "Adobe Creative Cloud",
@@ -729,10 +741,6 @@
     {
       "name": "腾讯视频",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Tencent_Video.png"
-    },
-    {
-      "name": "航旅纵横",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Umetrip.png"
     },
     {
       "name": "芒果TV",
@@ -1423,10 +1431,6 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weimai.png"
     },
     {
-      "name": "TeraBox",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/TeraBox.png"
-    },
-    {
       "name": "大麦",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Damai.png"
     },
@@ -1737,10 +1741,6 @@
     {
       "name": "创维智慧云",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/SkyworthDigitalPicamera.png"
-    },
-    {
-      "name": "OKOK",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/OKOK.png"
     },
     {
       "name": "车来了",
@@ -10463,6 +10463,10 @@
       "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/03CNSoft/waixingren.png"
     },
     {
+      "name": "wangfeimaowfm",
+      "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/03CNSoft/wangfeimaowfm.png"
+    },
+    {
       "name": "wangshangguowang",
       "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/03CNSoft/wangshangguowang.png"
     },
@@ -11831,6 +11835,10 @@
       "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/06jichang/dengta.png"
     },
     {
+      "name": "DH",
+      "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/06jichang/DH.png"
+    },
+    {
       "name": "dickvpn",
       "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/06jichang/dickvpn.png"
     },
@@ -12127,6 +12135,10 @@
       "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/06jichang/Kuromis0.png"
     },
     {
+      "name": "lantianyun",
+      "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/06jichang/lantianyun.png"
+    },
+    {
       "name": "liangxinyun",
       "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/06jichang/liangxinyun.png"
     },
@@ -12293,6 +12305,10 @@
     {
       "name": "Nanyun",
       "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/06jichang/Nanyun.png"
+    },
+    {
+      "name": "NeoNet",
+      "url": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/06jichang/NeoNet.png"
     },
     {
       "name": "Nerwo",
