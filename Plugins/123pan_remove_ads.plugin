@@ -1,0 +1,11 @@
+#!name = 123 云盘去广告
+#!desc = 移除 123 云盘配置下发的广告
+#!author = BOBANDJOB[https://github.com/BOBANDJOB]
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/123pan.png
+#!date = 2026-10-30 18:30
+
+[Rewrite]
+request if ${url} ~= /^https:\/\/www\.123pan\.com\/api\/config\/get/i then reject_dict(200)
+
+[MITM]
+hostname = www.123pan.com

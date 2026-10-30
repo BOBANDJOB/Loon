@@ -1,0 +1,24 @@
+#!name = 他趣去广告
+#!desc = 移除他趣推荐流广告、横幅、引导弹窗、签到与推荐弹窗
+#!author = BOBANDJOB[https://github.com/BOBANDJOB]
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/taqu.png
+#!date = 2026-10-30 18:30
+
+[Rewrite]
+# 推荐流：去掉带 adPosition 的素材，以及只有 link + pic 两个字段的图片广告
+response if ${url} ~= /^https:\/\/gw-cn\.jiaoliuqu\.com\/mp-dolphin\/v\d\/rec\/recByPositions\?/i then response.json.jq(".info.data |= map(if .materials and (.materials | type) == \"array\" then .materials |= map(select(has(\"adPosition\") | not)) else . end)")
+response if ${url} ~= /^https:\/\/gw-cn\.jiaoliuqu\.com\/mp-dolphin\/v\d\/rec\/recByPositions\?/i then response.json.jq(".info.data |= map(if .materials and (.materials | type) == \"array\" then .materials |= map(select((keys | length) != 2 or (keys | sort) != [\"link\", \"pic\"])) else . end)")
+# 社区首页模块的推荐标题与滚动内容
+response if ${url} ~= /^https:\/\/gw-cn\.jiaoliuqu\.com\/bbs\/v5\/Home\/getHomePageModulesBySortV\d\?/i then response.json.jq("(.info.data.modules_list // []) |= [.[] | [.[] | del(.relaction_title, .scrollow_contents)]] | (.info.data.top_fix_list // []) |= [.[] | del(.subtitle_list)]")
+# 横幅、引导、签到、推荐弹窗
+request if ${url} ~= /^https:\/\/gw-cn\.jiaoliuqu\.com\/taqu-homepage\/v\d\/Banner\/getBannerByPositions\?/i then reject_dict(200)
+request if ${url} ~= /^https:\/\/gw-cn\.jiaoliuqu\.com\/bbs\/v5\/Guide\/photoGuide\?/i then reject_dict(200)
+request if ${url} ~= /^https:\/\/gw-cn\.jiaoliuqu\.com\/i\/v\d\/homepage\/completeGuideV\d\?/i then reject_dict(200)
+request if ${url} ~= /^https:\/\/gw-cn\.jiaoliuqu\.com\/bbs\/v5\/Sign\/getDailySigninInfoV4\?/i then reject_dict(200)
+request if ${url} ~= /^https:\/\/gw-cn\.jiaoliuqu\.com\/taqu-hichat\/v\d\/Hichat\/getRecommendInfo\?/i then reject_dict(200)
+request if ${url} ~= /^https:\/\/gw-cn\.jiaoliuqu\.com\/live_api\/v\d\/Banner\/getBannerListV\d\?/i then reject_dict(200)
+request if ${url} ~= /^https:\/\/gw-cn\.jiaoliuqu\.com\/live_api\/v\d\/HallScroll\/getList\?/i then reject_dict(200)
+request if ${url} ~= /^https:\/\/gw-cn\.jiaoliuqu\.com\/taqu-msg-guide\/v\d\/RecommendColumn\/getList\?/i then reject_dict(200)
+
+[MITM]
+hostname = gw-cn.jiaoliuqu.com

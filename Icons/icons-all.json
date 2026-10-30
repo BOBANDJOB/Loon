@@ -1,6 +1,6 @@
 {
   "name": "Winfred图标订阅",
-  "description": "自用图标合集，共 5037 个，已按链接与图片内容去重，更新于 2026-10-30 17:45。感谢各位作者的图标：可莉(352)、可莉彩色静态旗帜(259)、fmz200(1599)、离歌(912)、blackmatrix7(1800)。图标版权归原作者及商标持有人所有。",
+  "description": "自用图标合集，共 5037 个，已按链接与图片内容去重，更新于 2026-10-30 18:18。感谢各位作者的图标：可莉(349)、可莉彩色静态旗帜(259)、fmz200(1599)、离歌(912)、blackmatrix7(1800)。图标版权归原作者及商标持有人所有。",
   "icons": [
     {
       "name": "Auto",
@@ -25,6 +25,10 @@
     {
       "name": "12306",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/12306.png"
+    },
+    {
+      "name": "123pan",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/123pan.png"
     },
     {
       "name": "adblockpro",
@@ -239,6 +243,10 @@
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/taobao.png"
     },
     {
+      "name": "taqu",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/taqu.png"
+    },
+    {
       "name": "telegram",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/telegram.png"
     },
@@ -305,6 +313,10 @@
     {
       "name": "zhihu",
       "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/zhihu.png"
+    },
+    {
+      "name": "zhilian",
+      "url": "https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/zhilian.png"
     },
     {
       "name": "eu",
@@ -1111,10 +1123,6 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/KuaiShou.png"
     },
     {
-      "name": "123云盘",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/123NetWorkDisk.png"
-    },
-    {
       "name": "红果短剧",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/PhoenixVideo.png"
     },
@@ -1181,10 +1189,6 @@
     {
       "name": "前程无忧",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/51Job.png"
-    },
-    {
-      "name": "智联招聘",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ZhiLianZhaoPin.png"
     },
     {
       "name": "美柚",
@@ -1601,10 +1605,6 @@
     {
       "name": "金十数据",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Jin10Data.png"
-    },
-    {
-      "name": "他趣",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Taqu.png"
     },
     {
       "name": "财联社",

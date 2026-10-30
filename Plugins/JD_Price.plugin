@@ -1,0 +1,18 @@
+#!name = 京东比价
+#!desc = 京东 App 商品详情页显示历史价格折线图。首次使用先打开慢慢买 App 获取 Cookie，获取成功后可关闭「获取慢慢买 Cookie」
+#!author = 小白脸 githubdulong[https://github.com/githubdulong]
+#!homepage = https://github.com/githubdulong/Script
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/jd.png
+#!date = 2026-10-30 18:30
+
+# 由 githubdulong 的 Surge 模块 Surge/jd_price.sgmodule 改写，脚本直接引用上游
+
+[Argument]
+mmmck = switch,true,false,tag=获取慢慢买 Cookie,desc=打开慢慢买 App 的爆料页面获取 Cookie，获取成功后可关闭
+
+[Script]
+http-request ^https?:\/\/apapia-sqk-weblogic\.manmanbuy\.com\/baoliao\/center\/menu script-path=https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js, requires-body=true, tag=慢慢买 Cookie, enable={mmmck}
+http-response ^https:\/\/in\.m\.jd\.com\/product\/graphext\/\d+\.html script-path=https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js, requires-body=true, timeout=30, tag=京东比价
+
+[MITM]
+hostname = in.m.jd.com, apapia-sqk-weblogic.manmanbuy.com
