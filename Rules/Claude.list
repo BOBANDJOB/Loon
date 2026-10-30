@@ -1,7 +1,6 @@
 # Anthropic / Claude
-# 由 tools/rules_merge.py 生成，请勿手改
-# 上游：可莉 https://kelee.one/Tool/Loon/Lsr/AI.lsr（# Anthropic 段，2026-10-07 22:40:50）
-# 生成时间：2026-10-24 21:50
+# 手写维护（2026-10-30 起，原由 tools/rules_merge.py 生成）
+# 初始内容来自可莉 https://kelee.one/Tool/Loon/Lsr/AI.lsr（# Anthropic 段，2026-10-07 22:40:50）
 
 DOMAIN-SUFFIX, anthropic.com
 DOMAIN-SUFFIX, claude.ai
