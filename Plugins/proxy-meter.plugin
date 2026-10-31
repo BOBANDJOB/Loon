@@ -2,7 +2,7 @@
 #!desc = 每天推送 VPS 用量进度和每日趋势；每小时检查限速策略，有变化立即推送。按人 / 网站排行见脚本日志，可开启详细诊断。
 #!author = Noble
 #!homepage = https://github.com/BOBANDJOB/Loon
-#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/common/global.png
+#!icon = https://github.com/BOBANDJOB/Loon/blob/main/Icons/ai/vps_meter.png?raw=true
 
 [Argument]
 node = input,"US",tag=查询节点,desc=Noble 自己的节点或策略组名（不要选 WARP 用户的节点）

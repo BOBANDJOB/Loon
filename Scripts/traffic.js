@@ -183,30 +183,34 @@ function bar(value, max, width) {
 }
 
 function progressLine(c) {
-  return "用量 " + bar(c.used, c.quota, 20) + " " + c.percent.toFixed(1) + "%";
+  return "用量 " + bar(c.used, c.quota, 10) + " " + c.percent.toFixed(1) + "%";
 }
 
-function forecastLine(c) {
+function forecastLine(c, compact) {
+  if (compact) return c.projPct === null ? "周期末预计：数据不足" : "预计 " + c.projPct.toFixed(1) + "%" +
+    (c.o && c.o.target_percent !== undefined ? " · 目标 " + c.o.target_percent + "%" : "");
   if (!c.o || c.o.target_percent === undefined || c.projPct === null) return projectedShort(c);
   return "周期末预计 " + fmt(c.projBytes) + "（" + c.projPct.toFixed(1) + "%） · 目标 " + c.o.target_percent + "%";
 }
 
-function budgetLine(s, c) {
+function budgetLine(s, c, compact) {
   if (isOver(c) || !c.o || c.o.target_percent === undefined) return null;
   const o = c.o;
+  if (compact) return "今日 " + (o.today_used / 1024 ** 3).toFixed(1) + "/" + (o.daily_quota / 1024 ** 3).toFixed(1) +
+    " GB" + (s.policy.v2_active === false ? "（预览）" : o.today_used > o.daily_quota ? "（超出）" : "");
   return "今日 " + fmt(o.today_used) + " / " + fmt(o.daily_quota) +
     (o.today_used > o.daily_quota ? "，超出 " + fmt(o.today_used - o.daily_quota) : "，还可用 " + fmt(o.daily_quota - o.today_used)) + previewTag(s.policy);
 }
 
 // 只在数据完整且策略已成熟时给出目标内判断；校准、执行和 dry_run 异常始终出现在摘要。
-function statusLine(s, c) {
+function statusLine(s, c, includeHealthy) {
   const p = s.policy;
   const notes = [];
   if (!p) notes.push("⚠️ 策略尚未计算，用量未校准");
   else if (p.status !== "ok") notes.push("⚠️ 策略异常：" + p.error);
   else {
     if (p.overall.uncalibrated) notes.push("⚠️ 周期数据不全且 offset 未填写，统计偏低");
-    else if (!isOver(c) && p.overall.mature && c.projPct !== null && c.projPct <= p.overall.target_percent) notes.push("当前预计在目标内");
+    else if (includeHealthy !== false && !isOver(c) && p.overall.mature && c.projPct !== null && c.projPct <= p.overall.target_percent) notes.push("当前预计在目标内");
     if (p.overall.offset_stale) notes.push("旧周期 offset 已忽略");
   }
   if (p && p.dry_run) notes.push("dry_run：策略只计算不执行");
@@ -231,12 +235,12 @@ function trendData(s, c) {
     used: typeof r.used === "number" && isFinite(r.used) && r.used >= 0 ? r.used * scale : null }));
 }
 
-function trendShort(s, c) {
+function trendShort(s, c, compact) {
   const rows = trendData(s, c);
   if (!rows || !rows.some((r) => r.used !== null)) return null;
   const max = Math.max(...rows.map((r) => r.used || 0));
   const spark = rows.map((r) => r.used === null ? "?" : max === 0 ? "▁" : "▁▂▃▄▅▆▇█"[Math.max(0, Math.ceil(r.used / max * 8) - 1)]).join("");
-  return "近7完整日 " + spark + " · 峰值 " + fmt(max) + (rows.some((r) => r.used === null) ? "（? 缺失）" : "");
+  return "近7完整日 " + spark + (compact ? "" : " · 峰值 " + fmt(max)) + (rows.some((r) => r.used === null) ? "（? 缺失）" : "");
 }
 
 function trendLines(s, c) {
@@ -260,12 +264,14 @@ function targetLines(o) {
   ];
 }
 
-function policySummary(p) {
+function policySummary(p, compact) {
   if (!p) return null;
   const tag = p.dry_run ? "（dry_run）" : "";
   const sh = p.shaper;
   if (sh && sh.initialized && sh.applied) {
-    return "实际限速" + tag + "：" + Object.keys(sh.applied).sort()
+    const names = Object.keys(sh.applied).sort();
+    if (compact && names.length && names.every((n) => !sh.applied[n])) return "实际限速" + tag + "：" + names.join("、") + " 不限速";
+    return "实际限速" + tag + "：" + names
       .map((n) => n + " " + (sh.applied[n] ? sh.applied[n] + " Mbps" : "不限速")).join(" · ");
   }
   if (p.status !== "ok") return "限速：全部不限速" + tag + "，" + p.error;
@@ -612,10 +618,22 @@ function scheduled() {
 // 弹窗优先显示用量、预算、实际限速及异常；按人明细移到日志，最多 10 行。
 function manualContent(s, via) {
   const c = cal(s);
-  const lines = overviewLines(s, c);
-  const trend = trendShort(s, c);
+  // 系统弹窗使用比例字体；缩短每行，日期 / 峰值 / 计算方法的完整信息仍在日志中。
+  const lines = [progressLine(c), c.calibrated ? "已用 " + (c.used / 1024 ** 3).toFixed(1) + "/" +
+    Number((c.quota / 1024 ** 3).toFixed(1)) + " GB" : usedLine(c, false),
+    (isOver(c) ? overText(c) : "剩余 " + (c.remaining / 1024 ** 3).toFixed(1) + " GB") + " · " + s.cycle.reset.slice(5) + " 重置"];
+  if (!isOver(c)) lines.push(forecastLine(c, true));
+  const budget = budgetLine(s, c, true);
+  if (budget) lines.push(budget);
+  const ps = policySummary(s.policy, true);
+  if (ps) lines.push(ps);
+  const status = statusLine(s, c, false);
+  if (status) lines.push(status);
+  // 异常优先；必要时省略预览日期或迷你图，仍保留查询节点和日志入口。
+  if (budget && s.policy.v2_active === false && lines.length < MAX_LINES - 2) lines.push("今日额度预览 · " + String(s.policy.v2_from || "").slice(5) + " 生效");
+  const trend = trendShort(s, c, true);
   if (trend && lines.length < MAX_LINES - 2) lines.push(trend);
-  lines.push("经 " + via + " 查询");
+  lines.push("查询：" + via);
   return lines;
 }
 
