@@ -286,10 +286,16 @@ function section(title, lines) {
   return ["", "【" + title + "】"].concat(lines);
 }
 
+function cycleLabel(s, field, compact = false) {
+  const at = s.cycle[field + "_at"];
+  if (at) return (compact ? at.slice(5, 16) : at.slice(0, 16)).replace("T", " ");
+  return compact ? s.cycle[field].slice(5) : s.cycle[field];
+}
+
 function overviewLines(s, c) {
   const ps = policySummary(s.policy);
   const lines = [progressLine(c), usedLine(c, false),
-    (isOver(c) ? overText(c) : "剩余 " + fmt(c.remaining)) + " · " + s.cycle.reset + " 重置"];
+    (isOver(c) ? overText(c) : "剩余 " + fmt(c.remaining)) + " · " + cycleLabel(s, "reset") + " 重置"];
   if (!isOver(c)) lines.push(forecastLine(c));
   const budget = budgetLine(s, c);
   if (budget) lines.push(budget);
@@ -341,8 +347,8 @@ function policyDiagLines(s) {
     lines.push(...targetLines(o));
     if (o.offset_stale) lines.push("offset 属于旧周期（" + o.offset_cycle + " 起），已忽略");
     if (o.uncalibrated) lines.push("⚠️ 本周期 offset 未填写，vnstat 没覆盖整个周期，已用和预计偏低");
-    lines.push("个人节奏自 " + o.personal_since + " 起算（已过周期 " + pct(o.personal_frac) + "）" +
-      (o.personal_since > s.cycle.start ? "，本周期此前没有按人数据" : "") + "；ratio " + o.ratio +
+    lines.push("个人节奏自 " + o.personal_since.slice(0, 16).replace("T", " ") + " 起算（已过周期 " + pct(o.personal_frac) + "）" +
+      (o.personal_since > (s.cycle.start_at || s.cycle.start) ? "，本周期此前没有按人数据" : "") + "；ratio " + o.ratio +
       (o.ratio_fallback ? "（实测 " + o.ratio_raw + " 缺失或异常，用默认值）" : "（实测）"));
     for (const name of Object.keys(p.users)) {
       const m = p.users[name];
@@ -376,7 +382,7 @@ function policyDiagLines(s) {
 function peopleLines(d) {
   if (!d.since) return ["暂无数据（v2ray_api 未开启或尚未采集）"];
   const compact = (list) => list.slice(0, TOP).map((r, i) => (i + 1) + ". " + r.name + "  " + fmt(r.total));
-  const lines = ["本周期（" + d.since + " 起，代理层）：", ...compact(d.users)];
+  const lines = ["本周期（" + d.since.slice(0, 16).replace("T", " ") + " 起，代理层）：", ...compact(d.users)];
   if (d.users_7d_ready) lines.push("近 7 天（含今天）：", ...compact(d.users_7d));
   else lines.push("近 7 天：数据不足 7 天（明细自 " + d.first + " 起）");
   return lines;
@@ -402,7 +408,7 @@ function siteLines(s, d) {
 // vnstat 原始读数只出现在这里
 function diagLines(s, d) {
   const t = s.total;
-  const lines = ["周期 " + s.cycle.start + " → " + s.cycle.reset + "（" + s.interface + "）",
+  const lines = ["周期 " + cycleLabel(s, "start") + " → " + cycleLabel(s, "reset") + "（" + s.interface + "）",
     "vnstat 原始读数 " + fmt(t.used) + "（实时，↓ " + fmt(t.rx) + " ↑ " + fmt(t.tx) + "）"];
   const o = s.policy && s.policy.status === "ok" ? s.policy.overall : null;
   if (o) {
@@ -621,7 +627,7 @@ function manualContent(s, via) {
   // 系统弹窗使用比例字体；缩短每行，日期 / 峰值 / 计算方法的完整信息仍在日志中。
   const lines = [progressLine(c), c.calibrated ? "已用 " + (c.used / 1024 ** 3).toFixed(1) + "/" +
     Number((c.quota / 1024 ** 3).toFixed(1)) + " GB" : usedLine(c, false),
-    (isOver(c) ? overText(c) : "剩余 " + (c.remaining / 1024 ** 3).toFixed(1) + " GB") + " · " + s.cycle.reset.slice(5) + " 重置"];
+    (isOver(c) ? overText(c) : "剩余 " + (c.remaining / 1024 ** 3).toFixed(1) + " GB") + " · " + cycleLabel(s, "reset", true) + " 重置"];
   if (!isOver(c)) lines.push(forecastLine(c, true));
   const budget = budgetLine(s, c, true);
   if (budget) lines.push(budget);
