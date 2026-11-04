@@ -11,7 +11,7 @@
 //   - 快速失败：请求超时 3 秒，另有 5 秒兜底计时器；按错误类型（连接被拒 / 超时 / 非 200 / 响应格式异常）给出提示。
 // 每次查询都在脚本日志里记录耗时（ms），便于评估超时阈值。
 //   - 结果用 $done({title, content}) 返回（不超过 10 行），从节点入口运行时只弹窗，不推送通知；
-//     从脚本列表运行时同时推送通知（内容相同）。明细只写脚本日志；verbose=true 展开完整诊断。
+//     从脚本列表运行时同时推送通知（内容相同）。明细只写脚本日志；手动入口直接指定 verbose=false / true，不继承定时开关。
 //     不改任何已推送状态。
 // 网站排行里认不出的 IP 显示为"IP（AS号 运营商名称）"，用 Loon 自带的 $utils.ipasn / ipaso，服务器端不做 ASN 查询。
 // 不带参数运行时，走 Loon 的分流规则，需要 DOMAIN,stats.noble.internal,<Noble 的节点>。
@@ -48,7 +48,9 @@ const ALERT = Number(ARG.alert) || 90;
 const FORECAST = Number(ARG.forecast) || 90; // 预计周期末用量占额度的提醒阈值（%）
 const REPORT_HOUR = ARG.report_hour === undefined || ARG.report_hour === "" || isNaN(Number(ARG.report_hour)) ? 9 : Number(ARG.report_hour);
 const TOP = 5;
-const VERBOSE = ARG.verbose === true || ARG.verbose === "true";
+// 手动显示偏好只由本次入口决定，不继承定时日报开关；旧手动入口默认普通查询。
+const REPORT_VERBOSE = MANUAL ? RAW.verbose : ARG.verbose;
+const VERBOSE = REPORT_VERBOSE === true || REPORT_VERBOSE === "true";
 const SHOW_EVENTS = 5; // 日报里显示的最近事件条数
 const API_EVENTS = 20; // /stats 返回的最近事件条数（policy.py 的 SHOW_EVENTS）
 const KEY_EVENT = "proxy-meter.lastEvent";   // 已推送的最新一条事件的时间
@@ -614,7 +616,7 @@ function badFields(s) {
 function query(node, cb) {
   const req = { url: URL, timeout: TIMEOUT_MS };
   if (node) req.node = node;
-  console.log("技术诊断：" + (VERBOSE ? "开" : "关") + (MANUAL ? "（读取已保存参数；更改开关后先运行一次定时脚本）" : "（本次插件参数已保存，供手动查询使用）"));
+  console.log("技术诊断：" + (VERBOSE ? "开" : "关") + (MANUAL ? "（由本次手动入口指定）" : "（定时日报设置；不影响手动查询）"));
   const t0 = Date.now();
   const log = (result) => console.log("查询耗时 " + (Date.now() - t0) + " ms（" + (MANUAL ? "手动" : "定时") + "，节点 " +
     (node || "按分流规则") + "，超时设置 " + TIMEOUT_MS + " ms，结果 " + result + "）");

@@ -12,11 +12,12 @@ warn = input,70,type=number,tag=提醒阈值（%）
 alert = input,90,type=number,tag=警告阈值（%）
 forecast = input,90,type=number,tag=预计超额阈值（%）,desc=预计周期末用量超过额度的这个比例时提醒
 enabled = switch,true,type=boolean,tag=启用
-verbose = switch,false,type=boolean,tag=详细诊断,desc=仅追加技术诊断：网卡原始值、scale/offset、策略计算和协议；个人及网站用量始终显示。修改后先运行一次“VPS 流量”定时脚本，再手动查询并检查日志中的开关状态
+verbose = switch,false,type=boolean,tag=定时日报技术诊断,desc=仅控制定时日报是否追加底层诊断；手动查询直接选择普通或技术诊断入口，无需切换此开关
 
 [Script]
 # 脚本用 $httpClient 的 node 参数直接经指定节点请求 stats.noble.internal，不需要额外的分流规则
 cron ${cron} then script("https://raw.githubusercontent.com/BOBANDJOB/Loon/refs/heads/main/Scripts/traffic.js", {${node}, ${warn}, ${alert}, ${forecast}, ${report_hour}, ${verbose}}) with enable=${enabled}, timeout=15, tag="VPS 流量"
 # 手动查询：长按节点运行时经由长按的节点查询（只有 noble 的节点能查到），在脚本列表里运行时经由查询节点；
-# 弹窗显示摘要，不影响每天的定时日报。generic 的字符串参数不能带插件的 ${node}，查询节点和阈值用最近一次定时运行存下的值
-generic then script("https://raw.githubusercontent.com/BOBANDJOB/Loon/refs/heads/main/Scripts/traffic.js", "mode=manual") with enable=${enabled}, timeout=15, tag="VPS 流量（手动查询）"
+# 弹窗显示摘要，不影响每天的定时日报。generic 的字符串参数不能带插件的 ${node}，查询节点和阈值用最近一次定时运行存下的值；报告类型由各入口直接指定，不需要同步开关
+generic then script("https://raw.githubusercontent.com/BOBANDJOB/Loon/refs/heads/main/Scripts/traffic.js", "mode=manual&verbose=false") with enable=${enabled}, timeout=15, tag="VPS 流量（手动查询）"
+generic then script("https://raw.githubusercontent.com/BOBANDJOB/Loon/refs/heads/main/Scripts/traffic.js", "mode=manual&verbose=true") with enable=${enabled}, timeout=15, tag="VPS 技术诊断"
