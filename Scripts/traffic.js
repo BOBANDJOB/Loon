@@ -535,25 +535,50 @@ function notifyEvents(p) {
   $persistentStore.write(newest, KEY_EVENT);
 }
 
+function briefRanking(rows) {
+  return (rows || []).slice(0, TOP).map((r, i) => (i + 1) + ". " + r.name + "  " + fmt(r.total));
+}
+
+function websitesFor(sites, users) {
+  const lines = [];
+  for (const user of users || []) {
+    const list = (sites || {})[user.name] || [];
+    if (!list.length) continue;
+    lines.push(user.name + "：", ...list.slice(0, 3).map((r, i) =>
+      "  " + (i + 1) + ". " + ipLabel(r.name) + "  " + fmt(r.total)));
+  }
+  return lines.length ? lines : ["暂无网站明细"];
+}
+
 function report(s) {
   const d = s.detail || {};
   const c = cal(s);
   const lines = ["【概览】"].concat(overviewLines(s, c));
-  lines.push(...section("每日用量 · 最近7个完整日", trendLines(s, c)));
-  if (VERBOSE) lines.push(...section("限速策略", policyLines(s)));
-  else {
-    const limits = activeLimits(s);
-    if (limits.length) lines.push(...section("限速", limits));
-  }
-  lines.push(...section("按人用量 · 代理层", peopleLines(d, s)));
-  const sl = siteLines(s, d);
-  if (sl) lines.push(...section(VERBOSE ? "每人前 " + TOP + " 网站" : "主要网站 · 本期", sl));
-  if (VERBOSE) lines.push(...section("诊断", diagLines(s, d)));
-  else {
-    const events = recentEvents(s);
-    if (events.length) lines.push(...section("最近事件", events));
-    lines.push("", "完整数据：开启“详细诊断”");
-  }
+  const limits = activeLimits(s);
+  if (limits.length) lines.push(...section("当前限速", limits));
+  lines.push(...section("今日按人 · 代理层", ["00:00 起（自然日）"].concat(
+    Array.isArray(d.users_today) ? (d.users_today.length ? briefRanking(d.users_today) : ["暂无用量"]) : ["今日明细需更新服务端"])));
+  lines.push(...section("今日网站 · 每人 Top 3", ["00:00 起；ⓐ 为多个域名合并"].concat(
+    s.sites_today ? websitesFor(s.sites_today, d.users_today) : ["今日网站需更新服务端"])));
+
+  lines.push(...section("7 日诊断", ["网卡趋势 · 最近 7 个完整日"].concat(trendLines(s, c))));
+  lines.push("个人用量 · 近 7 天（含今天，代理层）：");
+  if (d.users_7d_ready) lines.push(...briefRanking(d.users_7d));
+  else lines.push("数据不足 7 天" + (d.first ? "（明细自 " + d.first + " 起）" : ""));
+
+  lines.push(...section("周期诊断", [
+    cycleLabel(s, "start") + " → " + cycleLabel(s, "reset"),
+    d.since ? "个人明细自 " + when(d.since) + " 起" + (detailPartial(s, d) ? "（未覆盖全周期）" : "") : "暂无周期明细",
+    "个人用量（代理层）："
+  ]));
+  lines.push(...briefRanking(d.users), "本期网站 · 每人 Top 3：", ...websitesFor(s.sites, d.users));
+  lines.push("网卡原始 " + fmt(s.total.used) + "（↓ " + fmt(s.total.rx) + " ↑ " + fmt(s.total.tx) + "；" + when(s.updated) + " 查询）");
+  lines.push("网卡含转发双向计量；个人明细不含周期 offset，不能直接相加对账。");
+  lines.push(...policyLines(s));
+  const events = recentEvents(s);
+  if (events.length) lines.push(...section("最近事件", events));
+  if (VERBOSE) lines.push(...section("详细计算", diagLines(s, d)));
+  else lines.push("", "公式 / 协议 / 上下行明细：开启“详细诊断”");
   return lines.join("\n");
 }
 
