@@ -214,7 +214,6 @@ function statusLine(s, c, includeHealthy) {
   else {
     if (p.overall.uncalibrated) notes.push("⚠️ 周期数据不全且 offset 未填写，统计偏低");
     else if (includeHealthy !== false && !isOver(c) && p.overall.mature && c.projPct !== null && c.projPct <= p.overall.target_percent) notes.push("当前预计在目标内");
-    if (VERBOSE && p.overall.offset_stale) notes.push("旧周期 offset 已忽略");
   }
   if (p && p.dry_run) notes.push("dry_run：策略只计算不执行");
   if (p && (!p.shaper || !p.shaper.initialized)) notes.push("⚠️ 实际限速未确认");
@@ -250,8 +249,7 @@ function trendLines(s, c) {
   const rows = trendData(s, c);
   if (!rows) return ["暂无趋势（需每日数据和有效校准）"];
   const max = Math.max(...rows.map((r) => r.used || 0));
-  return [VERBOSE ? rows[0].date + " → " + rows[rows.length - 1].date + "（校准估算，不含今天，可跨周期）"
-    : rows[0].date.slice(5) + " → " + rows[rows.length - 1].date.slice(5) + "（不含今天）"]
+  return [rows[0].date.slice(5) + " → " + rows[rows.length - 1].date.slice(5) + "（不含今天）"]
     .concat(rows.map((r) => r.date.slice(5) + " " + (r.used === null ? "? 数据缺失或当日采集不完整" : bar(r.used, max, 12) + " " + fmt(r.used))));
 }
 
@@ -331,10 +329,10 @@ function overviewLines(s, c) {
   const lines = [progressLine(c), usedLine(c, false),
     (isOver(c) ? overText(c) : "剩余 " + fmt(c.remaining)) + " · " + cycleLabel(s, "reset") + " 重置"];
   if (c.calibrated && s.policy.evaluated) lines.unshift("截至 " + when(s.policy.evaluated));
-  if (!isOver(c)) lines.push(forecastLine(c, !VERBOSE));
+  if (!isOver(c)) lines.push(forecastLine(c, true));
   const budget = budgetLine(s, c);
   if (budget) lines.push(budget);
-  if (ps && (VERBOSE || activeLimits(s).length)) lines.push(ps);
+  if (ps && activeLimits(s).length) lines.push(ps);
   const status = statusLine(s, c, false);
   if (status) lines.push(status);
   return lines;
@@ -471,6 +469,7 @@ function diagLines(s, d) {
     "查询时 vnstat 原始读数 " + fmt(t.used) + "（" + when(s.updated) + " 查询，↓ " + fmt(t.rx) + " ↑ " + fmt(t.tx) + "）"];
   const o = s.policy && s.policy.status === "ok" ? s.policy.overall : null;
   if (o) {
+    if (o.offset_stale) lines.push("旧周期 offset 已忽略");
     lines.push("概览每 10 分钟更新；按人明细约每分钟更新。代理层用量不含网卡转发重复计量及周期 offset。");
     lines.push("概览快照校准：已用 " + fmt(o.used) + " = " + (o.scale !== undefined ? o.scale : 1) + " × vnstat " + fmt(o.nic_used) +
       (o.offset ? (o.offset > 0 ? " + " : " − ") + "offset " + fmt(Math.abs(o.offset)) : "") + "（" + when(s.policy.evaluated) + " 策略快照）");
@@ -561,24 +560,21 @@ function report(s) {
   lines.push(...section("今日网站 · 每人 Top 3", ["00:00 起；ⓐ 为多个域名合并"].concat(
     s.sites_today ? websitesFor(s.sites_today, d.users_today) : ["今日网站需更新服务端"])));
 
-  lines.push(...section("7 日诊断", ["网卡趋势 · 最近 7 个完整日"].concat(trendLines(s, c))));
+  lines.push(...section("近 7 日用量", ["每日总用量 · 最近 7 个完整日"].concat(trendLines(s, c))));
   lines.push("个人用量 · 近 7 天（含今天，代理层）：");
   if (d.users_7d_ready) lines.push(...briefRanking(d.users_7d));
   else lines.push("数据不足 7 天" + (d.first ? "（明细自 " + d.first + " 起）" : ""));
 
-  lines.push(...section("周期诊断", [
+  lines.push(...section("本周期用量", [
     cycleLabel(s, "start") + " → " + cycleLabel(s, "reset"),
     d.since ? "个人明细自 " + when(d.since) + " 起" + (detailPartial(s, d) ? "（未覆盖全周期）" : "") : "暂无周期明细",
     "个人用量（代理层）："
   ]));
   lines.push(...briefRanking(d.users), "本期网站 · 每人 Top 3：", ...websitesFor(s.sites, d.users));
-  lines.push("网卡原始 " + fmt(s.total.used) + "（↓ " + fmt(s.total.rx) + " ↑ " + fmt(s.total.tx) + "；" + when(s.updated) + " 查询）");
-  lines.push("网卡含转发双向计量；个人明细不含周期 offset，不能直接相加对账。");
-  lines.push(...policyLines(s));
+  lines.push("个人用量与总量统计口径不同，不能直接相加对账。");
   const events = recentEvents(s);
   if (events.length) lines.push(...section("最近事件", events));
-  if (VERBOSE) lines.push(...section("详细计算", diagLines(s, d)));
-  else lines.push("", "公式 / 协议 / 上下行明细：开启“详细诊断”");
+  if (VERBOSE) lines.push(...section("技术诊断", policyLines(s).concat(diagLines(s, d))));
   return lines.join("\n");
 }
 
@@ -618,6 +614,7 @@ function badFields(s) {
 function query(node, cb) {
   const req = { url: URL, timeout: TIMEOUT_MS };
   if (node) req.node = node;
+  console.log("技术诊断：" + (VERBOSE ? "开" : "关") + (MANUAL ? "（读取已保存参数；更改开关后先运行一次定时脚本）" : "（本次插件参数已保存，供手动查询使用）"));
   const t0 = Date.now();
   const log = (result) => console.log("查询耗时 " + (Date.now() - t0) + " ms（" + (MANUAL ? "手动" : "定时") + "，节点 " +
     (node || "按分流规则") + "，超时设置 " + TIMEOUT_MS + " ms，结果 " + result + "）");

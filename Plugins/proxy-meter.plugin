@@ -12,7 +12,7 @@ warn = input,70,type=number,tag=提醒阈值（%）
 alert = input,90,type=number,tag=警告阈值（%）
 forecast = input,90,type=number,tag=预计超额阈值（%）,desc=预计周期末用量超过额度的这个比例时提醒
 enabled = switch,true,type=boolean,tag=启用
-verbose = switch,false,type=boolean,tag=详细诊断,desc=日志显示完整策略计算、上下行和网站核对；修改后运行一次定时脚本，再手动查询
+verbose = switch,false,type=boolean,tag=详细诊断,desc=仅追加技术诊断：网卡原始值、scale/offset、策略计算和协议；个人及网站用量始终显示。修改后先运行一次“VPS 流量”定时脚本，再手动查询并检查日志中的开关状态
 
 [Script]
 # 脚本用 $httpClient 的 node 参数直接经指定节点请求 stats.noble.internal，不需要额外的分流规则
