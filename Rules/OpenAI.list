@@ -1,0 +1,27 @@
+# OpenAI / ChatGPT / Sora
+# 手写维护（2026-10-30 起，原由 tools/rules_merge.py 生成）
+# 初始内容来自可莉 https://kelee.one/Tool/Loon/Lsr/AI.lsr（# OpenAI 段，2026-10-07 22:40:50）
+
+AND, ((DOMAIN-KEYWORD, chatgpt-async-webps-prod-), (DOMAIN-SUFFIX, webpubsub.azure.com))
+AND, ((DOMAIN-KEYWORD, openaicom-api-), (DOMAIN-SUFFIX, azurefd.net))
+DOMAIN, chatgpt.livekit.cloud
+DOMAIN, host.livekit.cloud
+DOMAIN, openai.com.cdn.cloudflare.net
+DOMAIN, openaiapi-site.azureedge.net
+DOMAIN, openaicomproductionae4b.blob.core.windows.net
+DOMAIN, production-openaicom-storage.azureedge.net
+DOMAIN, turn.livekit.cloud
+DOMAIN, openaicom.imgix.net
+DOMAIN-SUFFIX, chat.com
+DOMAIN-SUFFIX, chatgpt.com
+DOMAIN-SUFFIX, crixet.com
+DOMAIN-SUFFIX, oaistatic.com
+DOMAIN-SUFFIX, oaiusercontent.com
+DOMAIN-SUFFIX, openai.com
+DOMAIN-SUFFIX, sora.com
+DOMAIN-SUFFIX, chatgpt.site
+
+# 本地补充
+DOMAIN-SUFFIX, ai.com
+DOMAIN, openai-api.arkoselabs.com
+DOMAIN-SUFFIX, client-api.arkoselabs.com

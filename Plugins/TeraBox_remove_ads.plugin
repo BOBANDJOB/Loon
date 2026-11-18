@@ -1,0 +1,17 @@
+#!name = TeraBox 去广告
+#!desc = 移除 TeraBox 广告与弹窗提示
+#!author = BOBANDJOB[https://github.com/BOBANDJOB]
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/terabox.png
+#!date = 2026-10-30 17:50
+
+[Rule]
+DOMAIN, ymg-api.terabox.com, REJECT
+
+[Rewrite]
+request if ${url} ~= /^https:\/\/www\.terabox\.com\/adx\//i then reject_dict(200)
+request if ${url} ~= /^https:\/\/www\.terabox\.com\/api\/ad\//i then reject_dict(200)
+request if ${url} ~= /^https:\/\/www\.terabox\.com\/api\/page\/tips\?/i then reject_dict(200)
+request if ${url} ~= /^https:\/\/www\.terabox\.com\/rest\/1\.0\/task\/common\/inttips\?/i then reject_dict(200)
+
+[MITM]
+hostname = www.terabox.com

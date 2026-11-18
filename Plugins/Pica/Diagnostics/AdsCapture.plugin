@@ -1,0 +1,32 @@
+#!name = 哔咔 Pica 广告诊断（临时）
+#!desc = 临时放行 ad-channel.wikawika.xyz 并加入 MitM，用于抓取底部广告配置；请先停用正式版，测试期间可能显示广告，完成后恢复正式版。
+#!author = Winfred[https://github.com/BOBANDJOB]
+#!homepage = https://github.com/BOBANDJOB/Loon/blob/main/Docs/Pica/App.md
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/pica.jpg
+#!date = 2026-11-16 13:19
+
+# 仅用于底部广告诊断，不是去空白广告的修复版。
+# 与正式版互斥启用；公告清理和横幅错误兜底保留，详见 Docs/Pica/App.md。
+
+[Rewrite]
+^https:\/\/manhuapica\.com\/ad\/\?cat= reject-dict
+
+[Script]
+# 只处理已捕获的 GET /banners HTTP 500 JSON 解析错误，其他响应放行。
+http-response ^https:\/\/api\.tipatipa\.xyz\/banners$ script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/pica/banners.js, requires-body=true, timeout=10, tag=哔咔首页横幅错误兜底
+# 首页推广弹窗来自公告第一页；此接口的公告列表也会一并清空。
+http-response ^https:\/\/api\.tipatipa\.xyz\/announcements\?page=1$ script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/pica/announcements.js, requires-body=true, timeout=10, tag=哔咔首页公告弹窗清理
+
+[Rule]
+# 本次只放行截图中被 DNS-REJECT 的入口；另外两个广告域名继续拦截。
+DOMAIN,ad-channel.wikawika.xyz,US
+DOMAIN,ad-channel.diwodiwo.xyz,REJECT
+DOMAIN,ad-display.diwodiwo.xyz,REJECT
+DOMAIN,manhuapica.com,US
+DOMAIN,pica-web.wakamoment.tk,US
+DOMAIN,api.tipatipa.xyz,US
+DOMAIN-SUFFIX,diwodiwo.xyz,US
+DOMAIN-SUFFIX,picacomic.com,US
+
+[MitM]
+hostname = manhuapica.com, api.tipatipa.xyz, ad-channel.wikawika.xyz

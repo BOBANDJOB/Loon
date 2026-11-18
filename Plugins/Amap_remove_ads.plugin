@@ -1,0 +1,55 @@
+#!name = 高德地图去广告
+#!desc = 移除高德地图开屏、首页信息流、搜索推广等广告（墨鱼版）。使用前建议卸载重装高德地图
+#!author = ddgksf2013[https://github.com/ddgksf2013]
+#!homepage = https://ddgksf2013.top/
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/amap.png
+#!date = 2025-12-06
+
+# 由 tools/ddgksf_merge.py 从墨鱼 QX 重写转换生成，请勿手改
+# 上游：https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/AmapAds.conf（V1.0.28，2025-12-06）
+
+[Rule]
+DOMAIN-SUFFIX, optimus-ads.amap.com, DIRECT
+
+[Rewrite]
+# 高德地图_开屏请求
+^https?:\/\/.*\.amap\.com\/ws\/aos\/alimama\/splash_screen reject-200
+# 高德地图_首页底部信息流
+^https?:\/\/.*\.amap\.com\/v\d\/ai_rec\/ reject-dict
+# 高德地图_路线规划下方广告
+^https?:\/\/.*\.amap\.com\/ws\/faas\/amap-navigation\/card-service-route-plan\? reject-dict
+# 高德地图_Tip请求
+^https?:\/\/.*\.amap\.com\/ws\/boss\/order_web\/\w{8}_information reject-200
+# 高德地图_通用广告请求
+^https?:\/\/.*\.amap\.com\/ws\/asa\/ads_attribution reject
+# 高德地图_搜索框scene
+^https?:\/\/.*\.amap\.com\/ws\/shield\/scene\/recommend reject-dict
+# 高德地图_首页左上角gif
+^https?:\/\/.*\.amap\.com\/uploadimg\/\w+\.gif reject-img
+# 高德地图_左下天气
+^https?:\/\/.*\.amap\.com\/ws\/valueadded\/weather reject-dict
+
+[Script]
+# 高德地图_amdc处理
+http-response ^http:\/\/amdc\.m\.taobao\.com script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/ddgksf2013/amdc.js, requires-body=true, timeout=10, tag=高德地图_amdc处理
+# 高德地图_底部tab栏角标
+http-response ^https?:\/\/.*\.amap\.com\/ws\/message\/notice\/list script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/ddgksf2013/amap.js, requires-body=true, timeout=10, tag=高德地图_底部tab栏角标
+# 高德地图_首页右中广告
+http-response ^https?:\/\/.*\.amap\.com\/ws\/shield\/frogserver\/aocs\/updatable script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/ddgksf2013/amap.js, requires-body=true, timeout=10, tag=高德地图_首页右中广告
+# 高德地图_附近页面
+http-response ^https?:\/\/.*\.amap\.com\/ws\/shield\/search\/nearbyrec_smart script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/ddgksf2013/amap.js, requires-body=true, timeout=10, tag=高德地图_附近页面
+# 高德地图_打车页面处理
+http-response ^https?:\/\/.*\.amap\.com\/ws\/promotion-web\/resource script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/ddgksf2013/amap.js, requires-body=true, timeout=10, tag=高德地图_打车页面处理
+# 高德地图_首页底部处理
+http-response ^https?:\/\/.*\.amap\.com\/ws\/faas\/amap-navigation\/main-page script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/ddgksf2013/amap.js, requires-body=true, timeout=10, tag=高德地图_首页底部处理
+# 高德地图_开屏广告
+http-response ^https?:\/\/.*\.amap\.com\/ws\/valueadded\/alimama\/splash_screen script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/ddgksf2013/amap.js, requires-body=true, timeout=10, tag=高德地图_开屏广告
+# 高德地图_首页顶部推广
+http-response ^https?:\/\/.*\.amap\.com\/ws\/msgbox\/pull script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/ddgksf2013/amap.js, requires-body=true, timeout=10, tag=高德地图_首页顶部推广
+# 高德地图_我的页面
+http-response ^https?:\/\/.*\.amap\.com\/ws\/shield\/dsp\/profile\/index\/nodefaas script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/ddgksf2013/amap.js, requires-body=true, timeout=10, tag=高德地图_我的页面
+# 高德地图_搜索框热词
+http-response ^https?:\/\/.*\.amap\.com\/ws\/shield\/search\/new_hotword script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/ddgksf2013/amap.js, requires-body=true, timeout=10, tag=高德地图_搜索框热词
+
+[MITM]
+hostname = m5.amap.com, m5-zb.amap.com, center.amap.com, amap-aos-info-nogw.amap.com, ai.amap.com

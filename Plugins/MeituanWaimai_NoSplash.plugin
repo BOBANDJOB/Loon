@@ -1,0 +1,25 @@
+#!name=美团外卖去开屏广告
+#!desc=【实验性】重装后若仍有开屏，说明素材走 Shark 隧道，本插件无效，可停用。拦截开屏广告接口与素材（图片、视频）。不封 Shark 长连接，否则结算页报 H-152##NUTCBH 无法下单。首次启用后请重装美团外卖，清掉已缓存的开屏素材。
+#!author=Noble
+#!homepage=
+#!icon=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/meituan.png
+#!date=2026-10-24
+
+# 2026-10-24 排查记录：
+# - 首页、店铺、购物车等接口走 Shark 加密长连接，MITM 看不到。Shark SDK 用内置 IP 列表同时直连多个 IP:443
+#   （无 SNI，命中 GEOIP），谁先连上用谁。曾用 IP-CIDR 全部封掉，App 会改走 http://wmapi.meituan.com，
+#   开屏也能拦，但结算页只认隧道，报 H-152##NUTCBH 无法下单；把 loadInfo 里的 shark_switch_x 改成 0 也无效。
+# - 因此放行隧道，只拦开屏素材：素材走 CDN 下载，不经过隧道。
+# - waimai-alita/*.zip 是 Alita 业务包（appupdate/alita/checkUpdate 下发），不是开屏素材，不要拦。
+
+[Rewrite]
+# 开屏接口（隧道不可用、App 回退到 HTTP 时生效）
+^https?:\/\/wmapi\.meituan\.com\/api\/v\d+\/(openscreen|startpicture) reject-dict
+
+# 开屏素材（图片 / 视频）
+^https?:\/\/(s3plus|flowplus)\.meituan\.net\/v\d\/\w+\/linglong\/\w+\.(gif|jpg|png|webp|mp4) reject-img
+^https?:\/\/img\.meituan\.net\/bizad\/bizad_brandCpt_\d+\.(jpg|png|webp) reject-img
+^https?:\/\/s3plus\.meituan\.net\/v1\/mss_\w+\/brandcpt-vedio\/\w+\.zip$ reject-dict
+
+[MITM]
+hostname = wmapi.meituan.com, s3plus.meituan.net, flowplus.meituan.net, img.meituan.net

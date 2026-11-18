@@ -1,0 +1,30 @@
+#!name = 哔咔 Pica 网页版去广告
+#!desc = 清理网页版广告、首页、章末、阅读穿插及收藏列表广告与公告，修复旧缓存绕过更新确认规则的问题；保留后台更新与登录数据。升级后可能需点一次「好」完成补丁激活。
+#!author = Winfred[https://github.com/BOBANDJOB]
+#!homepage = https://github.com/BOBANDJOB/Loon/blob/main/Docs/Pica/Web.md
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/pica-web-round.png
+#!date = 2026-11-17
+
+# 与 App.plugin 独立安装。说明见 Docs/Pica/Web.md。
+
+[Script]
+# 去掉条件请求头，使 SW / 注册模块返回可改写正文；不清空站点存储。
+http-request ^https:\/\/manhuapica\.com\/(?:sw\.js|index\.html|assets\/js\/(?:virtual_pwa-register|feature-comics)-[A-Za-z0-9_-]+\.js)?(?:\?[^#]*)?$ script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/pica-web/pwa-cache.js?v=20261117a, timeout=10, tag=哔咔网页版更新缓存请求处理
+http-response ^https:\/\/pica-ad-api\.diwodiwo\.xyz\/get-ad-zones(?:\?[^#]*)?$ script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/pica-web/response.js, requires-body=true, timeout=10, tag=哔咔网页版广告配置清理
+http-response ^https:\/\/picaapi\.(?:go2778\.com|acbbb\.com)\/announcements(?:\?[^#]*)?$ script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/pica-web/announcements.js, requires-body=true, timeout=10, tag=哔咔网页版公告清理
+http-response ^https:\/\/manhuapica\.com\/assets\/js\/(?:index|virtual_pwa-register)-[A-Za-z0-9_-]+\.js(?:\?[^#]*)?$ script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/pica-web/pwa-update.js?v=20261117a, requires-body=true, timeout=10, tag=哔咔网页版更新提示清理
+http-response ^https:\/\/manhuapica\.com\/sw\.js(?:\?[^#]*)?$ script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/pica-web/pwa-cache.js?v=20261117a, requires-body=true, timeout=10, tag=哔咔网页版更新缓存修复
+
+http-response ^https:\/\/manhuapica\.com\/assets\/js\/feature-comics-[A-Za-z0-9_-]+\.js(?:\?[^#]*)?$ script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/pica-web/content.js?v=20261116d, requires-body=true, timeout=10, tag=哔咔网页版阅读与列表广告移除
+
+http-response ^https:\/\/manhuapica\.com\/(?:index\.html)?(?:\?[^#]*)?$ script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/pica-web/document.js?v=20261117a, requires-body=true, timeout=10, tag=哔咔网页版状态栏模式修复
+
+[Rule]
+# 配置接口需要正常返回才能改写，沿用个人配置中的 US 策略组。
+DOMAIN,pica-ad-api.diwodiwo.xyz,US
+DOMAIN,picaapi.go2778.com,US
+DOMAIN,picaapi.acbbb.com,US
+DOMAIN,manhuapica.com,US
+
+[MitM]
+hostname = pica-ad-api.diwodiwo.xyz, picaapi.go2778.com, picaapi.acbbb.com, manhuapica.com

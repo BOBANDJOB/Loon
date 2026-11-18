@@ -1,0 +1,7 @@
+# 本地工具、缓存与敏感配置，不上传
+tools/
+CLAUDE.local.md
+.DS_Store
+.env
+.env.*
+.vscode/

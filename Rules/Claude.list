@@ -1,0 +1,14 @@
+# Anthropic / Claude
+# 手写维护（2026-10-30 起，原由 tools/rules_merge.py 生成）
+# 初始内容来自可莉 https://kelee.one/Tool/Loon/Lsr/AI.lsr（# Anthropic 段，2026-10-07 22:40:50）
+
+DOMAIN-SUFFIX, anthropic.com
+DOMAIN-SUFFIX, claude.ai
+DOMAIN-SUFFIX, claude.com
+DOMAIN-SUFFIX, claudeusercontent.com
+IP-CIDR, 160.79.104.0/23, no-resolve
+IP-CIDR6, 2607:6bc0::/48, no-resolve
+
+# 本地补充
+DOMAIN, cdn.usefathom.com
+USER-AGENT, Claude*

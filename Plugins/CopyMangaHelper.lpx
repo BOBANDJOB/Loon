@@ -1,0 +1,25 @@
+#!name = 拷贝漫画增强（Web App 测试版）
+#!desc = 基于 Byaidu / JirachiZhang 的 copymanga-helper 12.4，参考 hymbz 的 ComicRead 图片分类思路；移动端阅读与 Web App 适配。桌面浏览器透传供 Tampermonkey 使用；手机端请关闭同站油猴脚本。需启用脚本与 MitM。
+#!author = Byaidu[https://github.com/Byaidu], BOBANDJOB[https://github.com/BOBANDJOB]
+#!homepage = https://github.com/BOBANDJOB/Loon/tree/main/Scripts/copymanga
+#!icon = https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Icons/app/copymanga.png
+#!date = 2026-11-17
+
+# 上游：https://github.com/Byaidu/copymanga-helper
+# 感谢 Byaidu、JirachiZhang 提供原版阅读器；感谢 hymbz 的 ComicRead 图片分类与分页设计。
+# ComicRead：https://github.com/hymbz/ComicReadScript；相关思路在本版独立实现，未直接并入其源码。
+# 基于 GPL-3.0-or-later 的独立适配版；源码、许可与测试说明见 Scripts/copymanga/。
+# 原版默认关闭批量下载，本版保持相同设置。
+
+[Rewrite]
+# 网页根据 results.code 是否为空决定是否弹窗；从 my-plugin 统一归入本插件。
+response if ${request.method} == "GET" && ${url} ~= /^https:\/\/api\.copy4000\.com\/api\/v3\/system\/config\/2020\/1$/ && ${response.status} == 200 && ${request.header['User-Agent']} ~= /^(?!.*\b(?:Macintosh|Windows NT|X11|CrOS)\b)|\b(?:iPhone|iPad|iPod|Android|Mobile)\b/i then response.json.replace("results.code", "")
+
+[Script]
+http-request ^https:\/\/(?:[a-zA-Z0-9-]+\.)*(?:copymanga\.(?:com|org|net|info|site|tv)|mangacopy\.com|copy20\.com|2025copy\.com)\/__loon_copymanga__\/manifest\.webmanifest$ script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/copymanga/request.js?v=20261117h, timeout=10, tag=拷贝漫画 Web App 清单
+http-request ^https:\/\/(?:[a-zA-Z0-9-]+\.)*(?:copymanga\.(?:com|org|net|info|site|tv)|mangacopy\.com|copy20\.com|2025copy\.com)\/__loon_copymanga__\/fetch(?:\?|$) script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/copymanga/request.js?v=20261117h, requires-body=true, timeout=30, tag=拷贝漫画请求桥接
+http-request ^https:\/\/(?:[a-zA-Z0-9-]+\.)*(?:copymanga\.(?:com|org|net|info|site|tv)|mangacopy\.com|copy20\.com|2025copy\.com)\/(?:comic(?:\/|$)|h5(?:\/|$)|(?:\?.*)?$) script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/copymanga/request.js?v=20261117h, timeout=10, tag=拷贝漫画页面缓存处理
+http-response ^https:\/\/(?:[a-zA-Z0-9-]+\.)*(?:copymanga\.(?:com|org|net|info|site|tv)|mangacopy\.com|copy20\.com|2025copy\.com)\/(?:comic(?:\/|$)|h5(?:\/|$)|(?:\?.*)?$) script-path=https://raw.githubusercontent.com/BOBANDJOB/Loon/main/Scripts/copymanga/response.js?v=20261117h, requires-body=true, timeout=10, tag=拷贝漫画阅读器注入
+
+[MitM]
+hostname = api.copy4000.com, copymanga.com, *.copymanga.com, copymanga.org, *.copymanga.org, copymanga.net, *.copymanga.net, copymanga.info, *.copymanga.info, copymanga.site, *.copymanga.site, copymanga.tv, *.copymanga.tv, mangacopy.com, *.mangacopy.com, copy20.com, *.copy20.com, 2025copy.com, *.2025copy.com
