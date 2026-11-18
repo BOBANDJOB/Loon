@@ -38,12 +38,10 @@
 | 百度地图 | [Plugins/bdmap.plugin](../Plugins/bdmap.plugin) |
 | 哔哩哔哩 | [Plugins/bilibili.plugin](../Plugins/bilibili.plugin) |
 | 菜鸟 | [Plugins/cainiao.plugin](../Plugins/cainiao.plugin) |
-| 彩云天气 Pro | [Plugins/caiyun.plugin](../Plugins/caiyun.plugin) |
 | 网易云音乐 | [Plugins/cloudmusic.plugin](../Plugins/cloudmusic.plugin) |
 | 大众点评 | [Plugins/dianping.plugin](../Plugins/dianping.plugin) |
 | Emby Filter | [Plugins/emby.plugin](../Plugins/emby.plugin) |
 | Github429 | [Plugins/github429.plugin](../Plugins/github429.plugin) |
-| JavDB | [Plugins/javdb.plugin](../Plugins/javdb.plugin) |
 | 马士兵 | [Plugins/mashibing.plugin](../Plugins/mashibing.plugin) |
 | Winfred自用去广告 | [Plugins/my-plugin.plugin](../Plugins/my-plugin.plugin) |
 | MyBlockAds | [Plugins/myblockads.plugin](../Plugins/myblockads.plugin) |
